@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { Play, Compass, Tag, LayoutDashboard, MessageSquare, Menu, X, ChevronDown, type LucideIcon } from 'lucide-react';
 import { useSession } from '../session';
 
@@ -11,8 +11,20 @@ const DISCOVER: [string, string][] = [
 export default function Nav() {
   const { role, pro, signOut } = useSession();
   const nav = useNavigate();
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false); // mobile menu
   const [disc, setDisc] = useState(false); // discover dropdown
+
+  // Close the mobile menu whenever the route changes.
+  useEffect(() => { setOpen(false); setDisc(false); }, [pathname]);
+
+  // Close the mobile menu when the user scrolls the page.
+  useEffect(() => {
+    if (!open) return;
+    const close = () => setOpen(false);
+    window.addEventListener('scroll', close, { passive: true });
+    return () => window.removeEventListener('scroll', close);
+  }, [open]);
 
   const roleLinks: NavItem[] = [];
   if (role === 'player') roleLinks.push({ to: '/hub', label: 'My Hub', icon: LayoutDashboard }, { to: '/messages', label: 'Messages', icon: MessageSquare });
