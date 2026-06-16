@@ -1,0 +1,34 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="t" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF9F3C" />
+      <stop offset="1" stop-color="#FF5A2C" />
+    </linearGradient>
+    <radialGradient id="glow" cx="22%" cy="38%" r="55%">
+      <stop offset="0" stop-color="#16284F" />
+      <stop offset="1" stop-color="#0B1A38" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#glow)" />
+  <rect width="1200" height="6" fill="url(#t)" />
+
+  <!-- Logo mark -->
+  <g transform="translate(110 175) scale(3.2)">
+    <g fill="url(#t)" opacity="0.9">
+      <path d="M9 21 L19 21 L17 25 L7 25 Z" />
+      <path d="M11 15 L23 15 L21 19 L9 19 Z" />
+    </g>
+    <path d="M19 15 L52 15 L48 24 L15 24 Z" fill="url(#t)" />
+    <path d="M31 15 L41 15 L36 51 L26 51 Z" fill="url(#t)" />
+    <path d="M52 5 L53.6 9.4 L58 11 L53.6 12.6 L52 17 L50.4 12.6 L46 11 L50.4 9.4 Z" fill="#FF2A4D" />
+  </g>
+
+  <!-- Wordmark -->
+  <text x="360" y="295" font-family="'Space Grotesk','Arial Black',Arial,sans-serif" font-size="130" font-weight="700" font-style="italic" fill="#FFFFFF" letter-spacing="2">TALENTA</text>
+  <text x="362" y="360" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="700" letter-spacing="8" fill="#9AA6C2">DISCOVER. CONNECT. <tspan fill="#FF9F3C">ELEVATE.</tspan></text>
+
+  <!-- Sub line -->
+  <text x="362" y="430" font-family="Inter,Arial,sans-serif" font-size="30" font-weight="500" fill="#5AA9FF">Football Talent Marketplace</text>
+  <text x="362" y="472" font-family="Inter,Arial,sans-serif" font-size="26" font-weight="400" fill="#9AA6C2">Where players get discovered &amp; signed — worldwide.</text>
+</svg>

@@ -1,0 +1,13 @@
+{
+  "name": "Talenta — Football Talent Marketplace",
+  "short_name": "Talenta",
+  "description": "Where footballers get discovered & signed. Connect with clubs, academies & scouts worldwide.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B1A38",
+  "theme_color": "#0B1A38",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,20 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="t" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF9F3C" />
+      <stop offset="1" stop-color="#FF5A2C" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="#0B1A38" />
+  <!-- speed lines -->
+  <g fill="url(#t)" opacity="0.9">
+    <path d="M9 21 L19 21 L17 25 L7 25 Z" />
+    <path d="M11 15 L23 15 L21 19 L9 19 Z" />
+  </g>
+  <!-- T crossbar (forward-leaning) -->
+  <path d="M19 15 L52 15 L48 24 L15 24 Z" fill="url(#t)" />
+  <!-- T stem -->
+  <path d="M31 15 L41 15 L36 51 L26 51 Z" fill="url(#t)" />
+  <!-- spark / star -->
+  <path d="M52 5 L53.6 9.4 L58 11 L53.6 12.6 L52 17 L50.4 12.6 L46 11 L50.4 9.4 Z" fill="#FF2A4D" />
+</svg>
