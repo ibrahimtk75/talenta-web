@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Update to your real domain after registering
-Sitemap: https://talenta.app/sitemap.xml
+Sitemap: https://talenta-web.onrender.com/sitemap.xml
