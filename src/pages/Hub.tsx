@@ -1,21 +1,55 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Rocket, BadgeCheck, Eye, MessageSquare, Video, Plus, Upload, Pencil, Play,
-  Heart, TrendingUp, Star, CalendarCheck, ChevronRight,
+  Heart, TrendingUp, Star, CalendarCheck, ChevronRight, X,
 } from 'lucide-react';
 import { useSession } from '../session';
-import { PLAYERS, ORGS, valuationOf, fmtMoney } from '../data';
+import { PLAYERS, ORGS, POSITIONS, COUNTRIES, valuationOf, fmtMoney } from '../data';
 import { payLink } from '../payments';
 import { Kpi, Panel, DashHeader } from '../components/dash';
 import OrgLogo from '../components/OrgLogo';
 import ShareMenu from '../components/ShareMenu';
 
 export default function Hub() {
-  const { pro, setPro, profile, toast } = useSession();
+  const { pro, setPro, profile, setProfile, toast } = useSession();
   const nav = useNavigate();
 
   const playerName = profile.name || 'Leo Martins';
   const playerMeta = `Football · ${profile.position || 'Striker'} · ${profile.country || 'Brazil'}`;
+
+  // Edit profile + add video (functional, client-side).
+  const [editOpen, setEditOpen] = useState(false);
+  const [vidOpen, setVidOpen] = useState(false);
+  const [myVideos, setMyVideos] = useState<string[]>([]);
+  const [eName, setEName] = useState(profile.name || '');
+  const [ePos, setEPos] = useState(profile.position || 'Striker');
+  const [eCountry, setECountry] = useState(profile.country || 'Brazil');
+  const [vidUrl, setVidUrl] = useState('');
+
+  const openEdit = () => {
+    setEName(profile.name || ''); setEPos(profile.position || 'Striker'); setECountry(profile.country || 'Brazil');
+    setEditOpen(true);
+  };
+  const saveProfile = () => {
+    if (!eName.trim()) { toast('Please enter your name'); return; }
+    setProfile({ ...profile, name: eName.trim(), position: ePos, country: eCountry });
+    setEditOpen(false);
+    toast('Profile updated ✅');
+  };
+  const parseYt = (s: string) => {
+    const v = s.trim();
+    const m = v.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/) || v.match(/^([A-Za-z0-9_-]{11})$/);
+    return m ? m[1] : null;
+  };
+  const addVideo = () => {
+    const id = parseYt(vidUrl);
+    if (!id) { toast('Paste a valid YouTube link or 11-char video ID'); return; }
+    setMyVideos((v) => [id, ...v]);
+    setVidUrl('');
+    setVidOpen(false);
+    toast('Video added ✅');
+  };
 
   const goPro = () => {
     const url = payLink('proplayer', 'world', true);
@@ -46,9 +80,9 @@ export default function Hub() {
           {pro && <BadgeCheck size={20} className="text-sky" />}
         </>}
       >
-        <button className="btn-primary text-[13px]" onClick={() => toast('Video upload — opens picker')}><Upload size={15} /> Upload video</button>
+        <button className="btn-primary text-[13px]" onClick={() => setVidOpen(true)}><Upload size={15} /> Upload video</button>
         <ShareMenu url={typeof window !== 'undefined' ? window.location.href.replace(/#.*/, '') + '#/player/1' : ''} text="Check out my football profile on Talenta ⚽" label="Share profile" />
-        <button className="btn-ghost text-[13px]" onClick={() => toast('Edit profile')}><Pencil size={15} /> Edit profile</button>
+        <button className="btn-ghost text-[13px]" onClick={openEdit}><Pencil size={15} /> Edit profile</button>
         <button className="btn-ghost text-[13px]" onClick={() => nav('/player/1')}>View public</button>
       </DashHeader>
 
@@ -121,15 +155,22 @@ export default function Hub() {
       {/* My videos */}
       <Panel title="My videos" className="mt-6" action={<span className="text-[12.5px] text-mute">{pro ? 'Unlimited' : '1 of 1 used (Free)'}</span>}>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {myVideos.map((id, i) => (
+            <a key={`my${i}`} href={`https://www.youtube.com/watch?v=${id}`} target="_blank" rel="noopener noreferrer" className="group relative aspect-video overflow-hidden rounded-xl border border-primary/50 bg-black">
+              <img src={`https://img.youtube.com/vi/${id}/hqdefault.jpg`} alt="" className="h-full w-full object-cover" />
+              <span className="absolute inset-0 grid place-items-center"><span className="grid h-10 w-10 place-items-center rounded-full border border-white/70 bg-black/55 text-white"><Play size={14} fill="white" className="ml-0.5" /></span></span>
+              <span className="absolute left-1.5 top-1.5 rounded bg-primary px-1.5 py-0.5 text-[9px] font-bold text-white">YOURS</span>
+            </a>
+          ))}
           {(pro ? PLAYERS.slice(0, 4) : PLAYERS.slice(0, 1)).map((v, i) => (
             <div key={i} className="group relative aspect-video overflow-hidden rounded-xl border border-white/10 bg-black">
               <img src={`https://img.youtube.com/vi/${v.yt}/hqdefault.jpg`} alt="" className="h-full w-full object-cover" />
               <span className="absolute inset-0 grid place-items-center"><span className="grid h-10 w-10 place-items-center rounded-full border border-white/70 bg-black/55 text-white"><Play size={14} fill="white" className="ml-0.5" /></span></span>
             </div>
           ))}
-          <button onClick={() => { if (!pro) goPro(); else toast('Video upload (demo)'); }}
+          <button onClick={() => setVidOpen(true)}
             className="flex aspect-video flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-white/15 bg-white/[0.03] text-mute transition hover:border-primary hover:text-white">
-            <Plus size={22} /> <span className="text-[12.5px] font-semibold">Upload video</span>
+            <Plus size={22} /> <span className="text-[12.5px] font-semibold">Add video</span>
           </button>
         </div>
       </Panel>
@@ -170,6 +211,39 @@ export default function Hub() {
           </div>
         </Panel>
       </div>
+
+      {/* Edit profile modal */}
+      {editOpen && (
+        <div className="fixed inset-0 z-[200] grid place-items-center bg-black/60 p-4 backdrop-blur-sm" onClick={() => setEditOpen(false)}>
+          <div className="card w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between"><h2 className="font-display text-lg font-bold">Edit profile</h2><button onClick={() => setEditOpen(false)} className="text-mute hover:text-white"><X size={18} /></button></div>
+            <div className="space-y-4">
+              <div><label className="field-label">Full name</label><input value={eName} onChange={(e) => setEName(e.target.value)} className="field-input" placeholder="Your name" /></div>
+              <div><label className="field-label">Main position</label><select value={ePos} onChange={(e) => setEPos(e.target.value)} className="field-input">{POSITIONS.slice(1).map((p) => <option key={p}>{p}</option>)}</select></div>
+              <div><label className="field-label">Country</label><select value={eCountry} onChange={(e) => setECountry(e.target.value)} className="field-input">{COUNTRIES.map((c) => <option key={c}>{c}</option>)}</select></div>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button onClick={() => setEditOpen(false)} className="btn-ghost text-[13px]">Cancel</button>
+              <button onClick={saveProfile} className="btn-primary text-[13px]">Save changes</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add video modal */}
+      {vidOpen && (
+        <div className="fixed inset-0 z-[200] grid place-items-center bg-black/60 p-4 backdrop-blur-sm" onClick={() => setVidOpen(false)}>
+          <div className="card w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between"><h2 className="font-display text-lg font-bold">Add a video</h2><button onClick={() => setVidOpen(false)} className="text-mute hover:text-white"><X size={18} /></button></div>
+            <p className="mb-3 text-[13px] text-mute">Paste a YouTube link to your highlight reel or skill video — it appears on your profile instantly.</p>
+            <input value={vidUrl} onChange={(e) => setVidUrl(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addVideo(); }} className="field-input" placeholder="https://youtube.com/watch?v=..." autoFocus />
+            <div className="mt-6 flex justify-end gap-2">
+              <button onClick={() => setVidOpen(false)} className="btn-ghost text-[13px]">Cancel</button>
+              <button onClick={addVideo} className="btn-primary text-[13px]"><Upload size={15} /> Add video</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
