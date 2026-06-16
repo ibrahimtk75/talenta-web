@@ -68,13 +68,16 @@ export default function PlayerOnboard() {
 
   const goPro = async () => {
     if (busy || !requireBasics()) return;
-    const url = payLink('proplayer', 'world', true);
+    const region = country === 'India' ? 'india' : 'world';
+    const url = payLink('proplayer', region, true);
     if (!url) { toast('Checkout is being set up — please try again soon'); return; }
+    // Open the checkout tab synchronously inside the click gesture, BEFORE the async
+    // account-creation call — otherwise the browser blocks the popup.
+    window.open(url, '_blank', 'noopener');
     setBusy(true);
     const ok = await createAccount();
     setBusy(false);
     if (!ok) return;
-    window.open(url, '_blank', 'noopener');
     setPro(true);
     toast('Secure checkout opened in a new tab 💳');
     nav('/hub');
