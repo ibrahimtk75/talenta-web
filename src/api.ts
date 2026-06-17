@@ -4,6 +4,8 @@
 // switch the app from demo mode to the real backend. When it is unset the app
 // stays fully in demo mode — no network calls — so the static site keeps working.
 // ─────────────────────────────────────────────────────────────
+import type { Player } from './data';
+
 const BASE = (((import.meta as any).env?.VITE_API_URL as string) || '').replace(/\/$/, '');
 
 /** True when a backend URL is configured — gates all real auth/data calls. */
@@ -42,3 +44,50 @@ export const apiRegister = (b: {
 
 export const apiLogin = (b: { email: string; password: string }) =>
   call<AuthResp>('/api/auth/login', b);
+
+// ─────────────────────────────────────────────────────────────
+// Players (public browse) — GET /api/players returns an array of footballers.
+// ─────────────────────────────────────────────────────────────
+type BackendPlayer = {
+  id: string; name: string; country: string | null; position: string | null;
+  age: number | null; foot: string | null; career: [string, string][] | null;
+  headline: string | null; stats: Record<string, number> | null;
+  youtubeVideoId: string | null; views: number; pro: boolean; verified: boolean;
+  match?: number;
+};
+
+// Simple, explainable match score (mirrors the backend) so cards have a number.
+function computeMatch(b: BackendPlayer): number {
+  const s = b.stats || {};
+  let score = 60;
+  if (b.verified) score += 12;
+  if (b.pro) score += 6;
+  score += Math.min(12, (Number(s.goals ?? 0) + Number(s.assists ?? 0)) / 6);
+  score += Math.min(6, Number((s as any)['Pass %'] ?? s.passAccuracy ?? 0) / 16);
+  score += Math.min(4, (b.views || 0) / 500);
+  return Math.min(99, Math.round(score));
+}
+
+function mapPlayer(b: BackendPlayer): Player {
+  return {
+    id: String(b.id),
+    name: b.name || 'Unnamed player',
+    country: b.country || 'Other',
+    pos: b.position || 'Player',
+    age: b.age ?? 0,
+    foot: b.foot || '—',
+    yt: b.youtubeVideoId || '',
+    pro: !!b.pro,
+    verified: !!b.verified,
+    match: typeof b.match === 'number' ? b.match : computeMatch(b),
+    headline: b.headline || '',
+    stats: (b.stats as Record<string, number | string>) || {},
+    career: (b.career as [string, string][]) || [],
+  };
+}
+
+/** Fetch real registered footballers from the backend. */
+export async function fetchPlayers(): Promise<Player[]> {
+  const data = await call<BackendPlayer[]>('/api/players?limit=50');
+  return Array.isArray(data) ? data.map(mapPlayer) : [];
+}

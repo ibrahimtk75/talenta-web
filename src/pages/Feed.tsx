@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Play, Send, User } from 'lucide-react';
-import { PLAYERS, FLAG, Player } from '../data';
+import { FLAG, Player } from '../data';
+import { usePlayers } from '../usePlayers';
 import { useSession } from '../session';
 
 function Reel({ player }: { player: Player }) {
@@ -43,14 +44,30 @@ function Reel({ player }: { player: Player }) {
 }
 
 export default function Feed() {
+  const { players, loading } = usePlayers();
+  // Only players with a highlight reel can appear in the video feed.
+  const reels = players.filter((p) => p.yt);
+
+  if (!loading && reels.length === 0) {
+    return (
+      <div className="mx-auto max-w-md px-5 py-20 text-center">
+        <h1 className="font-display text-xl font-bold">No reels yet</h1>
+        <p className="mt-2 text-sm text-mute">No players have uploaded a highlight video yet. Join Talenta, add your reel and be the first in the feed.</p>
+        <Link to="/signup" className="btn-primary mt-5 inline-flex text-[13px]">Join Free</Link>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-[440px] px-5 py-5">
       <div className="h-[calc(100vh-150px)] snap-y snap-mandatory space-y-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-        {PLAYERS.map((p) => (
-          <div key={p.id} className="h-full">
-            <Reel player={p} />
-          </div>
-        ))}
+        {loading
+          ? <div className="h-full animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />
+          : reels.map((p) => (
+              <div key={p.id} className="h-full">
+                <Reel player={p} />
+              </div>
+            ))}
       </div>
     </div>
   );
