@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Play, Users, ChevronRight, BadgeCheck, Sparkles, ShieldCheck,
-  Youtube, Percent, UserPlus, Eye, Trophy, Quote, ChevronDown, Star,
+  Youtube, Percent, UserPlus, Eye, Trophy, ChevronDown,
   Building2, GraduationCap,
 } from 'lucide-react';
 import { CLUBS, DEALS, SPORTS, COUNTRIES, PLAYERS, initials } from '../data';
@@ -33,12 +33,6 @@ const audiences = [
   { icon: Trophy, h: 'For Players', p: 'Build a free profile, post 60-second skill reels and set your asking price. Get discovered by clubs & academies worldwide — and signed.', cta: 'Join as Player' },
   { icon: Building2, h: 'For Clubs & Scouts', p: 'Search players or get AI-matched by position, age & stats. Watch reels, contact, negotiate and sign — all on one dashboard.', cta: 'Join as Club' },
   { icon: GraduationCap, h: 'For Academies & Schools', p: 'Showcase your players, build your institution profile, and discover talent across the whole network.', cta: 'Join as Academy' },
-];
-
-const testimonials = [
-  { q: 'I was playing district football with no way to be seen. Within a month a club messaged me for a trial. This changed everything.', n: 'Aarav P.', r: 'Striker · India', rating: 5 },
-  { q: 'We replaced months of WhatsApp scouting with one dashboard. The AI suggestions are genuinely on point.', n: 'Coach Daniel', r: 'Academy Director · UK', rating: 5 },
-  { q: 'Verified profiles and ratings mean we trust what we see. Signed two players this season through Talenta.', n: 'River Plate Academy', r: 'Club · Argentina', rating: 5 },
 ];
 
 const faqs = [
@@ -159,21 +153,20 @@ export default function Landing() {
           ))}
         </div>
 
-        {/* TESTIMONIALS */}
-        <Heading title="Loved by players & clubs" sub="Real outcomes from the Talenta community" center />
-        <div className="grid gap-5 md:grid-cols-3">
-          {testimonials.map((t, i) => (
-            <Reveal key={t.n} delay={i * 90}>
-              <div className="card flex h-full flex-col p-6">
-                <Quote size={26} className="text-primary/60" />
-                <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-slate-200">"{t.q}"</p>
-                <div className="mt-4 flex items-center gap-1">{Array.from({ length: t.rating }).map((_, k) => <Star key={k} size={14} className="text-amber" fill="#FFB23C" />)}</div>
-                <div className="mt-2 text-sm font-bold">{t.n}</div>
-                <div className="text-[12.5px] text-mute">{t.r}</div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        {/* EARLY ACCESS */}
+        <Reveal>
+          <div className="card mt-20 border-primary/30 bg-primary/[0.05] p-8 text-center md:p-12">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-1.5 text-[12.5px] text-mute">
+              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_#FF2A4D]" /> Now in early access
+            </span>
+            <h2 className="mt-4 font-display text-2xl font-bold md:text-3xl">Be a founding member</h2>
+            <p className="mx-auto mt-3 max-w-xl text-mute">Talenta is brand new. Join now and be among the very first footballers, clubs and academies on the platform — and help shape what we build next.</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Link to="/signup" className="btn-primary text-base"><Play size={18} fill="white" /> Join Free as Player</Link>
+              <Link to="/signup" className="btn-ghost">For Clubs & Academies</Link>
+            </div>
+          </div>
+        </Reveal>
 
         {/* COMING SOON */}
         <Heading title="More sports — coming soon" sub="Talenta is built for 5 sports. Football is live now." />
