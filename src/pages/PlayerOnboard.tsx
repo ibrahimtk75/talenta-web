@@ -4,7 +4,7 @@ import { ArrowLeft, ChevronRight, Upload } from 'lucide-react';
 import { useSession } from '../session';
 import { COUNTRIES, POSITIONS } from '../data';
 import { payLink } from '../payments';
-import { apiEnabled, apiRegister, toBackendRole } from '../api';
+import { apiEnabled, apiRegister, apiUpsertProfile, toBackendRole, type ProfileBody } from '../api';
 
 const STEPS = ['Personal', 'Physical', 'Career', 'Stats', 'Finish'];
 
@@ -22,6 +22,33 @@ export default function PlayerOnboard() {
   const [country, setCountry] = useState(COUNTRIES[0]);
   const [position, setPosition] = useState(POSITIONS[1]);
   const [busy, setBusy] = useState(false);
+  // Profile detail fields (saved to the backend so the player appears in Browse).
+  const [dob, setDob] = useState('');
+  const [foot, setFoot] = useState('Right');
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [club, setClub] = useState('');
+  const [appearances, setAppearances] = useState('');
+  const [goals, setGoals] = useState('');
+  const [assists, setAssists] = useState('');
+  const [passAcc, setPassAcc] = useState('');
+
+  const int = (v: string) => Math.max(0, Math.round(Number(v) || 0));
+  const buildProfileBody = (): ProfileBody => ({
+    sport: 'FOOTBALL',
+    position,
+    dominantSide: foot,
+    dateOfBirth: dob ? new Date(dob).toISOString() : undefined,
+    heightCm: int(height) > 0 ? int(height) : undefined,
+    weightKg: int(weight) > 0 ? int(weight) : undefined,
+    currentClub: club.trim() || undefined,
+    stats: {
+      appearances: int(appearances),
+      goals: int(goals),
+      assists: int(assists),
+      ...(passAcc ? { passAccuracy: Math.min(100, Math.max(0, Number(passAcc) || 0)) } : {}),
+    },
+  });
 
   // Validate the basics needed to create the profile. With a backend connected
   // we also need email + password (real account); in demo mode just the name.
@@ -48,6 +75,13 @@ export default function PlayerOnboard() {
         country: country.slice(0, 2).toUpperCase(), role: toBackendRole('player'),
       });
       signIn(resp, 'player', prof);
+      // Save the football profile so the player shows up in Browse/search.
+      // If this fails, the account still exists — they can finish it from My Hub.
+      try {
+        await apiUpsertProfile(resp.accessToken, buildProfileBody());
+      } catch {
+        toast('Account created — finish your profile details from My Hub.');
+      }
       return true;
     } catch (e) {
       toast((e as Error).message || 'Could not create account');
@@ -110,7 +144,7 @@ export default function PlayerOnboard() {
               <Field label="Password"><input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="field-input" placeholder="Min 8 characters" /></Field>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Date of birth"><input type="date" className="field-input" /></Field>
+              <Field label="Date of birth"><input value={dob} onChange={(e) => setDob(e.target.value)} type="date" className="field-input" /></Field>
               <Field label="Country"><select value={country} onChange={(e) => setCountry(e.target.value)} className="field-input">{COUNTRIES.map((c) => <option key={c}>{c}</option>)}</select></Field>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -128,16 +162,16 @@ export default function PlayerOnboard() {
         )}
         {step === 1 && (
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Height (cm)"><input type="number" className="field-input" placeholder="178" /></Field>
-            <Field label="Weight (kg)"><input type="number" className="field-input" placeholder="72" /></Field>
-            <Field label="Dominant foot"><select className="field-input"><option>Right</option><option>Left</option><option>Both</option></select></Field>
+            <Field label="Height (cm)"><input value={height} onChange={(e) => setHeight(e.target.value)} type="number" className="field-input" placeholder="178" /></Field>
+            <Field label="Weight (kg)"><input value={weight} onChange={(e) => setWeight(e.target.value)} type="number" className="field-input" placeholder="72" /></Field>
+            <Field label="Dominant foot"><select value={foot} onChange={(e) => setFoot(e.target.value)} className="field-input"><option>Right</option><option>Left</option><option>Both</option></select></Field>
             <Field label="Main position"><select value={position} onChange={(e) => setPosition(e.target.value)} className="field-input">{POSITIONS.slice(1).map((p) => <option key={p}>{p}</option>)}</select></Field>
           </div>
         )}
         {step === 2 && (
           <div className="space-y-4">
             <p className="text-sm text-mute">Add every club/academy from childhood to now.</p>
-            <Field label="Club / academy"><input className="field-input" placeholder="e.g. Santos Youth Academy" /></Field>
+            <Field label="Current club / academy"><input value={club} onChange={(e) => setClub(e.target.value)} className="field-input" placeholder="e.g. Santos Youth Academy" /></Field>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="From"><input type="number" className="field-input" placeholder="2018" /></Field>
               <Field label="To"><input className="field-input" placeholder="2021 / Present" /></Field>
@@ -148,10 +182,10 @@ export default function PlayerOnboard() {
         {step === 3 && (
           <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Appearances"><input type="number" className="field-input" placeholder="60" /></Field>
-              <Field label="Goals"><input type="number" className="field-input" placeholder="41" /></Field>
-              <Field label="Assists"><input type="number" className="field-input" placeholder="18" /></Field>
-              <Field label="Pass accuracy %"><input type="number" className="field-input" placeholder="82" /></Field>
+              <Field label="Appearances"><input value={appearances} onChange={(e) => setAppearances(e.target.value)} type="number" className="field-input" placeholder="60" /></Field>
+              <Field label="Goals"><input value={goals} onChange={(e) => setGoals(e.target.value)} type="number" className="field-input" placeholder="41" /></Field>
+              <Field label="Assists"><input value={assists} onChange={(e) => setAssists(e.target.value)} type="number" className="field-input" placeholder="18" /></Field>
+              <Field label="Pass accuracy %"><input value={passAcc} onChange={(e) => setPassAcc(e.target.value)} type="number" className="field-input" placeholder="82" /></Field>
             </div>
             <Field label="Asking price / valuation ($K) — clubs can bid on this">
               <div className="relative">

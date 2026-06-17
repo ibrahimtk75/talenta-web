@@ -14,9 +14,9 @@ export const apiEnabled = !!BASE;
 export type AuthUser = { id: string; email: string; role: string; fullName: string };
 export type AuthResp = { user: AuthUser; accessToken: string; refreshToken: string };
 
-async function call<T>(path: string, body?: unknown, token?: string): Promise<T> {
+async function call<T>(path: string, body?: unknown, token?: string, method?: string): Promise<T> {
   const res = await fetch(BASE + path, {
-    method: body ? 'POST' : 'GET',
+    method: method || (body ? 'POST' : 'GET'),
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -44,6 +44,20 @@ export const apiRegister = (b: {
 
 export const apiLogin = (b: { email: string; password: string }) =>
   call<AuthResp>('/api/auth/login', b);
+
+// Create/update the caller's football profile so they appear in Browse/search.
+export type ProfileBody = {
+  sport: 'FOOTBALL';
+  position?: string;
+  heightCm?: number;
+  weightKg?: number;
+  dominantSide?: string;
+  dateOfBirth?: string; // ISO datetime
+  currentClub?: string;
+  stats: Record<string, number>;
+};
+export const apiUpsertProfile = (token: string, b: ProfileBody) =>
+  call('/api/profiles', b, token, 'PUT');
 
 // ─────────────────────────────────────────────────────────────
 // Players (public browse) — GET /api/players returns an array of footballers.
