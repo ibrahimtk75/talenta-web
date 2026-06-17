@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Play, Users, ChevronRight, BadgeCheck, Sparkles, ShieldCheck,
   Youtube, Percent, UserPlus, Eye, Trophy, Quote, ChevronDown, Star,
+  Building2, GraduationCap,
 } from 'lucide-react';
 import { CLUBS, DEALS, SPORTS, COUNTRIES, PLAYERS, initials } from '../data';
 import Reveal from '../components/Reveal';
@@ -26,6 +27,12 @@ const steps = [
   { icon: UserPlus, h: 'Create your profile', p: 'Players build a verified career profile and upload a 60-second skill reel — free to start.' },
   { icon: Eye, h: 'Get discovered', p: 'Your profile appears in the AI feed. Clubs, academies & schools search and find you.' },
   { icon: Trophy, h: 'Get signed', p: 'Clubs contact you on-platform, set up trials, and sign you. Reputation grows with ratings.' },
+];
+
+const audiences = [
+  { icon: Trophy, h: 'For Players', p: 'Build a free profile, post 60-second skill reels and set your asking price. Get discovered by clubs & academies worldwide — and signed.', cta: 'Join as Player' },
+  { icon: Building2, h: 'For Clubs & Scouts', p: 'Search players or get AI-matched by position, age & stats. Watch reels, contact, negotiate and sign — all on one dashboard.', cta: 'Join as Club' },
+  { icon: GraduationCap, h: 'For Academies & Schools', p: 'Showcase your players, build your institution profile, and discover talent across the whole network.', cta: 'Join as Academy' },
 ];
 
 const testimonials = [
@@ -87,6 +94,21 @@ export default function Landing() {
             ))}
           </div>
         </Reveal>
+
+        {/* WHO'S IT FOR */}
+        <Heading title="Who's it for?" sub="Whatever your role in football — here's how Talenta works for you" center />
+        <div className="grid gap-5 md:grid-cols-3">
+          {audiences.map((a, i) => (
+            <Reveal key={a.h} delay={i * 90}>
+              <div className="card flex h-full flex-col p-7">
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary-2 text-white"><a.icon size={22} /></div>
+                <h3 className="mt-4 text-lg font-bold">{a.h}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-mute">{a.p}</p>
+                <Link to="/signup" className="btn-ghost mt-5 w-fit text-[13px]">{a.cta} <ChevronRight size={15} /></Link>
+              </div>
+            </Reveal>
+          ))}
+        </div>
 
         {/* WHY TALENTA */}
         <Heading title="Why Talenta" sub="Built to get talent seen — and signed" center />
