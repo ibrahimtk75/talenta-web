@@ -49,7 +49,7 @@ export default function Nav() {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3">
         <Link to="/" onClick={() => setOpen(false)} className="flex items-center">
-          <img src="/logo.png" alt="Talenta" className="h-9 w-auto sm:h-10" />
+          <img src="/logo-clear.png" alt="Talenta" className="h-9 w-auto sm:h-10" />
         </Link>
 
         <nav className="ml-2 hidden items-center gap-0.5 md:flex">
