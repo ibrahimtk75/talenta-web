@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Search, MessageSquare, Users, Eye, Bookmark, Handshake, Send } from 'lucide-react';
-import { PLAYERS, POSITIONS, ORGS, FLAG, initials, COUNTRY_NAME } from '../data';
+import { Search, MessageSquare, Eye, Bookmark, Handshake, Send } from 'lucide-react';
+import { PLAYERS, POSITIONS, initials, COUNTRY_NAME } from '../data';
 import { PlayerRow } from '../components/PlayerCard';
-import OrgCard from '../components/OrgCard';
 import { Kpi, Panel, DashHeader } from '../components/dash';
 import { useSession } from '../session';
 
@@ -13,8 +12,8 @@ export default function ClubDashboard() {
   const [country, setCountry] = useState('Any');
   const nav = useNavigate();
   const { role, profile, toast } = useSession();
-  const orgName = profile.name || (role === 'academy' ? 'Demo Academy' : 'Demo FC');
-  const orgMeta = [profile.type || 'Professional Club', profile.country].filter(Boolean).join(' · ') || 'Professional Club · United Kingdom 🇬🇧';
+  const orgName = profile.name || (role === 'academy' ? 'Your Academy' : 'Your Club');
+  const orgMeta = [profile.type || (role === 'academy' ? 'Academy' : 'Club'), profile.country].filter(Boolean).join(' · ');
   const codes = Array.from(new Set(PLAYERS.map((p) => p.country))).sort();
   const ql = q.trim().toLowerCase();
   let list = PLAYERS.slice();
@@ -23,11 +22,10 @@ export default function ClubDashboard() {
   if (ql) list = list.filter((p) => p.name.toLowerCase().includes(ql) || p.pos.toLowerCase().includes(ql));
   list = list.sort((a, b) => b.match - a.match);
 
-  const shortlist = PLAYERS.slice(0, 3);
   const pipeline: [string, typeof PLAYERS][] = [
-    ['Contacted', PLAYERS.slice(0, 2)],
-    ['On trial', PLAYERS.slice(2, 3)],
-    ['Signed', PLAYERS.slice(3, 4)],
+    ['Contacted', []],
+    ['On trial', []],
+    ['Signed', []],
   ];
 
   return (
@@ -40,16 +38,16 @@ export default function ClubDashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Kpi icon={Eye} n="312" l="Players viewed" trend="+24" />
-        <Kpi icon={Bookmark} n="18" l="Shortlisted" />
-        <Kpi icon={Send} n="9" l="Contacted" trend="+3" />
-        <Kpi icon={Handshake} n="2" l="Deals closed" />
+        <Kpi icon={Eye} n="0" l="Players viewed" />
+        <Kpi icon={Bookmark} n="0" l="Shortlisted" />
+        <Kpi icon={Send} n="0" l="Contacted" />
+        <Kpi icon={Handshake} n="0" l="Deals closed" />
       </div>
 
       {/* AI suggestions + shortlist */}
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_300px]">
         <div>
-          <div className="mb-3.5 flex items-center gap-2"><Sparkles size={18} className="text-primary" /><b className="font-display">AI suggestions for you</b></div>
+          <div className="mb-3.5 flex items-center gap-2"><Search size={18} className="text-primary" /><b className="font-display">Browse players</b></div>
           <div className="mb-4 flex flex-wrap gap-2">
             {POSITIONS.map((p) => <button key={p} onClick={() => setFilter(p)} className={`chip !py-1.5 !text-[12px] ${filter === p ? 'chip-active' : ''}`}>{p}</button>)}
           </div>
@@ -70,14 +68,7 @@ export default function ClubDashboard() {
             </div>
           </Panel>
           <Panel title="Shortlist" action={<Bookmark size={16} className="text-primary" />}>
-            <div className="space-y-2.5">
-              {shortlist.map((p) => (
-                <button key={p.id} onClick={() => nav(`/player/${p.id}`)} className="flex w-full items-center gap-2.5 rounded-lg border border-white/10 bg-white/[0.03] p-2.5 text-left hover:border-primary/50">
-                  <span className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-lg bg-gradient-to-br from-primary to-primary-2 text-[12px] font-bold text-white">{initials(p.name)}</span>
-                  <span className="min-w-0 flex-1"><span className="block truncate text-[13px] font-semibold">{p.name} {FLAG[p.country]}</span><span className="block text-[11px] text-mute">{p.pos} · {p.match}% match</span></span>
-                </button>
-              ))}
-            </div>
+            <p className="rounded-lg border border-dashed border-white/15 p-4 text-center text-[12.5px] text-mute">No players shortlisted yet. Save players from search to build your shortlist.</p>
           </Panel>
         </div>
       </div>
@@ -101,11 +92,6 @@ export default function ClubDashboard() {
           </div>
         ))}
       </div>
-
-      {/* Registered clubs */}
-      <h2 className="mb-1 mt-12 flex items-center gap-2 font-display text-xl font-bold"><Users size={18} className="text-primary" /> Registered clubs & academies</h2>
-      <p className="mb-5 text-sm text-mute">{ORGS.length} organisations on Talenta · connect & network</p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{ORGS.map((o) => <OrgCard key={o.name} o={o} />)}</div>
     </div>
   );
 }
