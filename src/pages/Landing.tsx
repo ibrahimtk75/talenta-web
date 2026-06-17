@@ -5,9 +5,8 @@ import {
   Youtube, Percent, UserPlus, Eye, Trophy, ChevronDown,
   Building2, GraduationCap,
 } from 'lucide-react';
-import { CLUBS, DEALS, SPORTS, COUNTRIES, PLAYERS, initials } from '../data';
+import { SPORTS, COUNTRIES } from '../data';
 import Reveal from '../components/Reveal';
-import OrgLogo from '../components/OrgLogo';
 
 const stats = [
   { icon: Sparkles, n: 'Free', l: 'For players' },
@@ -133,21 +132,28 @@ export default function Landing() {
           ))}
         </div>
 
-        {/* CLUBS */}
+        {/* WHO IT'S FOR */}
         <Heading title="Built for clubs, academies & schools" sub="Every level, every region — from grassroots academies to professional clubs" />
         <Reveal>
-          <div className="flex flex-wrap gap-2.5">{CLUBS.map((c) => <div key={c} className="chip !py-1.5 !pl-1.5 !text-slate-100"><OrgLogo name={c} size={24} /> {c}</div>)}</div>
+          <div className="flex flex-wrap gap-2.5">
+            {['Professional clubs', 'Football academies', 'Schools & colleges', 'Universities', 'Scouts & agents', 'Grassroots clubs'].map((c) => (
+              <div key={c} className="chip !py-2 !text-slate-100">{c}</div>
+            ))}
+          </div>
         </Reveal>
 
-        {/* DEALS */}
-        <Heading title="How signings happen" sub="Contact → trial → deal, all on Talenta. We take 3% only on a successful signing." />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {DEALS.map((d, i) => (
-            <Reveal key={i} delay={i * 60}>
-              <div className="card flex items-center gap-3.5 p-4">
-                <div className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary to-primary-2 font-display font-bold text-white">{initials(d[0])}</div>
-                <div><div className="font-bold">{d[0]}</div><div className="text-[12.5px] text-mute">→ {d[1]}</div></div>
-                <span className="ml-auto whitespace-nowrap rounded-md bg-primary/15 px-2.5 py-1 text-[10.5px] font-extrabold text-primary">{d[2]}</span>
+        {/* SIGNING MODEL */}
+        <Heading title="Fair by design — no agent fees" sub="Contact, trial and sign all in one place. We charge just 3% — and only when a signing actually happens." />
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[
+            ['Free to join', 'Players build a profile and upload highlights for free. Going Pro is optional.'],
+            ['Direct contact', 'Clubs and scouts message players directly — no middlemen, no gatekeepers.'],
+            ['3% on success', 'No upfront cost to clubs for a deal. We only earn when a player actually gets signed.'],
+          ].map(([h, p], i) => (
+            <Reveal key={h} delay={i * 60}>
+              <div className="card h-full p-5">
+                <div className="font-bold">{h}</div>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-mute">{p}</p>
               </div>
             </Reveal>
           ))}
