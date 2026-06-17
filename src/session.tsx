@@ -18,6 +18,7 @@ interface SessionCtx {
   profile: Profile;
   setProfile: (p: Profile) => void;
   token: string | null;
+  userId: string | null;
   signIn: (resp: AuthResp, uiRole: Role, profile?: Profile) => void;
   signOut: () => void;
   toast: (msg: string) => void;
@@ -28,7 +29,7 @@ const Ctx = createContext<SessionCtx>(null!);
 export const useSession = () => useContext(Ctx);
 
 const STORE = 'talenta_auth';
-type Persisted = { token: string; role: Role; profile: Profile };
+type Persisted = { token: string; role: Role; profile: Profile; userId?: string };
 
 function loadAuth(): Persisted | null {
   try {
@@ -45,6 +46,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [pro, setPro] = useState(false);
   const [profile, setProfile] = useState<Profile>(saved?.profile ?? {});
   const [token, setToken] = useState<string | null>(saved?.token ?? null);
+  const [userId, setUserId] = useState<string | null>(saved?.userId ?? null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const toast = (msg: string) => {
@@ -56,15 +58,17 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const signIn = (resp: AuthResp, uiRole: Role, prof: Profile = {}) => {
     const merged: Profile = { name: resp.user.fullName, ...prof };
     setToken(resp.accessToken);
+    setUserId(resp.user.id);
     setRole(uiRole);
     setProfile(merged);
     try {
-      localStorage.setItem(STORE, JSON.stringify({ token: resp.accessToken, role: uiRole, profile: merged }));
+      localStorage.setItem(STORE, JSON.stringify({ token: resp.accessToken, role: uiRole, profile: merged, userId: resp.user.id }));
     } catch { /* storage unavailable */ }
   };
 
   const signOut = () => {
     setToken(null);
+    setUserId(null);
     setRole('guest');
     setPro(false);
     setProfile({});
@@ -72,7 +76,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <Ctx.Provider value={{ role, setRole, pro, setPro, profile, setProfile, token, signIn, signOut, toast, toastMsg }}>
+    <Ctx.Provider value={{ role, setRole, pro, setPro, profile, setProfile, token, userId, signIn, signOut, toast, toastMsg }}>
       {children}
     </Ctx.Provider>
   );

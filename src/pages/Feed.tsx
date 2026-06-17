@@ -4,15 +4,24 @@ import { Play, Send, User } from 'lucide-react';
 import { FLAG, Player } from '../data';
 import { usePlayers } from '../usePlayers';
 import { useSession } from '../session';
+import { apiEnabled, apiSendMessage } from '../api';
 
 function Reel({ player }: { player: Player }) {
   const [playing, setPlaying] = useState(false);
   const nav = useNavigate();
-  const { role, toast } = useSession();
+  const { role, token, toast } = useSession();
 
-  const contact = () => {
-    if (role !== 'club' && role !== 'academy') { toast('Contacting players is for clubs. Sign in as a club.'); return; }
-    toast(`Request sent to ${player.name}`);
+  const contact = async () => {
+    if (role !== 'club' && role !== 'academy') { toast('Contacting players is for clubs & academies.'); return; }
+    if (apiEnabled && token) {
+      try {
+        await apiSendMessage(token, player.id, `Hi ${player.name}, we'd like to connect with you on Talenta.`);
+        toast('Message sent ✅');
+        nav('/messages', { state: { peerId: player.id, peerName: player.name } });
+      } catch { toast('Could not send message — try again'); }
+    } else {
+      toast('Sign in as a club to contact players.');
+    }
   };
 
   return (

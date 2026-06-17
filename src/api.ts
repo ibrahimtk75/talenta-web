@@ -105,3 +105,18 @@ export async function fetchPlayers(): Promise<Player[]> {
   const data = await call<BackendPlayer[]>('/api/players?limit=50');
   return Array.isArray(data) ? data.map(mapPlayer) : [];
 }
+
+// ─────────────────────────────────────────────────────────────
+// Messaging — real conversations between players and clubs/academies.
+// ─────────────────────────────────────────────────────────────
+export type Conversation = { peerId: string; peerName: string; lastMessage: string; at: string };
+export type Message = { id: string; senderId: string; receiverId: string; body: string; createdAt: string; readAt: string | null };
+
+export const apiListConversations = (token: string) =>
+  call<Conversation[]>('/api/messages', undefined, token);
+
+export const apiGetConversation = (token: string, otherUserId: string) =>
+  call<Message[]>(`/api/messages/${otherUserId}`, undefined, token);
+
+export const apiSendMessage = (token: string, receiverId: string, body: string) =>
+  call<Message>('/api/messages', { receiverId, body }, token);

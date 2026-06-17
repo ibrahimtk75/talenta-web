@@ -6,11 +6,12 @@ import { RateStars } from '../components/Stars';
 import ShareMenu from '../components/ShareMenu';
 import { usePlayer } from '../usePlayers';
 import { useSession } from '../session';
+import { apiEnabled, apiSendMessage } from '../api';
 
 export default function PlayerDetail() {
   const { id } = useParams();
   const nav = useNavigate();
-  const { role, toast } = useSession();
+  const { role, token, toast } = useSession();
   const [playing, setPlaying] = useState(false);
   const [offer, setOffer] = useState('');
   const [ratings, setRatings] = useState<Record<string, number>>({});
@@ -28,9 +29,17 @@ export default function PlayerDetail() {
     setRatings({}); setReview('');
   };
 
-  const contact = () => {
-    if (!isClub) { toast('Contacting players is for clubs. Sign in as a club.'); return; }
-    toast(`Request sent to ${p.name}`);
+  const contact = async () => {
+    if (!isClub) { toast('Contacting players is for clubs & academies.'); return; }
+    if (apiEnabled && token) {
+      try {
+        await apiSendMessage(token, p.id, `Hi ${p.name}, we'd like to connect with you on Talenta.`);
+        toast('Message sent ✅');
+        nav('/messages', { state: { peerId: p.id, peerName: p.name } });
+      } catch { toast('Could not send message — try again'); }
+    } else {
+      toast('Sign in as a club to contact players.');
+    }
   };
   const sendOffer = () => {
     const v = Number(offer);
