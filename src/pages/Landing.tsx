@@ -60,11 +60,11 @@ export default function Landing() {
             Now in early access · Football · {COUNTRIES.length}+ countries
           </div>
           <h1 className="font-display text-5xl font-bold leading-[1.05] md:text-7xl">
-            Where <span className="grad-text">footballers</span><br />get discovered & signed.
+            Connect your talent<br />to your <span className="grad-text">dream club</span>.
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-mute">
-            Players build a verified career profile and post skill reels — free to start.
-            Clubs, academies & schools discover talent with AI and sign through the platform.
+            <b className="text-slate-200">Get discovered. Get signed.</b> Footballers build a verified video
+            profile for free — clubs, academies & scouts discover talent and connect directly, worldwide.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link to="/signup" className="btn-primary text-base"><Play size={18} fill="white" /> Join Free as Player</Link>
