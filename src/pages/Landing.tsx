@@ -210,17 +210,35 @@ export default function Landing() {
           ))}
         </div>
 
-        {/* EARLY ACCESS */}
+        {/* FOUNDING MEMBERS — FREE OFFER */}
         <Reveal>
-          <div className="card mt-20 border-primary/30 bg-primary/[0.05] p-8 text-center md:p-12">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-1.5 text-[12.5px] text-mute">
-              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_#FF2A4D]" /> Now in early access
+          <div className="card relative mt-20 overflow-hidden border-primary/40 bg-gradient-to-br from-primary/[0.12] via-ink to-ink p-8 text-center md:p-12">
+            <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/[0.12] px-4 py-1.5 text-[12.5px] font-semibold text-accent">
+              🎉 Limited founding offer
             </span>
-            <h2 className="mt-4 font-display text-2xl font-bold md:text-3xl">Be a founding member</h2>
-            <p className="mx-auto mt-3 max-w-xl text-mute">Talenta is brand new. Join now and be among the very first footballers, clubs and academies on the platform — and help shape what we build next.</p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link to="/signup" className="btn-primary text-base"><Play size={18} fill="white" /> Join Free as Player</Link>
-              <Link to="/signup" className="btn-ghost">For Clubs & Academies</Link>
+            <h2 className="mt-4 font-display text-3xl font-bold leading-tight md:text-5xl">
+              Free for our first<br /><span className="grad-text">1,000 players</span> &amp; <span className="grad-text">100 institutions</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-mute">
+              Be a founding member. The first <b className="text-slate-200">1,000 footballers</b> get Talenta Pro free,
+              and the first <b className="text-slate-200">100 clubs, academies, schools &amp; universities</b> join completely free — just for being early.
+            </p>
+            <div className="mx-auto mt-7 flex max-w-lg flex-wrap justify-center gap-4">
+              <div className="min-w-[150px] flex-1 rounded-xl border border-primary/30 bg-primary/[0.06] p-4">
+                <div className="font-display text-3xl font-bold grad-text">1,000</div>
+                <div className="mt-1 text-[12px] uppercase tracking-wide text-mute">Players · Pro FREE</div>
+              </div>
+              <div className="min-w-[150px] flex-1 rounded-xl border border-primary/30 bg-primary/[0.06] p-4">
+                <div className="font-display text-3xl font-bold grad-text">100</div>
+                <div className="mt-1 text-[12px] uppercase tracking-wide text-mute">Clubs · Schools · Universities FREE</div>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-wrap justify-center gap-1.5 text-[22px] leading-none opacity-90">
+              {FLAGS.slice(0, 20).map((f, i) => <span key={i} className="select-none">{f}</span>)}
+            </div>
+            <div className="mt-7 flex flex-wrap justify-center gap-3">
+              <Link to="/signup" className="btn-primary text-base"><Play size={18} fill="white" /> Claim your free spot</Link>
+              <Link to="/signup" className="btn-ghost">For Clubs &amp; Academies</Link>
             </div>
           </div>
         </Reveal>
