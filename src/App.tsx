@@ -11,6 +11,7 @@ import PlayerOnboard from './pages/PlayerOnboard';
 import Pricing from './pages/Pricing';
 import Browse from './pages/Browse';
 import Feed from './pages/Feed';
+import Rankings from './pages/Rankings';
 import PlayerDetail from './pages/PlayerDetail';
 import ClubDashboard from './pages/ClubDashboard';
 import AcademyDashboard from './pages/AcademyDashboard';
@@ -58,6 +59,7 @@ export default function App() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/rankings" element={<Rankings />} />
           <Route path="/player/:id" element={<PlayerDetail />} />
           <Route path="/club" element={<Protected allow={['club']}><ClubDashboard /></Protected>} />
           <Route path="/academy" element={<Protected allow={['academy']}><AcademyDashboard /></Protected>} />
