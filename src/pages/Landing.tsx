@@ -42,6 +42,9 @@ const faqs = [
   ['Which sports are supported?', 'We launch with Football. Cricket, Basketball, Hockey and Tennis are coming next on the same platform.'],
 ];
 
+// Football nations — flag emojis for the "worldwide" marquee strip.
+const FLAGS = ['🇧🇷','🇦🇷','🇫🇷','🇩🇪','🇪🇸','🇵🇹','🏴󠁧󠁢󠁥󠁮󠁧󠁿','🇮🇹','🇳🇱','🇧🇪','🇳🇬','🇬🇭','🇨🇲','🇸🇳','🇪🇬','🇲🇦','🇨🇮','🇯🇵','🇰🇷','🇸🇦','🇶🇦','🇦🇪','🇮🇳','🇦🇺','🇺🇸','🇲🇽','🇨🇴','🇺🇾','🇨🇱','🇭🇷','🇩🇰','🇸🇪','🇳🇴','🇵🇱','🇨🇭','🏴󠁧󠁢󠁳󠁣󠁴󠁿','🏴󠁧󠁢󠁷󠁬󠁳󠁿','🇮🇪','🇹🇷'];
+
 export default function Landing() {
   return (
     <div>
@@ -74,6 +77,24 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* GLOBAL FLAGS STRIP */}
+      <section className="relative overflow-hidden border-y border-white/10 bg-ink/50 py-6">
+        <p className="mb-4 text-center text-[12px] font-semibold uppercase tracking-[0.25em] text-mute">
+          Talent from every corner of the world 🌍
+        </p>
+        <div className="relative">
+          <div className="flags-track flex w-max gap-7 text-[32px] leading-none">
+            {[...FLAGS, ...FLAGS].map((f, i) => (
+              <span key={i} className="cursor-default select-none opacity-85 transition-transform duration-200 hover:scale-125">{f}</span>
+            ))}
+          </div>
+          {/* edge fades */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink to-transparent" />
+        </div>
+        <style>{`.flags-track{animation:flagscroll 45s linear infinite}.flags-track:hover{animation-play-state:paused}@keyframes flagscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}`}</style>
+      </section>
+
       <div className="mx-auto max-w-6xl px-5">
         {/* STATS */}
         <Reveal>
@@ -85,6 +106,36 @@ export default function Landing() {
                 <div className="mt-1 text-[11.5px] uppercase tracking-wide text-mute">{s.l}</div>
               </div>
             ))}
+          </div>
+        </Reveal>
+
+        {/* LEGENDS / CALLIGRAPHY ART BAND */}
+        <Reveal>
+          <div className="relative mt-20 overflow-hidden rounded-xl2 border border-primary/25 bg-gradient-to-br from-primary/[0.12] via-ink to-ink p-8 md:p-14">
+            {/* decorative football + pitch arcs (original art) */}
+            <svg viewBox="0 0 400 400" className="pointer-events-none absolute -right-12 -top-16 h-[150%] w-auto opacity-[0.16]" fill="none" stroke="url(#ball)" strokeWidth="2.5">
+              <defs>
+                <linearGradient id="ball" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#FF5A2C" /><stop offset="1" stopColor="#FFB23C" />
+                </linearGradient>
+              </defs>
+              <circle cx="200" cy="200" r="118" />
+              <circle cx="200" cy="200" r="150" strokeDasharray="4 12" />
+              <polygon points="200,150 236,177 222,219 178,219 164,177" fill="url(#ball)" opacity="0.55" stroke="none" />
+              <path d="M82 200a118 118 0 0 1 236 0" />
+              <path d="M150 95l28 48M250 95l-28 48M120 300l34-44M280 300l-34-44" />
+            </svg>
+            <div className="relative z-10 max-w-2xl">
+              <span className="text-[12px] font-semibold uppercase tracking-[0.25em] text-primary">The next great footballer</span>
+              <h2 className="mt-2 leading-[1.05] grad-text" style={{ fontFamily: "'Dancing Script', cursive", fontSize: 'clamp(2.6rem, 6vw, 4.5rem)', fontWeight: 700 }}>
+                Every legend started as<br />a kid with a ball.
+              </h2>
+              <p className="mt-5 max-w-lg leading-relaxed text-mute">
+                From a dusty village ground to the world's biggest stadiums — greatness can come from anywhere.
+                Talenta makes sure the world finally sees them.
+              </p>
+              <Link to="/signup" className="btn-primary mt-7 inline-flex"><Play size={18} fill="white" /> Start your journey</Link>
+            </div>
           </div>
         </Reveal>
 
