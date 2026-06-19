@@ -42,8 +42,9 @@ const faqs = [
   ['Which sports are supported?', 'We launch with Football. Cricket, Basketball, Hockey and Tennis are coming next on the same platform.'],
 ];
 
-// Football nations — flag emojis for the "worldwide" marquee strip.
-const FLAGS = ['🇧🇷','🇦🇷','🇫🇷','🇩🇪','🇪🇸','🇵🇹','🏴󠁧󠁢󠁥󠁮󠁧󠁿','🇮🇹','🇳🇱','🇧🇪','🇳🇬','🇬🇭','🇨🇲','🇸🇳','🇪🇬','🇲🇦','🇨🇮','🇯🇵','🇰🇷','🇸🇦','🇶🇦','🇦🇪','🇮🇳','🇦🇺','🇺🇸','🇲🇽','🇨🇴','🇺🇾','🇨🇱','🇭🇷','🇩🇰','🇸🇪','🇳🇴','🇵🇱','🇨🇭','🏴󠁧󠁢󠁳󠁣󠁴󠁿','🏴󠁧󠁢󠁷󠁬󠁳󠁿','🇮🇪','🇹🇷'];
+// Football nations — ISO codes; rendered as real flag images (flagcdn) so they
+// display correctly on every device (Windows/Edge don't render flag emoji).
+const FLAGS = ['br','ar','fr','de','es','pt','gb-eng','it','nl','be','ng','gh','cm','sn','eg','ma','ci','jp','kr','sa','qa','ae','in','au','us','mx','co','uy','cl','hr','dk','se','no','pl','ch','gb-sct','gb-wls','ie','tr'];
 
 export default function Landing() {
   return (
@@ -83,9 +84,10 @@ export default function Landing() {
           Talent from every corner of the world 🌍
         </p>
         <div className="relative">
-          <div className="flags-track flex w-max gap-7 text-[32px] leading-none">
-            {[...FLAGS, ...FLAGS].map((f, i) => (
-              <span key={i} className="cursor-default select-none opacity-85 transition-transform duration-200 hover:scale-125">{f}</span>
+          <div className="flags-track flex w-max items-center gap-6">
+            {[...FLAGS, ...FLAGS].map((c, i) => (
+              <img key={i} src={`https://flagcdn.com/h40/${c}.png`} alt="" loading="lazy"
+                className="h-7 w-auto select-none rounded shadow-sm shadow-black/40 ring-1 ring-white/10 transition-transform duration-200 hover:scale-125" />
             ))}
           </div>
           {/* edge fades */}
@@ -233,8 +235,8 @@ export default function Landing() {
                 <div className="mt-1 text-[12px] uppercase tracking-wide text-mute">Clubs · Schools · Universities FREE</div>
               </div>
             </div>
-            <div className="mt-6 flex flex-wrap justify-center gap-1.5 text-[22px] leading-none opacity-90">
-              {FLAGS.slice(0, 20).map((f, i) => <span key={i} className="select-none">{f}</span>)}
+            <div className="mt-6 flex flex-wrap justify-center gap-2 opacity-90">
+              {FLAGS.slice(0, 20).map((c, i) => <img key={i} src={`https://flagcdn.com/h24/${c}.png`} alt="" loading="lazy" className="h-5 w-auto rounded-sm ring-1 ring-white/10" />)}
             </div>
             <div className="mt-7 flex flex-wrap justify-center gap-3">
               <Link to="/signup" className="btn-primary text-base"><Play size={18} fill="white" /> Claim your free spot</Link>
