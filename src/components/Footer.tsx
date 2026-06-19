@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, Linkedin, Play, Mail, Phone } from 'lucide-react';
-import { SALES_EMAIL } from '../payments';
+import { Facebook, Instagram, Twitter, Youtube, Linkedin, Play, Mail } from 'lucide-react';
+
+const CONTACT_EMAIL = 'talanta@gmail.com';
 
 const socials = [
   { Icon: Instagram, href: 'https://instagram.com/talenta', label: 'Instagram' },
@@ -57,12 +58,9 @@ export default function Footer() {
               Where footballers get discovered & signed — connecting talent with clubs, academies,
               scouts & schools worldwide. Built from Kerala, for the world.
             </p>
-            <div className="mt-5 space-y-2.5 text-sm">
-              <a href={`mailto:${SALES_EMAIL}`} className="flex items-center gap-2.5 text-mute transition-colors hover:text-white">
-                <Mail size={15} className="text-primary" /> {SALES_EMAIL}
-              </a>
-              <a href="tel:+919526538775" className="flex items-center gap-2.5 text-mute transition-colors hover:text-white">
-                <Phone size={15} className="text-primary" /> +91 95265 38775
+            <div className="mt-5 text-sm">
+              <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2.5 text-mute transition-colors hover:text-white">
+                <Mail size={15} className="text-primary" /> {CONTACT_EMAIL}
               </a>
             </div>
             <div className="mt-5 flex gap-2.5 text-mute">
