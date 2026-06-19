@@ -26,8 +26,20 @@ async function call<T>(path: string, body?: unknown, token?: string, method?: st
   let data: any = {};
   try { data = await res.json(); } catch { /* empty body */ }
   if (!res.ok) {
-    const msg = data?.error || data?.message || `Request failed (${res.status})`;
-    throw new Error(typeof msg === 'string' ? msg : 'Request failed');
+    // Turn backend codes into friendly, actionable messages for users.
+    let msg: string;
+    if (res.status === 409) {
+      msg = 'This email is already registered. Please log in instead, or use a different email.';
+    } else if (res.status === 401) {
+      msg = 'Incorrect email or password.';
+    } else if (res.status === 400 && Array.isArray(data?.issues) && data.issues[0]?.message) {
+      msg = data.issues[0].message;
+    } else {
+      const raw = data?.message || data?.error;
+      msg = (typeof raw === 'string' && raw && raw !== 'CONFLICT' && raw !== 'VALIDATION_ERROR')
+        ? raw : `Something went wrong (${res.status}). Please try again.`;
+    }
+    throw new Error(msg);
   }
   return data as T;
 }
