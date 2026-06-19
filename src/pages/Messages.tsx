@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Send, MessageSquare } from 'lucide-react';
+import { Send, MessageSquare, ChevronLeft } from 'lucide-react';
 import {
   apiEnabled, apiListConversations, apiGetConversation, apiSendMessage,
   type Conversation, type Message,
@@ -86,8 +86,8 @@ export default function Messages() {
     <div className="mx-auto max-w-6xl px-5 py-12">
       <h1 className="font-display text-2xl font-bold md:text-3xl">Messages</h1>
       <div className="card mt-5 grid h-[calc(100vh-220px)] grid-cols-1 overflow-hidden md:grid-cols-[280px_1fr]">
-        {/* conversation list */}
-        <div className="hidden overflow-y-auto border-r border-white/10 md:block">
+        {/* conversation list — on mobile, shows until a thread is opened */}
+        <div className={`overflow-y-auto border-r border-white/10 ${active ? 'hidden md:block' : 'block'}`}>
           {loading ? (
             <div className="p-4 text-[13px] text-mute">Loading…</div>
           ) : convos.length === 0 ? (
@@ -101,11 +101,12 @@ export default function Messages() {
           ))}
         </div>
 
-        {/* thread */}
-        <div className="flex flex-col">
+        {/* thread — on mobile, shows only when a conversation is open */}
+        <div className={`flex-col ${active ? 'flex' : 'hidden md:flex'}`}>
           {active ? (
             <>
-              <div className="flex items-center gap-2.5 border-b border-white/10 p-4 font-bold">
+              <div className="flex items-center gap-2 border-b border-white/10 p-4 font-bold">
+                <button onClick={() => { setActive(null); setActiveName(''); }} className="-ml-2 grid h-8 w-8 place-items-center rounded-lg text-mute hover:text-white md:hidden" aria-label="Back to conversations"><ChevronLeft size={20} /></button>
                 <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-primary to-primary-2 text-white">{(activeName || '?')[0]}</span> {activeName || 'Conversation'}
               </div>
               <div className="flex flex-1 flex-col gap-2.5 overflow-y-auto p-5">
