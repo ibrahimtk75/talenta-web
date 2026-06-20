@@ -14,6 +14,9 @@
     <meta name="author" content="Talenta" />
     <meta name="robots" content="index, follow" />
 
+    <!-- Google Search Console verification — replace CONTENT with the token Google gives you -->
+    <meta name="google-site-verification" content="REPLACE_WITH_GSC_TOKEN" />
+
     <!-- Icons & theme -->
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -37,6 +40,21 @@
     <meta name="twitter:title" content="Talenta — Connect Your Talent to Your Dream Club" />
     <meta name="twitter:description" content="Get discovered. Get signed. Footballers connect with clubs, academies & scouts worldwide." />
     <meta name="twitter:image" content="https://talenta-web.onrender.com/og.png" />
+
+    <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID (only fires once a real ID is set) -->
+    <script>
+      window.__GA_ID = 'G-XXXXXXXXXX';
+      if (window.__GA_ID && window.__GA_ID.indexOf('XXXX') === -1) {
+        var s = document.createElement('script');
+        s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.__GA_ID;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', window.__GA_ID);
+      }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
