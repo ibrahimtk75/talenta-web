@@ -132,3 +132,10 @@ export const apiGetConversation = (token: string, otherUserId: string) =>
 
 export const apiSendMessage = (token: string, receiverId: string, body: string) =>
   call<Message>('/api/messages', { receiverId, body }, token);
+
+// ─────────────────────────────────────────────────────────────
+// AI support chatbot.
+// ─────────────────────────────────────────────────────────────
+export type ChatMsg = { role: 'user' | 'assistant'; content: string };
+export const apiSupportChat = (message: string, history: ChatMsg[]) =>
+  call<{ reply: string; ai?: boolean }>('/api/support-chat', { message, history });

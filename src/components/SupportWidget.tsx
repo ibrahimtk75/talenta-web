@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { MessageCircle, X } from 'lucide-react';
+import { MessageCircle, X, Send } from 'lucide-react';
+import { apiEnabled, apiSupportChat, type ChatMsg } from '../api';
 
 const WA_NUMBER = '919526137000';
 const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hi Talenta, I have a question about the platform.')}`;
 
-// Simple support bot — canned answers to the most common questions, with a
-// WhatsApp handoff for anything else.
 const FAQ: [string, string][] = [
-  ['Is Talenta free?', 'Yes! Players join completely free. Pro is optional (₹199/mo) for unlimited videos, a verified badge and more visibility. Clubs & academies have subscription plans.'],
+  ['Is it free?', 'Yes! Players join completely free. Pro is optional (₹199/mo) for unlimited videos, a verified badge and more visibility. Clubs & academies have subscription plans.'],
   ['How do I get discovered?', 'Create a free profile, add your position, stats and a highlight video. Clubs, academies and scouts search and contact you directly. 🚀'],
-  ['How do clubs find players?', 'Clubs open Browse, filter by position, age and country, watch a player\'s reel, and tap Contact to message them directly.'],
   ['How do I join?', 'Tap "Join Free" at the top → choose Player, Club or Academy → fill in your details. It takes about 2 minutes! ⚽'],
 ];
 
@@ -19,16 +17,42 @@ const WhatsAppIcon = ({ size = 16 }: { size?: number }) => (
   </svg>
 );
 
+type Msg = { from: 'bot' | 'user'; text: string };
+
 export default function SupportWidget() {
   const [open, setOpen] = useState(false);
-  const [thread, setThread] = useState<{ from: 'bot' | 'user'; text: string }[]>([
-    { from: 'bot', text: "Hi! 👋 I'm Talenta's assistant. How can I help you today?" },
+  const [thread, setThread] = useState<Msg[]>([
+    { from: 'bot', text: "Hi! 👋 I'm Talenta's assistant. Ask me anything, or tap a question below." },
   ]);
+  const [input, setInput] = useState('');
+  const [busy, setBusy] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [thread, open]);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [thread, open, busy]);
 
-  const ask = (q: string, a: string) => setThread((t) => [...t, { from: 'user', text: q }, { from: 'bot', text: a }]);
+  const pushFaq = (q: string, a: string) => setThread((t) => [...t, { from: 'user', text: q }, { from: 'bot', text: a }]);
+
+  const send = async () => {
+    const text = input.trim();
+    if (!text || busy) return;
+    setInput('');
+    const next: Msg[] = [...thread, { from: 'user', text }];
+    setThread(next);
+    if (!apiEnabled) {
+      setThread((t) => [...t, { from: 'bot', text: `Please reach us on WhatsApp at +91 95261 37000 — we'll help right away! 💬` }]);
+      return;
+    }
+    setBusy(true);
+    try {
+      const history: ChatMsg[] = next.slice(-9, -1).map((m) => ({ role: m.from === 'user' ? 'user' : 'assistant', content: m.text }));
+      const { reply } = await apiSupportChat(text, history);
+      setThread((t) => [...t, { from: 'bot', text: reply }]);
+    } catch {
+      setThread((t) => [...t, { from: 'bot', text: `I'm having trouble right now — please message us on WhatsApp at +91 95261 37000.` }]);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <>
@@ -39,7 +63,7 @@ export default function SupportWidget() {
       </button>
 
       {open && (
-        <div className="fixed bottom-24 right-5 z-[150] flex h-[470px] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink/95 shadow-card backdrop-blur-xl">
+        <div className="fixed bottom-24 right-5 z-[150] flex h-[480px] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink/95 shadow-card backdrop-blur-xl">
           <div className="flex items-center gap-3 border-b border-white/10 bg-gradient-to-r from-primary/25 to-transparent p-4">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-primary to-primary-2 text-base text-white">⚽</span>
             <div>
@@ -50,23 +74,31 @@ export default function SupportWidget() {
 
           <div className="flex flex-1 flex-col gap-2.5 overflow-y-auto p-4">
             {thread.map((m, i) => (
-              <div key={i} className={`max-w-[82%] rounded-2xl px-3.5 py-2 text-[13px] leading-relaxed ${m.from === 'user' ? 'self-end rounded-br-md bg-gradient-to-r from-primary to-primary-2 text-white' : 'self-start rounded-bl-md bg-white/[0.06] text-slate-100'}`}>{m.text}</div>
+              <div key={i} className={`max-w-[82%] whitespace-pre-wrap rounded-2xl px-3.5 py-2 text-[13px] leading-relaxed ${m.from === 'user' ? 'self-end rounded-br-md bg-gradient-to-r from-primary to-primary-2 text-white' : 'self-start rounded-bl-md bg-white/[0.06] text-slate-100'}`}>{m.text}</div>
             ))}
+            {busy && <div className="self-start rounded-2xl rounded-bl-md bg-white/[0.06] px-3.5 py-2.5 text-[13px] text-mute">typing<span className="animate-pulse">…</span></div>}
             <div ref={endRef} />
           </div>
 
-          <div className="border-t border-white/10 p-3">
-            <div className="mb-2 flex flex-wrap gap-1.5">
-              {FAQ.map(([q, a]) => (
-                <button key={q} onClick={() => ask(q, a)}
-                  className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11.5px] text-mute transition-colors hover:border-primary hover:text-white">{q}</button>
-              ))}
-            </div>
-            <a href={WA_LINK} target="_blank" rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-3 py-2.5 text-[13.5px] font-semibold text-white transition hover:brightness-110">
-              <WhatsAppIcon size={17} /> Chat with us on WhatsApp
-            </a>
+          {/* quick FAQ chips */}
+          <div className="flex flex-wrap gap-1.5 px-3 pt-2">
+            {FAQ.map(([q, a]) => (
+              <button key={q} onClick={() => pushFaq(q, a)}
+                className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11.5px] text-mute transition-colors hover:border-primary hover:text-white">{q}</button>
+            ))}
           </div>
+
+          {/* input */}
+          <div className="flex items-center gap-2 p-3">
+            <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') send(); }}
+              placeholder="Type your question…" className="field-input flex-1 !py-2 text-[13px]" />
+            <button onClick={send} disabled={busy} className="btn-primary !px-3 !py-2 disabled:opacity-60"><Send size={16} /></button>
+          </div>
+
+          <a href={WA_LINK} target="_blank" rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 border-t border-white/10 bg-[#25D366] py-2.5 text-[13px] font-semibold text-white transition hover:brightness-110">
+            <WhatsAppIcon size={16} /> Chat with us on WhatsApp
+          </a>
         </div>
       )}
     </>
