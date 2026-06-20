@@ -46,8 +46,10 @@ async function call<T>(path: string, body?: unknown, token?: string, method?: st
 
 // Map the app's UI roles to the backend UserRole enum (PLAYER | CLUB | SCOUT).
 // Academies/schools/universities are buyer-side orgs → registered as CLUB.
-export function toBackendRole(uiRole: 'player' | 'club' | 'academy'): string {
-  return uiRole === 'player' ? 'PLAYER' : 'CLUB';
+export function toBackendRole(uiRole: 'player' | 'club' | 'academy' | 'coach'): string {
+  if (uiRole === 'player') return 'PLAYER';
+  if (uiRole === 'coach') return 'COACH';
+  return 'CLUB';
 }
 
 export const apiRegister = (b: {
@@ -139,3 +141,18 @@ export const apiSendMessage = (token: string, receiverId: string, body: string) 
 export type ChatMsg = { role: 'user' | 'assistant'; content: string };
 export const apiSupportChat = (message: string, history: ChatMsg[]) =>
   call<{ reply: string; ai?: boolean }>('/api/support-chat', { message, history });
+
+// ─────────────────────────────────────────────────────────────
+// Coaches (multi-role sports ecosystem).
+// ─────────────────────────────────────────────────────────────
+export type Coach = {
+  id: string; name: string; country: string; verified: boolean;
+  sports: string[]; certifications: string | null; experienceYrs: number | null;
+  bio: string | null; hourlyRate: number | null;
+};
+export type CoachProfileBody = {
+  sports?: string[]; certifications?: string; experienceYrs?: number; bio?: string; hourlyRate?: number;
+};
+export const fetchCoaches = () => call<Coach[]>('/api/coaches');
+export const apiUpsertCoachProfile = (token: string, b: CoachProfileBody) =>
+  call('/api/coach-profile', b, token, 'PUT');
