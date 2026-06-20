@@ -46,9 +46,10 @@ async function call<T>(path: string, body?: unknown, token?: string, method?: st
 
 // Map the app's UI roles to the backend UserRole enum (PLAYER | CLUB | SCOUT).
 // Academies/schools/universities are buyer-side orgs → registered as CLUB.
-export function toBackendRole(uiRole: 'player' | 'club' | 'academy' | 'coach'): string {
+export function toBackendRole(uiRole: 'player' | 'club' | 'academy' | 'coach' | 'referee'): string {
   if (uiRole === 'player') return 'PLAYER';
   if (uiRole === 'coach') return 'COACH';
+  if (uiRole === 'referee') return 'REFEREE';
   return 'CLUB';
 }
 
@@ -156,3 +157,12 @@ export type CoachProfileBody = {
 export const fetchCoaches = () => call<Coach[]>('/api/coaches');
 export const apiUpsertCoachProfile = (token: string, b: CoachProfileBody) =>
   call('/api/coach-profile', b, token, 'PUT');
+
+export type Referee = {
+  id: string; name: string; country: string; verified: boolean;
+  sports: string[]; level: string | null; experienceYrs: number | null; available: boolean;
+};
+export type RefereeProfileBody = { sports?: string[]; level?: string; experienceYrs?: number; available?: boolean; };
+export const fetchReferees = () => call<Referee[]>('/api/referees');
+export const apiUpsertRefereeProfile = (token: string, b: RefereeProfileBody) =>
+  call('/api/referee-profile', b, token, 'PUT');

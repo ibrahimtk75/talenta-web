@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import type { AuthResp } from './api';
 
-export type Role = 'guest' | 'player' | 'club' | 'academy' | 'coach';
+export type Role = 'guest' | 'player' | 'club' | 'academy' | 'coach' | 'referee';
 
 export interface Profile {
   name?: string;

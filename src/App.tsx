@@ -16,6 +16,8 @@ import Rankings from './pages/Rankings';
 import Challenges from './pages/Challenges';
 import Coaches from './pages/Coaches';
 import CoachRegister from './pages/CoachRegister';
+import Referees from './pages/Referees';
+import RefereeRegister from './pages/RefereeRegister';
 import PlayerDetail from './pages/PlayerDetail';
 import ClubDashboard from './pages/ClubDashboard';
 import AcademyDashboard from './pages/AcademyDashboard';
@@ -67,6 +69,8 @@ export default function App() {
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/coaches" element={<Coaches />} />
           <Route path="/coach-register" element={<CoachRegister />} />
+          <Route path="/referees" element={<Referees />} />
+          <Route path="/referee-register" element={<RefereeRegister />} />
           <Route path="/player/:id" element={<PlayerDetail />} />
           <Route path="/club" element={<Protected allow={['club']}><ClubDashboard /></Protected>} />
           <Route path="/academy" element={<Protected allow={['academy']}><AcademyDashboard /></Protected>} />

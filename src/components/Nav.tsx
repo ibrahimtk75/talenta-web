@@ -5,7 +5,7 @@ import { useSession } from '../session';
 
 type NavItem = { to: string; label: string; icon: LucideIcon };
 const DISCOVER: [string, string][] = [
-  ['players', 'Players'], ['coaches', 'Coaches'], ['clubs', 'Clubs'], ['academies', 'Academies'], ['universities', 'Universities'], ['schools', 'Schools'],
+  ['players', 'Players'], ['coaches', 'Coaches'], ['referees', 'Referees'], ['clubs', 'Clubs'], ['academies', 'Academies'], ['universities', 'Universities'], ['schools', 'Schools'],
 ];
 
 export default function Nav() {
@@ -31,7 +31,7 @@ export default function Nav() {
   else if (role === 'club') roleLinks.push({ to: '/club', label: 'Dashboard', icon: LayoutDashboard }, { to: '/messages', label: 'Messages', icon: MessageSquare });
   else if (role === 'academy') roleLinks.push({ to: '/academy', label: 'Dashboard', icon: LayoutDashboard }, { to: '/messages', label: 'Messages', icon: MessageSquare });
 
-  const goDisc = (k: string) => { setDisc(false); setOpen(false); nav(k === 'players' ? '/browse' : k === 'coaches' ? '/coaches' : `/browse?cat=${k}`); };
+  const goDisc = (k: string) => { setDisc(false); setOpen(false); nav(k === 'players' ? '/browse' : k === 'coaches' ? '/coaches' : k === 'referees' ? '/referees' : `/browse?cat=${k}`); };
 
   const Item = ({ l, mobile = false }: { l: NavItem; mobile?: boolean }) => (
     <NavLink to={l.to} onClick={() => setOpen(false)}
