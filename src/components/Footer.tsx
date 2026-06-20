@@ -15,7 +15,7 @@ type Item = { l: string; to?: string; href?: string };
 const cols: { h: string; items: Item[] }[] = [
   { h: 'Explore', items: [
     { l: 'Talent Feed', to: '/feed' }, { l: 'Discover', to: '/browse' },
-    { l: 'Rankings', to: '/rankings' }, { l: 'Pricing', to: '/pricing' },
+    { l: 'Rankings', to: '/rankings' }, { l: 'Blog', href: '/blog/' }, { l: 'Pricing', to: '/pricing' },
   ] },
   { h: 'Join', items: [
     { l: 'As a Player', to: '/signup' }, { l: 'For Clubs & Scouts', to: '/signup' },
