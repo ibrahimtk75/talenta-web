@@ -3,6 +3,7 @@ import { useEffect, type ReactElement } from 'react';
 import { SessionProvider, useSession, type Role } from './session';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
+import SupportWidget from './components/SupportWidget';
 import Landing from './pages/Landing';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
@@ -72,6 +73,7 @@ export default function App() {
       </main>
       <Footer />
       <Toast />
+      <SupportWidget />
     </SessionProvider>
   );
 }
