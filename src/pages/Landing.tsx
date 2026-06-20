@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import { SPORTS, COUNTRIES } from '../data';
 import Reveal from '../components/Reveal';
+import { usePlayers } from '../usePlayers';
+import { PlayerGridCard } from '../components/PlayerCard';
 
 const stats = [
   { icon: Sparkles, n: 'Free', l: 'For players' },
@@ -47,6 +49,8 @@ const faqs = [
 const FLAGS = ['br','ar','fr','de','es','pt','gb-eng','it','nl','be','ng','gh','cm','sn','eg','ma','ci','jp','kr','sa','qa','ae','in','au','us','mx','co','uy','cl','hr','dk','se','no','pl','ch','gb-sct','gb-wls','ie','tr'];
 
 export default function Landing() {
+  const { players, loading: playersLoading } = usePlayers();
+  const showcase = players.slice(0, 6);
   return (
     <div>
       {/* HERO */}
@@ -211,6 +215,27 @@ export default function Landing() {
             </Reveal>
           ))}
         </div>
+
+        {/* REAL TALENT SHOWCASE */}
+        <Heading title="Real talent on Talenta" sub="Footballers building their future right now — get discovered alongside them" center />
+        {playersLoading ? (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-64 animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}
+          </div>
+        ) : showcase.length ? (
+          <>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {showcase.map((p) => <PlayerGridCard key={p.id} player={p} />)}
+            </div>
+            <div className="mt-7 text-center">
+              <Link to="/browse" className="btn-ghost">Browse all players <ChevronRight size={15} /></Link>
+            </div>
+          </>
+        ) : (
+          <div className="rounded-xl2 border border-dashed border-white/15 p-10 text-center text-mute">
+            No players yet — be the very first to join and get discovered. ⚽
+          </div>
+        )}
 
         {/* FOUNDING MEMBERS — FREE OFFER */}
         <Reveal>
