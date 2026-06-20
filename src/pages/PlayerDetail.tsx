@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp, Heart } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp, Heart, Sparkles } from 'lucide-react';
 import { FLAG, initials, valuationOf, fmtMoney } from '../data';
 import { RateStars } from '../components/Stars';
 import ShareMenu from '../components/ShareMenu';
+import TalentaCard from '../components/TalentaCard';
 import { usePlayer } from '../usePlayers';
 import { useSession } from '../session';
 import { apiEnabled, apiSendMessage } from '../api';
@@ -13,6 +14,7 @@ export default function PlayerDetail() {
   const nav = useNavigate();
   const { role, token, toast } = useSession();
   const [playing, setPlaying] = useState(false);
+  const [showCard, setShowCard] = useState(false);
   const [offer, setOffer] = useState('');
   const [ratings, setRatings] = useState<Record<string, number>>({});
   const [review, setReview] = useState('');
@@ -66,6 +68,7 @@ export default function PlayerDetail() {
           <div className="mt-2 text-[13px] text-mute">No club reviews yet</div>
         </div>
         <div className="flex flex-wrap gap-2">
+          <button onClick={() => setShowCard(true)} className="btn-ghost"><Sparkles size={15} /> Talenta Card</button>
           <ShareMenu text={`${p.name} — ${p.pos} on Talenta ⚽`} />
           <button onClick={contact} className="btn-primary"><Send size={16} /> Contact Player</button>
         </div>
@@ -172,6 +175,8 @@ export default function PlayerDetail() {
           )}
         </div>
       ) : <p className="text-[13px] text-mute">No highlight video uploaded yet.</p>}
+
+      {showCard && <TalentaCard player={p} onClose={() => setShowCard(false)} />}
     </div>
   );
 }
