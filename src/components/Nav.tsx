@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Play, Compass, Tag, Trophy, LayoutDashboard, MessageSquare, Menu, X, ChevronDown, type LucideIcon } from 'lucide-react';
+import { Play, Compass, Tag, Trophy, Flame, LayoutDashboard, MessageSquare, Menu, X, ChevronDown, type LucideIcon } from 'lucide-react';
 import { useSession } from '../session';
 
 type NavItem = { to: string; label: string; icon: LucideIcon };
@@ -72,6 +72,7 @@ export default function Nav() {
           </div>
           {roleLinks.map((l) => <Item key={l.to} l={l} />)}
           <Item l={{ to: '/rankings', label: 'Rankings', icon: Trophy }} />
+          <Item l={{ to: '/challenges', label: 'Challenges', icon: Flame }} />
           <Item l={{ to: '/pricing', label: 'Pricing', icon: Tag }} />
         </nav>
 
@@ -103,6 +104,7 @@ export default function Nav() {
             ))}
             {roleLinks.map((l) => <Item key={l.to} l={l} mobile />)}
             <Item l={{ to: '/rankings', label: 'Rankings', icon: Trophy }} mobile />
+            <Item l={{ to: '/challenges', label: 'Challenges', icon: Flame }} mobile />
             <Item l={{ to: '/pricing', label: 'Pricing', icon: Tag }} mobile />
           </div>
         </div>
