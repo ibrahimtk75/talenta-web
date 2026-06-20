@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp, Heart } from 'lucide-react';
 import { FLAG, initials, valuationOf, fmtMoney } from '../data';
 import { RateStars } from '../components/Stars';
 import ShareMenu from '../components/ShareMenu';
@@ -69,6 +69,25 @@ export default function PlayerDetail() {
           <ShareMenu text={`${p.name} — ${p.pos} on Talenta ⚽`} />
           <button onClick={contact} className="btn-primary"><Send size={16} /> Contact Player</button>
         </div>
+      </div>
+
+      {/* Sponsor / support a player */}
+      <div className="card mt-6 overflow-hidden border-accent/30 bg-gradient-to-br from-accent/[0.09] to-transparent p-6">
+        <div className="flex items-center gap-2 text-accent"><Heart size={16} fill="currentColor" /> <span className="text-[11.5px] font-bold uppercase tracking-wider">Support a dream</span></div>
+        <h2 className="mt-2 font-display text-xl font-bold">Sponsor {p.name}'s journey</h2>
+        <p className="mt-2 max-w-2xl text-[13.5px] leading-relaxed text-mute">
+          Many talented young footballers can't afford boots, travel to trials, or quality coaching. Become a sponsor and
+          help {p.name} chase their dream — every contribution goes toward their football journey.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <a
+            href={`https://wa.me/919526137000?text=${encodeURIComponent(`Hi Talenta, I'd like to sponsor ${p.name}'s football journey. Please share the details.`)}`}
+            target="_blank" rel="noopener noreferrer" className="btn-primary">
+            <Heart size={16} fill="white" /> Become a sponsor
+          </a>
+          <ShareMenu text={`Help ${p.name} reach their football dream on Talenta ⚽💚`} label="Share & spread the word" />
+        </div>
+        <p className="mt-3 text-[11.5px] text-mute">Talenta connects sponsors directly with players — transparent and fee-free.</p>
       </div>
 
       {/* Estimated value & offers */}
