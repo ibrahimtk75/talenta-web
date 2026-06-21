@@ -53,11 +53,11 @@ export default function Nav() {
         </Link>
 
         <nav className="ml-2 hidden items-center gap-0.5 md:flex">
-          <Item l={{ to: '/feed', label: 'Feed', icon: Play }} />
+          <Item l={{ to: '/feed', label: 'Watch', icon: Play }} />
           <div className="relative">
             <button onClick={() => setDisc((d) => !d)}
               className="flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[13.5px] font-semibold text-mute transition-colors hover:bg-white/[0.04] hover:text-white">
-              <Compass size={16} className="opacity-80" /> Discover <ChevronDown size={14} className={`transition-transform ${disc ? 'rotate-180' : ''}`} />
+              <Compass size={16} className="opacity-80" /> Explore <ChevronDown size={14} className={`transition-transform ${disc ? 'rotate-180' : ''}`} />
             </button>
             {disc && (
               <>
@@ -71,9 +71,9 @@ export default function Nav() {
             )}
           </div>
           {roleLinks.map((l) => <Item key={l.to} l={l} />)}
-          <Item l={{ to: '/rankings', label: 'Rankings', icon: Trophy }} />
-          <Item l={{ to: '/challenges', label: 'Challenges', icon: Flame }} />
-          <Item l={{ to: '/pricing', label: 'Pricing', icon: Tag }} />
+          <Item l={{ to: '/rankings', label: 'Top Players', icon: Trophy }} />
+          <Item l={{ to: '/challenges', label: 'Compete', icon: Flame }} />
+          <Item l={{ to: '/pricing', label: 'Plans', icon: Tag }} />
         </nav>
 
         <div className="ml-auto flex items-center gap-2.5">
@@ -97,15 +97,15 @@ export default function Nav() {
       {open && (
         <div className="border-t border-white/10 bg-ink/95 px-4 py-3 backdrop-blur-xl md:hidden">
           <div className="flex flex-col gap-1">
-            <Item l={{ to: '/feed', label: 'Feed', icon: Play }} mobile />
-            <div className="px-3.5 pb-0.5 pt-2 text-[11px] font-bold uppercase tracking-wide text-mute/70">Discover</div>
+            <Item l={{ to: '/feed', label: 'Watch', icon: Play }} mobile />
+            <div className="px-3.5 pb-0.5 pt-2 text-[11px] font-bold uppercase tracking-wide text-mute/70">Explore</div>
             {DISCOVER.map(([k, lab]) => (
               <button key={k} onClick={() => goDisc(k)} className="flex w-full items-center gap-2 rounded-lg px-3.5 py-2 text-[13.5px] font-semibold text-mute hover:bg-white/[0.04] hover:text-white"><Compass size={15} /> {lab}</button>
             ))}
             {roleLinks.map((l) => <Item key={l.to} l={l} mobile />)}
-            <Item l={{ to: '/rankings', label: 'Rankings', icon: Trophy }} mobile />
-            <Item l={{ to: '/challenges', label: 'Challenges', icon: Flame }} mobile />
-            <Item l={{ to: '/pricing', label: 'Pricing', icon: Tag }} mobile />
+            <Item l={{ to: '/rankings', label: 'Top Players', icon: Trophy }} mobile />
+            <Item l={{ to: '/challenges', label: 'Compete', icon: Flame }} mobile />
+            <Item l={{ to: '/pricing', label: 'Plans', icon: Tag }} mobile />
           </div>
         </div>
       )}
