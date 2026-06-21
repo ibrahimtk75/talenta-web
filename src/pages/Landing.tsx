@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Play, Users, ChevronRight, BadgeCheck, Sparkles, ShieldCheck,
   Youtube, Percent, UserPlus, Eye, Trophy, ChevronDown,
-  Building2, GraduationCap,
+  Building2, GraduationCap, School, Landmark, type LucideIcon,
 } from 'lucide-react';
-import { SPORTS, COUNTRIES } from '../data';
+import { SPORTS, COUNTRIES, FLAG, type Player } from '../data';
 import Reveal from '../components/Reveal';
 import { usePlayers } from '../usePlayers';
-import { PlayerGridCard } from '../components/PlayerCard';
+import { apiEnabled, fetchInstitutions, type Institution } from '../api';
 
 const stats = [
   { icon: Sparkles, n: 'Free', l: 'For players' },
@@ -50,7 +50,7 @@ const FLAGS = ['br','ar','fr','de','es','pt','gb-eng','it','nl','be','ng','gh','
 
 export default function Landing() {
   const { players, loading: playersLoading } = usePlayers();
-  const showcase = players.slice(0, 6);
+  const videoPlayers = players.filter((p) => p.yt).slice(0, 6);
   return (
     <div>
       {/* HERO */}
@@ -216,16 +216,16 @@ export default function Landing() {
           ))}
         </div>
 
-        {/* REAL TALENT SHOWCASE */}
-        <Heading title="Real talent on Talenta" sub="Footballers building their future right now — get discovered alongside them" center />
+        {/* PLAYER VIDEO SHOWCASE */}
+        <Heading title="Watch real talent in action" sub="60-second skill reels from footballers on Talenta — tap to watch their full profile" center />
         {playersLoading ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-64 animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}
+            {Array.from({ length: 6 }).map((_, i) => <div key={i} className="aspect-video animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}
           </div>
-        ) : showcase.length ? (
+        ) : videoPlayers.length ? (
           <>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {showcase.map((p) => <PlayerGridCard key={p.id} player={p} />)}
+              {videoPlayers.map((p) => <PlayerVideoCard key={p.id} player={p} />)}
             </div>
             <div className="mt-7 text-center">
               <Link to="/browse" className="btn-ghost">Browse all players <ChevronRight size={15} /></Link>
@@ -233,9 +233,13 @@ export default function Landing() {
           </>
         ) : (
           <div className="rounded-xl2 border border-dashed border-white/15 p-10 text-center text-mute">
-            No players yet — be the very first to join and get discovered. ⚽
+            No player videos yet — be the very first to upload a reel and get discovered. ⚽
           </div>
         )}
+
+        {/* INSTITUTIONS DIRECTORY — clubs, academies, schools, universities */}
+        <Heading title="Clubs, academies & institutions" sub="The clubs, academies, schools & universities discovering talent on Talenta" center />
+        <InstitutionsDirectory />
 
         {/* FOUNDING MEMBERS — FREE OFFER */}
         <Reveal>
@@ -306,6 +310,98 @@ function Heading({ title, sub, center }: { title: string; sub: string; center?: 
     <div className={`mb-7 mt-20 ${center ? 'text-center' : ''}`}>
       <h2 className="font-display text-2xl font-bold md:text-3xl">{title}</h2>
       <p className="mt-1.5 text-sm text-mute">{sub}</p>
+    </div>
+  );
+}
+
+// A player's video reel as a tappable thumbnail (links to the full profile).
+function PlayerVideoCard({ player }: { player: Player }) {
+  return (
+    <Link to={`/player/${player.id}`} className="card group overflow-hidden">
+      <div className="relative aspect-video overflow-hidden bg-ink">
+        <img src={`https://img.youtube.com/vi/${player.yt}/hqdefault.jpg`} alt={`${player.name} skill reel`} loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
+        <div className="absolute inset-0 grid place-items-center">
+          <span className="grid h-14 w-14 place-items-center rounded-full bg-primary/90 text-white shadow-glow transition-transform group-hover:scale-110">
+            <Play size={22} fill="white" />
+          </span>
+        </div>
+        {player.verified && (
+          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-ink/80 px-2 py-1 text-[11px] font-semibold text-sky backdrop-blur">
+            <BadgeCheck size={12} /> Verified
+          </span>
+        )}
+      </div>
+      <div className="flex items-center justify-between p-4">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5 font-semibold"><span className="truncate">{player.name}</span> <span>{FLAG[player.country] || '🌍'}</span></div>
+          <div className="text-[12.5px] text-mute">{player.pos}{player.age ? ` · ${player.age}` : ''}</div>
+        </div>
+        {!!player.match && <span className="flex-shrink-0 rounded-lg bg-primary/15 px-2 py-1 text-[12px] font-bold text-primary">{player.match}</span>}
+      </div>
+    </Link>
+  );
+}
+
+// Directory of registered clubs, academies, schools & universities, grouped by category.
+const INSTITUTION_CATEGORIES: { key: string; label: string; icon: LucideIcon; match: (i: Institution) => boolean }[] = [
+  { key: 'clubs', label: 'Clubs & Scouts', icon: Building2, match: (i) => i.role === 'CLUB' },
+  { key: 'academies', label: 'Academies', icon: GraduationCap, match: (i) => i.role === 'ACADEMY' && (!i.orgType || i.orgType === 'Academy') },
+  { key: 'schools', label: 'Schools & Colleges', icon: School, match: (i) => i.orgType === 'School' },
+  { key: 'universities', label: 'Universities', icon: Landmark, match: (i) => i.orgType === 'University' },
+];
+
+function InstitutionsDirectory() {
+  const [items, setItems] = useState<Institution[]>([]);
+  const [loading, setLoading] = useState(apiEnabled);
+
+  useEffect(() => {
+    if (!apiEnabled) { setLoading(false); return; }
+    let alive = true;
+    fetchInstitutions()
+      .then((list) => { if (alive) { setItems(Array.isArray(list) ? list : []); setLoading(false); } })
+      .catch(() => { if (alive) setLoading(false); });
+    return () => { alive = false; };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-40 animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {INSTITUTION_CATEGORIES.map((cat) => {
+        const list = items.filter(cat.match);
+        return (
+          <div key={cat.key} className="card flex flex-col p-6">
+            <div className="flex items-center gap-2.5">
+              <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-xl bg-primary/15 text-primary"><cat.icon size={19} /></span>
+              <div className="min-w-0">
+                <div className="font-bold leading-tight">{cat.label}</div>
+                <div className="text-[12px] text-mute">{list.length} joined</div>
+              </div>
+            </div>
+            <div className="mt-4 flex-1 space-y-2">
+              {list.length ? list.slice(0, 5).map((it) => (
+                <div key={it.id} className="flex items-center gap-2 text-[13px]">
+                  <span>{FLAG[it.country] || '🌍'}</span>
+                  <span className="truncate">{it.name}</span>
+                  {it.verified && <BadgeCheck size={13} className="flex-shrink-0 text-sky" />}
+                </div>
+              )) : (
+                <p className="text-[12.5px] leading-relaxed text-mute">
+                  No {cat.label.toLowerCase()} yet — <Link to="/signup" className="font-semibold text-primary">be the first to join</Link>.
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

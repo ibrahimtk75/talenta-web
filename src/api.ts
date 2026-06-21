@@ -54,7 +54,7 @@ export function toBackendRole(uiRole: 'player' | 'club' | 'academy' | 'coach' | 
 }
 
 export const apiRegister = (b: {
-  email: string; password: string; fullName: string; country: string; role: string;
+  email: string; password: string; fullName: string; country: string; role: string; orgType?: string;
 }) => call<AuthResp>('/api/auth/register', b);
 
 export const apiLogin = (b: { email: string; password: string }) =>
@@ -166,3 +166,12 @@ export type RefereeProfileBody = { sports?: string[]; level?: string; experience
 export const fetchReferees = () => call<Referee[]>('/api/referees');
 export const apiUpsertRefereeProfile = (token: string, b: RefereeProfileBody) =>
   call('/api/referee-profile', b, token, 'PUT');
+
+// ─────────────────────────────────────────────────────────────
+// Institutions directory — clubs, academies, schools, universities.
+// ─────────────────────────────────────────────────────────────
+export type Institution = {
+  id: string; name: string; country: string;
+  role: 'CLUB' | 'ACADEMY'; orgType: string | null; verified: boolean;
+};
+export const fetchInstitutions = () => call<Institution[]>('/api/institutions');

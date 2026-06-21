@@ -43,7 +43,7 @@ export default function OrgRegister() {
       try {
         const resp = await apiRegister({
           email: email.trim(), password, fullName: name.trim(),
-          country: country.slice(0, 2).toUpperCase(), role: toBackendRole(uiRole),
+          country: country.slice(0, 2).toUpperCase(), role: toBackendRole(uiRole), orgType: type,
         });
         signIn(resp, uiRole, prof);
       } catch (e) {
