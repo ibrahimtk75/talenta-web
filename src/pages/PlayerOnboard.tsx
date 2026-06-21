@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ChevronRight, Upload } from 'lucide-react';
 import { useSession } from '../session';
-import { COUNTRIES, POSITIONS } from '../data';
+import { COUNTRIES, POSITIONS, SKILL_LEVELS } from '../data';
 import { payLink } from '../payments';
 import { apiEnabled, apiRegister, apiUpsertProfile, toBackendRole, type ProfileBody } from '../api';
 
@@ -21,6 +21,7 @@ export default function PlayerOnboard() {
   const [password, setPassword] = useState('');
   const [country, setCountry] = useState(COUNTRIES[0]);
   const [position, setPosition] = useState(POSITIONS[1]);
+  const [skill, setSkill] = useState(SKILL_LEVELS[1]); // default Intermediate
   const [busy, setBusy] = useState(false);
   // Profile detail fields (saved to the backend so the player appears in Browse).
   const [dob, setDob] = useState('');
@@ -37,6 +38,7 @@ export default function PlayerOnboard() {
   const buildProfileBody = (): ProfileBody => ({
     sport: 'FOOTBALL',
     position,
+    skillLevel: skill,
     dominantSide: foot,
     dateOfBirth: dob ? new Date(dob).toISOString() : undefined,
     heightCm: int(height) > 0 ? int(height) : undefined,
@@ -166,6 +168,7 @@ export default function PlayerOnboard() {
             <Field label="Weight (kg)"><input value={weight} onChange={(e) => setWeight(e.target.value)} type="number" className="field-input" placeholder="72" /></Field>
             <Field label="Dominant foot"><select value={foot} onChange={(e) => setFoot(e.target.value)} className="field-input"><option>Right</option><option>Left</option><option>Both</option></select></Field>
             <Field label="Main position"><select value={position} onChange={(e) => setPosition(e.target.value)} className="field-input">{POSITIONS.slice(1).map((p) => <option key={p}>{p}</option>)}</select></Field>
+            <Field label="Skill level"><select value={skill} onChange={(e) => setSkill(e.target.value)} className="field-input">{SKILL_LEVELS.map((s) => <option key={s}>{s}</option>)}</select></Field>
           </div>
         )}
         {step === 2 && (

@@ -3,6 +3,7 @@ export interface Player {
   name: string;
   country: string;
   pos: string;
+  skillLevel?: string;
   age: number;
   foot: string;
   yt: string;
@@ -38,6 +39,9 @@ export const POSITIONS = [
   'Defensive Midfielder', 'Central Midfielder', 'Attacking Midfielder',
   'Right Winger', 'Left Winger', 'Striker', 'Centre-Forward',
 ];
+
+// Self-declared skill level — helps clubs & academies filter by level.
+export const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Semi-Pro', 'Professional'];
 
 export const COUNTRIES = ['Argentina', 'Australia', 'Belgium', 'Brazil', 'Cameroon', 'Canada', 'Colombia', 'Croatia', 'Denmark', 'Egypt', 'England', 'France', 'Germany', 'Ghana', 'India', 'Italy', 'Ivory Coast', 'Japan', 'Mexico', 'Morocco', 'Netherlands', 'Nigeria', 'Norway', 'Pakistan', 'Portugal', 'Qatar', 'Saudi Arabia', 'Scotland', 'Senegal', 'Spain', 'Sweden', 'UAE', 'USA', 'Uruguay', 'Wales', 'Other'];
 

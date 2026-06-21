@@ -64,6 +64,7 @@ export const apiLogin = (b: { email: string; password: string }) =>
 export type ProfileBody = {
   sport: 'FOOTBALL';
   position?: string;
+  skillLevel?: string;
   heightCm?: number;
   weightKg?: number;
   dominantSide?: string;
@@ -78,7 +79,7 @@ export const apiUpsertProfile = (token: string, b: ProfileBody) =>
 // Players (public browse) — GET /api/players returns an array of footballers.
 // ─────────────────────────────────────────────────────────────
 type BackendPlayer = {
-  id: string; name: string; country: string | null; position: string | null;
+  id: string; name: string; country: string | null; position: string | null; skillLevel?: string | null;
   age: number | null; foot: string | null; career: [string, string][] | null;
   headline: string | null; stats: Record<string, number> | null;
   youtubeVideoId: string | null; views: number; pro: boolean; verified: boolean;
@@ -103,6 +104,7 @@ function mapPlayer(b: BackendPlayer): Player {
     name: b.name || 'Unnamed player',
     country: b.country || 'Other',
     pos: b.position || 'Player',
+    skillLevel: b.skillLevel || undefined,
     age: b.age ?? 0,
     foot: b.foot || '—',
     yt: b.youtubeVideoId || '',

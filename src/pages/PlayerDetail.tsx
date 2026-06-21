@@ -65,6 +65,13 @@ export default function PlayerDetail() {
             {p.verified && <BadgeCheck size={20} className="text-sky" />}
           </h1>
           <div className="mt-1 text-mute">Football · {p.pos}{p.age ? ` · Age ${p.age}` : ''}{p.foot && p.foot !== '—' ? ` · ${p.foot} foot` : ''}</div>
+          {p.skillLevel && (
+            <div className="mt-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/[0.08] px-3 py-1 text-[12px] font-semibold text-primary">
+                <Sparkles size={12} /> {p.skillLevel} level
+              </span>
+            </div>
+          )}
           <div className="mt-2 text-[13px] text-mute">No club reviews yet</div>
         </div>
         <div className="flex flex-wrap gap-2">
