@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, X } from 'lucide-react';
-import { POSITIONS, COUNTRY_NAME } from '../data';
+import { POSITIONS, COUNTRY_NAME, SKILL_LEVELS } from '../data';
 import { PlayerGridCard } from '../components/PlayerCard';
 import { usePlayers } from '../usePlayers';
 
@@ -15,6 +15,7 @@ export default function Browse() {
   const [pos, setPos] = useState('All Positions');
   const [q, setQ] = useState('');
   const [country, setCountry] = useState('All');
+  const [skill, setSkill] = useState('All');
 
   const { players: all, loading } = usePlayers();
   const isPlayers = cat === 'players';
@@ -24,11 +25,12 @@ export default function Browse() {
   let players = all;
   if (pos !== 'All Positions') players = players.filter((p) => p.pos === pos);
   if (country !== 'All') players = players.filter((p) => p.country === country);
+  if (skill !== 'All') players = players.filter((p) => p.skillLevel === skill);
   if (ql) players = players.filter((p) => p.name.toLowerCase().includes(ql) || p.pos.toLowerCase().includes(ql));
 
   const count = isPlayers ? players.length : 0;
   const label = CATS.find(([k]) => k === cat)![1];
-  const switchCat = (k: string) => { setSp(k === 'players' ? {} : { cat: k }); setQ(''); setCountry('All'); setPos('All Positions'); };
+  const switchCat = (k: string) => { setSp(k === 'players' ? {} : { cat: k }); setQ(''); setCountry('All'); setPos('All Positions'); setSkill('All'); };
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-12">
@@ -56,6 +58,10 @@ export default function Browse() {
               <option value="All">🌍 All countries</option>
               {countryCodes.map((c) => <option key={c} value={c}>{COUNTRY_NAME[c] || c}</option>)}
             </select>
+            <select value={skill} onChange={(e) => setSkill(e.target.value)} className="field-input w-auto min-w-[160px]">
+              <option value="All">⭐ All skill levels</option>
+              {SKILL_LEVELS.map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
           </div>
 
           {/* position chips */}
@@ -72,7 +78,7 @@ export default function Browse() {
             <div className="mt-10 rounded-xl2 border border-dashed border-white/15 p-10 text-center text-mute">
               {all.length === 0
                 ? 'No players have joined yet. Be the first — create your free profile and get discovered.'
-                : 'No players match your filters. Try clearing the search or country.'}
+                : 'No players match your filters. Try clearing the search, country or skill level.'}
             </div>
           ) : (
             <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{players.map((p) => <PlayerGridCard key={p.id} player={p} />)}</div>
