@@ -25,4 +25,19 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://talenta-web.onrender.com/blog/how-to-become-a-professional-footballer-in-india.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://talenta-web.onrender.com/blog/best-football-academies-in-kerala.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://talenta-web.onrender.com/blog/football-positions-explained-which-position-suits-you.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
