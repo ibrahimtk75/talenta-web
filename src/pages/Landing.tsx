@@ -249,10 +249,16 @@ export default function Landing() {
           </div>
         ) : videoPlayers.length ? (
           <>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {videoPlayers.map((p) => <PlayerVideoCard key={p.id} player={p} />)}
+            {/* horizontal slider — swipe/scroll through player reels */}
+            <div className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 pb-3" style={{ scrollbarWidth: 'thin' }}>
+              {videoPlayers.map((p) => (
+                <div key={p.id} className="w-[80%] flex-shrink-0 snap-start sm:w-[46%] lg:w-[31.5%]">
+                  <PlayerVideoCard player={p} />
+                </div>
+              ))}
             </div>
-            <div className="mt-7 text-center">
+            <p className="mt-1.5 text-center text-[12px] text-mute sm:hidden">← swipe to see more →</p>
+            <div className="mt-6 text-center">
               <Link to="/browse" className="btn-ghost">Browse all players <ChevronRight size={15} /></Link>
             </div>
           </>
