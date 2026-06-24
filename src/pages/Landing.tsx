@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Play, Users, ChevronRight, BadgeCheck, Sparkles, ShieldCheck,
   Youtube, Percent, UserPlus, Eye, Trophy, ChevronDown,
-  Building2, GraduationCap, School, Landmark, type LucideIcon,
+  Building2, GraduationCap, School, Landmark, Bot, Video, Target, type LucideIcon,
 } from 'lucide-react';
 import { SPORTS, COUNTRIES, FLAG, type Player } from '../data';
 import Reveal from '../components/Reveal';
@@ -22,6 +22,14 @@ const benefits = [
   { icon: ShieldCheck, h: 'Verified profiles', p: 'ID, age & club-history verification + two-way ratings build trust on both sides.' },
   { icon: Youtube, h: 'Zero-cost video', p: '60-second skill reels & full matches hosted free on YouTube — no hosting bills.' },
   { icon: Percent, h: 'On-platform deals', p: 'Contracts and signings happen on Talenta. We take just 3% on successful deals.' },
+];
+
+// "Powered by AI" — what's live today vs the AI roadmap we're building next.
+const aiFeatures: { icon: LucideIcon; h: string; p: string; live: boolean }[] = [
+  { icon: Sparkles, h: 'AI Talent Score', p: 'Every player gets a clear, data-driven score so clubs spot real ability fast — not endless scrolling.', live: true },
+  { icon: Bot, h: 'AI Assistant', p: 'An always-on assistant answers player and club questions instantly, in plain language.', live: true },
+  { icon: Video, h: 'AI Video Analysis', p: 'Upload a reel and AI extracts your real skills — pace, technique and best position — automatically.', live: false },
+  { icon: Target, h: 'Smart Club Matching', p: 'AI matches each player to the clubs and academies whose needs fit them best, like a recommender engine.', live: false },
 ];
 
 const steps = [
@@ -169,6 +177,23 @@ export default function Landing() {
                 <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/15 text-primary"><b.icon size={20} /></div>
                 <h3 className="mt-4 font-bold">{b.h}</h3>
                 <p className="mt-2 text-[13.5px] leading-relaxed text-mute">{b.p}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* POWERED BY AI */}
+        <Heading title="Powered by AI" sub="Smart technology so talent rises on merit — live today, with a bold AI roadmap ahead" center />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {aiFeatures.map((a, i) => (
+            <Reveal key={a.h} delay={i * 80}>
+              <div className="card h-full p-6">
+                <div className="flex items-center justify-between">
+                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/15 text-primary"><a.icon size={20} /></div>
+                  <span className={`rounded-full px-2.5 py-1 text-[10px] font-extrabold ${a.live ? 'bg-accent text-white' : 'border border-white/10 bg-white/[0.06] text-mute'}`}>{a.live ? '● LIVE' : 'COMING'}</span>
+                </div>
+                <h3 className="mt-4 font-bold">{a.h}</h3>
+                <p className="mt-2 text-[13.5px] leading-relaxed text-mute">{a.p}</p>
               </div>
             </Reveal>
           ))}
