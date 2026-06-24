@@ -44,6 +44,15 @@
   }
 }
 
+/* Native <select> dropdown options — without this, Windows renders the open
+   list as near-white text on a white background (unreadable). Force a dark,
+   on-brand list with light text. */
+select.field-input option,
+select option {
+  background-color: #0B1A38;
+  color: #f1f5f9;
+}
+
 /* stadium background */
 .stadium-bg {
   position: fixed; inset: 0; z-index: -2; overflow: hidden;

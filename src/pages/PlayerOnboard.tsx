@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ChevronRight, Upload } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Youtube } from 'lucide-react';
 import { useSession } from '../session';
 import { COUNTRIES, POSITIONS, SKILL_LEVELS } from '../data';
 import { payLink } from '../payments';
-import { apiEnabled, apiRegister, apiUpsertProfile, toBackendRole, type ProfileBody } from '../api';
+import { apiEnabled, apiRegister, apiUpsertProfile, apiAddYoutubeVideo, toBackendRole, type ProfileBody } from '../api';
 
 const STEPS = ['Personal', 'Physical', 'Career', 'Stats', 'Finish'];
 
@@ -33,6 +33,7 @@ export default function PlayerOnboard() {
   const [goals, setGoals] = useState('');
   const [assists, setAssists] = useState('');
   const [passAcc, setPassAcc] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
 
   const int = (v: string) => Math.max(0, Math.round(Number(v) || 0));
   const buildProfileBody = (): ProfileBody => ({
@@ -83,6 +84,11 @@ export default function PlayerOnboard() {
         await apiUpsertProfile(resp.accessToken, buildProfileBody());
       } catch {
         toast('Account created — finish your profile details from My Hub.');
+      }
+      // Attach a YouTube reel if the player pasted one (video is YouTube-hosted).
+      if (videoUrl.trim()) {
+        try { await apiAddYoutubeVideo(resp.accessToken, videoUrl.trim()); }
+        catch { toast('Profile saved — you can add your video link later from My Hub.'); }
       }
       return true;
     } catch (e) {
@@ -200,11 +206,14 @@ export default function PlayerOnboard() {
         )}
         {step === 4 && (
           <div className="space-y-4">
-            <button onClick={() => toast('Video upload — opens picker')}
-              className="flex w-full flex-col items-center gap-1 rounded-xl border border-dashed border-white/15 bg-white/[0.03] py-6 text-mute transition hover:border-primary">
-              <Upload size={26} /> <span className="font-semibold">Upload a 60-sec skill video</span>
-              <span className="text-xs">Free: 1 video · Pro: unlimited</span>
-            </button>
+            <div className="rounded-xl border border-white/15 bg-white/[0.03] p-4">
+              <label className="field-label flex items-center gap-2"><Youtube size={16} className="text-primary" /> Your skill reel (YouTube link)</label>
+              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className="field-input" placeholder="https://youtube.com/watch?v=…  or  youtu.be/…" />
+              <p className="mt-2 text-[12px] leading-relaxed text-mute">
+                Upload your 60-second reel to YouTube (free), then paste the link here — it appears on your profile.
+                No YouTube yet? Skip for now and add it later from My Hub.
+              </p>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="card p-5">
                 <div className="text-[11px] font-bold text-mute">FREE</div>

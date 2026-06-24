@@ -75,6 +75,10 @@ export type ProfileBody = {
 export const apiUpsertProfile = (token: string, b: ProfileBody) =>
   call('/api/profiles', b, token, 'PUT');
 
+// Attach a YouTube reel to the caller's profile (video is hosted on YouTube).
+export const apiAddYoutubeVideo = (token: string, url: string, title?: string) =>
+  call<{ id: string; youtubeVideoId: string }>('/api/videos/youtube', { url, title }, token);
+
 // ─────────────────────────────────────────────────────────────
 // Players (public browse) — GET /api/players returns an array of footballers.
 // ─────────────────────────────────────────────────────────────
