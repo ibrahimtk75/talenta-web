@@ -4,7 +4,7 @@ import { ArrowLeft, ChevronRight, Youtube } from 'lucide-react';
 import { useSession } from '../session';
 import { COUNTRIES, POSITIONS, SKILL_LEVELS } from '../data';
 import { payLink } from '../payments';
-import { apiEnabled, apiRegister, apiUpsertProfile, apiAddYoutubeVideo, toBackendRole, type ProfileBody } from '../api';
+import { apiEnabled, apiRegister, apiUpsertProfile, apiAddVideoLink, toBackendRole, type ProfileBody } from '../api';
 
 const STEPS = ['Personal', 'Physical', 'Career', 'Stats', 'Finish'];
 
@@ -87,7 +87,7 @@ export default function PlayerOnboard() {
       }
       // Attach a YouTube reel if the player pasted one (video is YouTube-hosted).
       if (videoUrl.trim()) {
-        try { await apiAddYoutubeVideo(resp.accessToken, videoUrl.trim()); }
+        try { await apiAddVideoLink(resp.accessToken, videoUrl.trim()); }
         catch { toast('Profile saved — you can add your video link later from My Hub.'); }
       }
       return true;
@@ -207,11 +207,11 @@ export default function PlayerOnboard() {
         {step === 4 && (
           <div className="space-y-4">
             <div className="rounded-xl border border-white/15 bg-white/[0.03] p-4">
-              <label className="field-label flex items-center gap-2"><Youtube size={16} className="text-primary" /> Your skill reel (YouTube link)</label>
-              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className="field-input" placeholder="https://youtube.com/watch?v=…  or  youtu.be/…" />
+              <label className="field-label flex items-center gap-2"><Youtube size={16} className="text-primary" /> Your skill reel (YouTube or Instagram link)</label>
+              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className="field-input" placeholder="youtu.be/…  ·  instagram.com/reel/…" />
               <p className="mt-2 text-[12px] leading-relaxed text-mute">
-                Upload your 60-second reel to YouTube (free), then paste the link here — it appears on your profile.
-                No YouTube yet? Skip for now and add it later from My Hub.
+                Already have a reel on <b className="text-slate-300">YouTube</b> or <b className="text-slate-300">Instagram</b>? Just paste the link — it appears on your profile.
+                No reel yet? Skip for now and add it later from My Hub.
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">

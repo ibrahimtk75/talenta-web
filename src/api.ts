@@ -75,9 +75,9 @@ export type ProfileBody = {
 export const apiUpsertProfile = (token: string, b: ProfileBody) =>
   call('/api/profiles', b, token, 'PUT');
 
-// Attach a YouTube reel to the caller's profile (video is hosted on YouTube).
-export const apiAddYoutubeVideo = (token: string, url: string, title?: string) =>
-  call<{ id: string; youtubeVideoId: string }>('/api/videos/youtube', { url, title }, token);
+// Attach a reel by link — YouTube or Instagram — to the caller's profile.
+export const apiAddVideoLink = (token: string, url: string, title?: string) =>
+  call<{ id: string; youtubeVideoId: string | null; instagramUrl: string | null }>('/api/videos/link', { url, title }, token);
 
 // ─────────────────────────────────────────────────────────────
 // Players (public browse) — GET /api/players returns an array of footballers.
@@ -86,7 +86,7 @@ type BackendPlayer = {
   id: string; name: string; country: string | null; position: string | null; skillLevel?: string | null;
   age: number | null; foot: string | null; career: [string, string][] | null;
   headline: string | null; stats: Record<string, number> | null;
-  youtubeVideoId: string | null; views: number; pro: boolean; verified: boolean;
+  youtubeVideoId: string | null; instagramUrl?: string | null; views: number; pro: boolean; verified: boolean;
   match?: number;
 };
 
@@ -112,6 +112,7 @@ function mapPlayer(b: BackendPlayer): Player {
     age: b.age ?? 0,
     foot: b.foot || '—',
     yt: b.youtubeVideoId || '',
+    igUrl: b.instagramUrl || undefined,
     pro: !!b.pro,
     verified: !!b.verified,
     match: typeof b.match === 'number' ? b.match : computeMatch(b),

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Play, Users, ChevronRight, BadgeCheck, Sparkles, ShieldCheck,
   Youtube, Percent, UserPlus, Eye, Trophy, ChevronDown,
-  Building2, GraduationCap, School, Landmark, Bot, Video, Target, type LucideIcon,
+  Building2, GraduationCap, School, Landmark, Bot, Video, Target, Instagram, type LucideIcon,
 } from 'lucide-react';
 import { SPORTS, COUNTRIES, FLAG, type Player } from '../data';
 import Reveal from '../components/Reveal';
@@ -58,7 +58,7 @@ const FLAGS = ['br','ar','fr','de','es','pt','gb-eng','it','nl','be','ng','gh','
 
 export default function Landing() {
   const { players, loading: playersLoading } = usePlayers();
-  const videoPlayers = players.filter((p) => p.yt).slice(0, 6);
+  const videoPlayers = players.filter((p) => p.yt || p.igUrl).slice(0, 6);
   return (
     <div>
       {/* HERO */}
@@ -350,8 +350,14 @@ function PlayerVideoCard({ player }: { player: Player }) {
   return (
     <Link to={`/player/${player.id}`} className="card group overflow-hidden">
       <div className="relative aspect-video overflow-hidden bg-ink">
-        <img src={`https://img.youtube.com/vi/${player.yt}/hqdefault.jpg`} alt={`${player.name} skill reel`} loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        {player.yt ? (
+          <img src={`https://img.youtube.com/vi/${player.yt}/hqdefault.jpg`} alt={`${player.name} skill reel`} loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        ) : (
+          <div className="grid h-full w-full place-items-center bg-gradient-to-br from-[#f09433] via-[#dc2743] to-[#bc1888]">
+            <Instagram size={34} className="text-white/90" />
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
         <div className="absolute inset-0 grid place-items-center">
           <span className="grid h-14 w-14 place-items-center rounded-full bg-primary/90 text-white shadow-glow transition-transform group-hover:scale-110">

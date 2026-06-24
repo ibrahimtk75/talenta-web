@@ -7,6 +7,7 @@ export interface Player {
   age: number;
   foot: string;
   yt: string;
+  igUrl?: string; // Instagram reel URL (alternative to yt)
   pro: boolean;
   verified: boolean;
   match: number;

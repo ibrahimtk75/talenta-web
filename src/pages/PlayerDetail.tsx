@@ -181,6 +181,10 @@ export default function PlayerDetail() {
             </button>
           )}
         </div>
+      ) : p.igUrl ? (
+        <div className="w-full max-w-[360px] overflow-hidden rounded-xl2 border border-white/10 bg-white">
+          <iframe className="h-[560px] w-full" src={`${p.igUrl}embed`} title={p.name} allowFullScreen scrolling="no" />
+        </div>
       ) : <p className="text-[13px] text-mute">No highlight video uploaded yet.</p>}
 
       {showCard && <TalentaCard player={p} onClose={() => setShowCard(false)} />}
