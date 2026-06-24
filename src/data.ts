@@ -58,16 +58,17 @@ export const SPORTS: [string, string, boolean][] = [
   ['Football', '⚽', true], ['Cricket', '🏏', false], ['Basketball', '🏀', false], ['Hockey', '🏑', false], ['Tennis', '🎾', false],
 ];
 
-// Region pricing (all USD)
+// Region base pricing in USD (numeric — formatted into the visitor's local
+// currency at display time; see src/currency.ts). India uses lower PPP tiers.
 export function pricing(region: 'world' | 'india', monthly: boolean) {
   const m = monthly;
   const india = region === 'india';
   return {
-    player: india ? (m ? '$2' : '$19') : (m ? '$10' : '$99'),
-    school: india ? (m ? '$12' : '$120') : (m ? '$49' : '$490'),
-    academy: india ? (m ? '$24' : '$240') : (m ? '$99' : '$990'),
-    university: india ? (m ? '$36' : '$360') : (m ? '$149' : '$1,490'),
-    club: india ? (m ? '$99' : '$999') : (m ? '$199' : '$1,999'),
+    player: india ? (m ? 2 : 19) : (m ? 10 : 99),
+    school: india ? (m ? 12 : 120) : (m ? 49 : 490),
+    academy: india ? (m ? 24 : 240) : (m ? 99 : 990),
+    university: india ? (m ? 36 : 360) : (m ? 149 : 1490),
+    club: india ? (m ? 99 : 999) : (m ? 199 : 1999),
     per: m ? '/mo' : '/yr',
   };
 }

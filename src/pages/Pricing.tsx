@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { pricing } from '../data';
 import { payLink, contactSales } from '../payments';
 import { useSession } from '../session';
+import { useCurrency, fmtLocal, type CurrencyInfo } from '../currency';
 
-type Tier = { name: string; tag?: string; price: string; per?: string; items: string[]; cta: string; feat?: boolean; pkey?: string; free?: boolean };
+type Tier = { name: string; tag?: string; usd?: number; lit?: string; per?: string; items: string[]; cta: string; feat?: boolean; pkey?: string; free?: boolean };
 
-function TierCard({ t, region, monthly }: { t: Tier; region: 'world' | 'india'; monthly: boolean }) {
+function TierCard({ t, region, monthly, cur }: { t: Tier; region: 'world' | 'india'; monthly: boolean; cur: CurrencyInfo }) {
   const { toast } = useSession();
   const nav = useNavigate();
+
+  const priceText = t.lit ?? (t.usd != null ? fmtLocal(t.usd, cur) : '');
 
   const onCta = () => {
     if (t.free) { nav('/signup'); return; }
@@ -18,7 +21,7 @@ function TierCard({ t, region, monthly }: { t: Tier; region: 'world' | 'india'; 
       if (url) { window.open(url, '_blank', 'noopener'); return; }
     }
     // Org/enterprise tiers (and "Learn more") go through our sales team via email.
-    contactSales(t.name, `${t.price}${t.per || ''}`);
+    contactSales(t.name, `${priceText}${t.per || ''}`);
     toast('Opening email to our team ✉️');
   };
 
@@ -26,7 +29,7 @@ function TierCard({ t, region, monthly }: { t: Tier; region: 'world' | 'india'; 
     <div className={`card relative p-6 ${t.feat ? 'border-primary/50 bg-primary/[0.06] shadow-glow' : ''}`}>
       {t.tag && <div className={`mb-3 inline-block rounded px-2.5 py-1 text-[11px] font-extrabold ${t.tag === 'FREE' ? 'bg-white/10 text-mute' : 'bg-gradient-to-r from-primary to-primary-2 text-white'}`}>{t.tag}</div>}
       <h3 className="text-lg font-bold">{t.name}</h3>
-      <div className="my-1 font-display text-3xl font-bold">{t.price}<span className="text-sm font-medium text-mute">{t.per}</span></div>
+      <div className="my-1 font-display text-3xl font-bold">{t.free ? 'Free' : priceText}<span className="text-sm font-medium text-mute">{t.per}</span></div>
       <ul className="my-5 space-y-2.5">
         {t.items.map((i) => (
           <li key={i} className="flex gap-2 text-[13.5px] text-slate-200"><Check size={16} className="mt-0.5 flex-shrink-0 text-primary" /> {i}</li>
@@ -38,22 +41,32 @@ function TierCard({ t, region, monthly }: { t: Tier; region: 'world' | 'india'; 
 }
 
 export default function Pricing() {
+  const cur = useCurrency();
   const [region, setRegion] = useState<'world' | 'india'>('world');
   const [monthly, setMonthly] = useState(true);
+  const [touched, setTouched] = useState(false);
   const p = pricing(region, monthly);
 
+  // Auto-pick the India tier for visitors detected in India (until the user
+  // manually changes the region toggle).
+  useEffect(() => {
+    if (!touched && cur.country === 'IN') setRegion('india');
+  }, [cur.country, touched]);
+
+  const chooseRegion = (r: 'world' | 'india') => { setTouched(true); setRegion(r); };
+
   const players: Tier[] = [
-    { name: 'Free Player', tag: 'FREE', price: '$0', free: true, items: ['Public career profile', '1 highlight video', 'Appear in search'], cta: 'Start Free' },
-    { name: 'Pro Player', tag: 'POPULAR', price: p.player, per: p.per, feat: true, pkey: 'proplayer', items: ['Everything in Free', 'Unlimited videos', 'Daily practice space', '✔ Verified badge', 'Boosted visibility', 'Profile analytics'], cta: 'Go Pro' },
+    { name: 'Free Player', tag: 'FREE', free: true, items: ['Public career profile', '1 highlight video', 'Appear in search'], cta: 'Start Free' },
+    { name: 'Pro Player', tag: 'POPULAR', usd: p.player, per: p.per, feat: true, pkey: 'proplayer', items: ['Everything in Free', 'Unlimited videos', 'Daily practice space', '✔ Verified badge', 'Boosted visibility', 'Profile analytics'], cta: 'Go Pro' },
   ];
   const inst: Tier[] = [
-    { name: 'School', price: p.school, per: p.per, pkey: 'school', items: ['School sports profile', 'Showcase your students', 'Discover & contact talent', 'Up to 50 athletes'], cta: 'Contact Sales' },
-    { name: 'Academy', tag: 'POPULAR', price: p.academy, per: p.per, feat: true, pkey: 'academy', items: ['Everything in School', 'AI talent suggestions', 'Advanced search & filters', 'Unlimited athletes'], cta: 'Contact Sales' },
-    { name: 'University', price: p.university, per: p.per, pkey: 'university', items: ['Everything in Academy', 'Multi-team management', 'Recruitment tools', 'Priority support'], cta: 'Contact Sales' },
+    { name: 'School', usd: p.school, per: p.per, pkey: 'school', items: ['School sports profile', 'Showcase your students', 'Discover & contact talent', 'Up to 50 athletes'], cta: 'Contact Sales' },
+    { name: 'Academy', tag: 'POPULAR', usd: p.academy, per: p.per, feat: true, pkey: 'academy', items: ['Everything in School', 'AI talent suggestions', 'Advanced search & filters', 'Unlimited athletes'], cta: 'Contact Sales' },
+    { name: 'University', usd: p.university, per: p.per, pkey: 'university', items: ['Everything in Academy', 'Multi-team management', 'Recruitment tools', 'Priority support'], cta: 'Contact Sales' },
   ];
   const club: Tier[] = [
-    { name: 'Pro Club', price: p.club, per: p.per, pkey: 'club', items: ['AI player suggestions', 'Advanced search & filters', 'Contact & sign players', 'Saved shortlists'], cta: 'Contact Sales' },
-    { name: 'Deal commission', price: '3%', per: '/deal', items: ['Only when you sign a player', 'Secure on-platform deal record', 'Contract & verification support'], cta: 'Learn more' },
+    { name: 'Pro Club', usd: p.club, per: p.per, pkey: 'club', items: ['AI player suggestions', 'Advanced search & filters', 'Contact & sign players', 'Saved shortlists'], cta: 'Contact Sales' },
+    { name: 'Deal commission', lit: '3%', per: '/deal', items: ['Only when you sign a player', 'Secure on-platform deal record', 'Contract & verification support'], cta: 'Learn more' },
   ];
 
   const Seg = ({ opts, val, set }: { opts: [string, string][]; val: string; set: (v: any) => void }) => (
@@ -68,25 +81,31 @@ export default function Pricing() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-12">
       <h1 className="font-display text-2xl font-bold md:text-3xl">Pricing</h1>
-      <p className="mt-1 text-sm text-mute">All prices in USD. Players start free. Schools, academies, universities & clubs pay to discover & sign. We take just 3% on successful deals.</p>
+      <p className="mt-1 text-sm text-mute">
+        {cur.loading
+          ? 'Loading prices for your region…'
+          : cur.code === 'USD'
+            ? 'Players start free. Schools, academies, universities & clubs pay to discover & sign. We take just 3% on successful deals.'
+            : <>Shown in <b className="text-slate-200">{cur.code}</b> for your region (approx; billed in USD). Players start free — we take just 3% on successful deals.</>}
+      </p>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
-        <Seg opts={[['world', '🌍 USA & Europe'], ['india', '🇮🇳 India']]} val={region} set={setRegion} />
+        <Seg opts={[['world', '🌍 USA & Europe'], ['india', '🇮🇳 India']]} val={region} set={chooseRegion} />
         <Seg opts={[['m', 'Monthly'], ['y', 'Yearly']]} val={monthly ? 'm' : 'y'} set={(v) => setMonthly(v === 'm')} />
       </div>
 
-      <Group title="FOR PLAYERS" tiers={players} region={region} monthly={monthly} />
-      <Group title="FOR SCHOOLS · ACADEMIES · UNIVERSITIES" tiers={inst} region={region} monthly={monthly} />
-      <Group title="FOR PROFESSIONAL CLUBS" tiers={club} region={region} monthly={monthly} />
+      <Group title="FOR PLAYERS" tiers={players} region={region} monthly={monthly} cur={cur} />
+      <Group title="FOR SCHOOLS · ACADEMIES · UNIVERSITIES" tiers={inst} region={region} monthly={monthly} cur={cur} />
+      <Group title="FOR PROFESSIONAL CLUBS" tiers={club} region={region} monthly={monthly} cur={cur} />
     </div>
   );
 }
 
-function Group({ title, tiers, region, monthly }: { title: string; tiers: Tier[]; region: 'world' | 'india'; monthly: boolean }) {
+function Group({ title, tiers, region, monthly, cur }: { title: string; tiers: Tier[]; region: 'world' | 'india'; monthly: boolean; cur: CurrencyInfo }) {
   return (
     <>
       <h4 className="mb-3.5 mt-9 text-[13px] font-bold uppercase tracking-wide text-mute">{title}</h4>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{tiers.map((t) => <TierCard key={t.name} t={t} region={region} monthly={monthly} />)}</div>
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{tiers.map((t) => <TierCard key={t.name} t={t} region={region} monthly={monthly} cur={cur} />)}</div>
     </>
   );
 }
