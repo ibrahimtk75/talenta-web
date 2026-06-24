@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Youtube, Linkedin, Play, Mail } from 'lucide-react';
 
-const CONTACT_EMAIL = 'sportstalenta@gmail.com';
+const CONTACT_EMAIL = 'sportssportstalenta@gmail.com';
 
 const socials = [
   { Icon: Instagram, href: 'https://instagram.com/talenta', label: 'Instagram' },

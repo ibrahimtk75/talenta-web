@@ -40,7 +40,7 @@ export default function TalentaCard({ player: p, onClose }: { player: Player; on
       if (url && (navigator as any).share) {
         const blob = await (await fetch(url)).blob();
         const file = new File([blob], 'talenta-card.png', { type: 'image/png' });
-        try { await (navigator as any).share({ files: [file], title: 'My Talenta Card', text: `Check out my football card on Talenta ⚽ — talenta-web.onrender.com` }); return; } catch { /* cancelled */ }
+        try { await (navigator as any).share({ files: [file], title: 'My Talenta Card', text: `Check out my football card on Talenta ⚽ — talentasports.com` }); return; } catch { /* cancelled */ }
       }
       if (url) { const a = document.createElement('a'); a.href = url; a.download = `${p.name}-Talenta-Card.png`; a.click(); }
     } catch { /* ignore */ } finally { setBusy(false); }
@@ -84,7 +84,7 @@ export default function TalentaCard({ player: p, onClose }: { player: Player; on
             </div>
           )}
 
-          <div className="absolute inset-x-0 bottom-2.5 text-center text-[10px] font-bold opacity-80">talenta-web.onrender.com</div>
+          <div className="absolute inset-x-0 bottom-2.5 text-center text-[10px] font-bold opacity-80">talentasports.com</div>
         </div>
 
         {/* actions */}

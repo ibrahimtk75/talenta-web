@@ -10,7 +10,7 @@ export default function ShareMenu({ url, text, label = 'Share', className }: { u
   const btnRef = useRef<HTMLButtonElement>(null);
   const { toast } = useSession();
 
-  const u = url || (typeof window !== 'undefined' ? window.location.href : 'https://talenta-web.onrender.com');
+  const u = url || (typeof window !== 'undefined' ? window.location.href : 'https://talentasports.com');
   const t = text || 'Check out this footballer on Talenta ⚽';
   const enc = encodeURIComponent;
 
