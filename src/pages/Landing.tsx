@@ -123,6 +123,37 @@ export default function Landing() {
           </div>
         </Reveal>
 
+        {/* PLAYER VIDEO SHOWCASE */}
+        <Heading title="Watch real talent in action" sub="60-second skill reels from footballers on Talenta — tap to watch their full profile" center />
+        {playersLoading ? (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => <div key={i} className="aspect-video animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}
+          </div>
+        ) : videoPlayers.length ? (
+          <>
+            {/* horizontal slider — swipe/scroll through player reels */}
+            <div className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 pb-3" style={{ scrollbarWidth: 'thin' }}>
+              {videoPlayers.map((p) => (
+                <div key={p.id} className="w-[80%] flex-shrink-0 snap-start sm:w-[46%] lg:w-[31.5%]">
+                  <PlayerVideoCard player={p} />
+                </div>
+              ))}
+            </div>
+            <p className="mt-1.5 text-center text-[12px] text-mute sm:hidden">← swipe to see more →</p>
+            <div className="mt-6 text-center">
+              <Link to="/browse" className="btn-ghost">Browse all players <ChevronRight size={15} /></Link>
+            </div>
+          </>
+        ) : (
+          <div className="rounded-xl2 border border-dashed border-white/15 p-10 text-center text-mute">
+            No player videos yet — be the very first to upload a reel and get discovered. ⚽
+          </div>
+        )}
+
+        {/* INSTITUTIONS DIRECTORY — clubs, academies, schools, universities */}
+        <Heading title="Clubs, academies & institutions" sub="The clubs, academies, schools & universities discovering talent on Talenta" center />
+        <InstitutionsDirectory />
+
         {/* LEGENDS / CALLIGRAPHY ART BAND */}
         <Reveal>
           <div className="relative mt-20 overflow-hidden rounded-xl2 border border-primary/25 bg-gradient-to-br from-primary/[0.12] via-ink to-ink p-8 md:p-14">
@@ -240,37 +271,6 @@ export default function Landing() {
             </Reveal>
           ))}
         </div>
-
-        {/* PLAYER VIDEO SHOWCASE */}
-        <Heading title="Watch real talent in action" sub="60-second skill reels from footballers on Talenta — tap to watch their full profile" center />
-        {playersLoading ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => <div key={i} className="aspect-video animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}
-          </div>
-        ) : videoPlayers.length ? (
-          <>
-            {/* horizontal slider — swipe/scroll through player reels */}
-            <div className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 pb-3" style={{ scrollbarWidth: 'thin' }}>
-              {videoPlayers.map((p) => (
-                <div key={p.id} className="w-[80%] flex-shrink-0 snap-start sm:w-[46%] lg:w-[31.5%]">
-                  <PlayerVideoCard player={p} />
-                </div>
-              ))}
-            </div>
-            <p className="mt-1.5 text-center text-[12px] text-mute sm:hidden">← swipe to see more →</p>
-            <div className="mt-6 text-center">
-              <Link to="/browse" className="btn-ghost">Browse all players <ChevronRight size={15} /></Link>
-            </div>
-          </>
-        ) : (
-          <div className="rounded-xl2 border border-dashed border-white/15 p-10 text-center text-mute">
-            No player videos yet — be the very first to upload a reel and get discovered. ⚽
-          </div>
-        )}
-
-        {/* INSTITUTIONS DIRECTORY — clubs, academies, schools, universities */}
-        <Heading title="Clubs, academies & institutions" sub="The clubs, academies, schools & universities discovering talent on Talenta" center />
-        <InstitutionsDirectory />
 
         {/* FOUNDING MEMBERS — FREE OFFER */}
         <Reveal>
