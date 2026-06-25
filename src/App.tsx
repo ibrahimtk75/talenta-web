@@ -27,6 +27,7 @@ import Messages from './pages/Messages';
 import NotFound from './pages/NotFound';
 import Faq from './pages/Faq';
 import Rules from './pages/Rules';
+import Admin from './pages/Admin';
 import { Terms, Privacy } from './pages/Legal';
 
 function Toast() {
@@ -82,6 +83,7 @@ export default function App() {
           <Route path="/messages" element={<Protected allow={['player', 'club', 'academy']}><Messages /></Protected>} />
           <Route path="/faq" element={<Faq />} />
           <Route path="/rules" element={<Rules />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />

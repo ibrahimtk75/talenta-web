@@ -185,3 +185,48 @@ export type Institution = {
   role: 'CLUB' | 'ACADEMY'; orgType: string | null; verified: boolean; logo?: string | null;
 };
 export const fetchInstitutions = () => call<Institution[]>('/api/institutions');
+
+// ─────────────────────────────────────────────────────────────
+// Admin panel — gated by a shared secret sent as the x-admin-key header.
+// ─────────────────────────────────────────────────────────────
+export type Sponsor = { name: string; logo: string; url?: string };
+export type AdminUser = {
+  id: string; email: string; fullName: string; role: string; country: string;
+  orgType: string | null; isVerified: boolean; avatarUrl: string | null;
+  photos: string[] | null; sponsors: Sponsor[] | null; createdAt: string;
+};
+export type AdminPatch = { isVerified?: boolean; avatarUrl?: string | null; orgType?: string | null; sponsors?: Sponsor[] };
+
+async function adminCall<T>(path: string, key: string, opts?: { method?: string; body?: unknown }): Promise<T> {
+  const res = await fetch(BASE + path, {
+    method: opts?.method || 'GET',
+    headers: { 'Content-Type': 'application/json', 'x-admin-key': key },
+    body: opts?.body ? JSON.stringify(opts.body) : undefined,
+  });
+  let data: any = {};
+  try { data = await res.json(); } catch { /* empty */ }
+  if (!res.ok) {
+    const msg = res.status === 401 ? 'Wrong admin key.'
+      : res.status === 403 ? 'Admin panel is not enabled — set ADMIN_KEY on the server.'
+      : data?.error || `Something went wrong (${res.status}).`;
+    throw new Error(msg);
+  }
+  return data as T;
+}
+
+export const adminCheck = (key: string) => adminCall<{ ok: boolean }>('/api/admin/check', key);
+export const adminListUsers = (key: string, group: 'players' | 'orgs' | 'all') =>
+  adminCall<AdminUser[]>(`/api/admin/users?group=${group}`, key);
+export const adminUpdateUser = (key: string, id: string, patch: AdminPatch) =>
+  adminCall<Partial<AdminUser>>(`/api/admin/users/${id}`, key, { method: 'PATCH', body: patch });
+export const adminDeleteUser = (key: string, id: string) =>
+  adminCall<{ ok: boolean }>(`/api/admin/users/${id}`, key, { method: 'DELETE' });
+
+/** Common brand sponsors → Simple Icons logo URLs, for quick admin add. */
+export const BRAND_LOGOS: Record<string, string> = {
+  Nike: 'https://cdn.simpleicons.org/nike', adidas: 'https://cdn.simpleicons.org/adidas',
+  PUMA: 'https://cdn.simpleicons.org/puma', 'Red Bull': 'https://cdn.simpleicons.org/redbull',
+  'Under Armour': 'https://cdn.simpleicons.org/underarmour', Reebok: 'https://cdn.simpleicons.org/reebok',
+  'New Balance': 'https://cdn.simpleicons.org/newbalance', Gatorade: 'https://cdn.simpleicons.org/gatorade',
+  'Coca-Cola': 'https://cdn.simpleicons.org/cocacola', Pepsi: 'https://cdn.simpleicons.org/pepsi',
+};
