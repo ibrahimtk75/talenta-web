@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Upload, ChevronRight } from 'lucide-react';
 import { useSession } from '../session';
 import { COUNTRIES } from '../data';
@@ -130,7 +130,7 @@ export default function OrgRegister() {
 
         <label className="flex items-start gap-2.5 text-[13px] text-mute">
           <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 accent-primary" />
-          I agree Talenta may contact me about onboarding, verification & opportunities.
+          <span>I agree to Talenta's <Link to="/rules" target="_blank" className="font-semibold text-primary">Rules &amp; Code of Conduct</Link> — including the transfer policy and 3% commission on deals — and that Talenta may contact me about onboarding, verification & opportunities.</span>
         </label>
 
         <button onClick={finish} disabled={busy} className="btn-primary w-full justify-center disabled:opacity-60">

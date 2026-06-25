@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp, Heart, Sparkles } from 'lucide-react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp, Heart, Sparkles, Lock } from 'lucide-react';
 import { FLAG, initials, valuationOf, fmtMoney } from '../data';
 import { RateStars } from '../components/Stars';
 import ShareMenu from '../components/ShareMenu';
@@ -87,11 +87,24 @@ export default function PlayerDetail() {
         </div>
       </div>
 
+      {/* Access notice — full data is gated to clubs, academies & scouts */}
+      {!isClub && (
+        <div className="card mt-6 flex flex-wrap items-center justify-between gap-3 border-primary/30 bg-primary/[0.05] p-4">
+          <div className="flex items-center gap-2.5 text-[13px]">
+            <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-lg bg-primary/15 text-primary"><Lock size={16} /></span>
+            <span className="text-mute">You're viewing a <b className="text-slate-200">public preview</b> — profile + one video. Full stats, value, history & all photos are for clubs & scouts.</span>
+          </div>
+          <Link to="/signup" className="btn-primary flex-shrink-0">Unlock as Club / Scout</Link>
+        </div>
+      )}
+
       {/* Photo gallery — face, full-body (kit/ground), action shots */}
       {(() => {
-        const gallery = (p.photos && p.photos.length ? p.photos : (p.photo ? [p.photo] : [])).slice(0, 3);
-        if (!gallery.length) return null;
+        const all = (p.photos && p.photos.length ? p.photos : (p.photo ? [p.photo] : [])).slice(0, 3);
+        if (!all.length) return null;
         const labels = ['Face', 'Full body', 'Action'];
+        const gallery = isClub ? all : all.slice(0, 1); // public sees the face photo only
+        const lockedCount = all.length - gallery.length;
         return (
           <div className="mt-6">
             <h2 className="mb-3 font-display text-lg font-bold">Photos</h2>
@@ -102,6 +115,11 @@ export default function PlayerDetail() {
                   <span className="absolute bottom-2 left-2 rounded-md bg-black/65 px-2 py-0.5 text-[10.5px] font-semibold backdrop-blur">{labels[i] || `Photo ${i + 1}`}</span>
                 </a>
               ))}
+              {lockedCount > 0 && (
+                <Link to="/signup" className="grid aspect-[3/4] place-items-center rounded-xl2 border border-dashed border-white/15 bg-white/[0.03] text-center text-mute transition hover:border-primary">
+                  <span><Lock size={18} className="mx-auto" /><span className="mt-1.5 block text-[12px] font-semibold">+{lockedCount} photo{lockedCount > 1 ? 's' : ''}</span><span className="text-[10.5px]">clubs only</span></span>
+                </Link>
+              )}
             </div>
           </div>
         );
@@ -126,7 +144,8 @@ export default function PlayerDetail() {
         <p className="mt-3 text-[11.5px] text-mute">Talenta connects sponsors directly with players — transparent and fee-free.</p>
       </div>
 
-      {/* Estimated value & offers */}
+      {/* Estimated value & offers — clubs & academies only */}
+      {isClub ? (
       <div className="card mt-6 p-6">
         <div>
           <div className="flex items-center gap-1.5 text-[13px] text-mute"><TrendingUp size={14} className="text-primary" /> Estimated value</div>
@@ -146,10 +165,9 @@ export default function PlayerDetail() {
             </div>
             <p className="mt-2.5 text-[12px] text-mute">The player can accept, decline or counter your offer.</p>
           </div>
-        ) : (
-          <div className="mt-5 border-t border-white/10 pt-5 text-[13px] text-mute">Sign in as a club or academy to make an offer.</div>
-        )}
+        ) : null}
       </div>
+      ) : <LockedNotice title="Estimated value & offers" />}
 
       {isClub && (
         <div className="card mt-6 p-6">
@@ -169,7 +187,7 @@ export default function PlayerDetail() {
       )}
 
       <h2 className="mb-4 mt-9 font-display text-lg font-bold">Career timeline</h2>
-      {p.career.length ? (
+      {!isClub ? <LockedNotice title="Career history" /> : p.career.length ? (
         <div className="relative space-y-4 pl-6 before:absolute before:bottom-1.5 before:left-1.5 before:top-1.5 before:w-0.5 before:bg-white/15">
           {p.career.map((c, i) => (
             <div key={i} className="relative">
@@ -182,7 +200,7 @@ export default function PlayerDetail() {
       ) : <p className="text-[13px] text-mute">No career history added yet.</p>}
 
       <h2 className="mb-4 mt-9 font-display text-lg font-bold">Career stats</h2>
-      {Object.keys(p.stats).length ? (
+      {!isClub ? <LockedNotice title="Full career stats" /> : Object.keys(p.stats).length ? (
         <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
           {Object.entries(p.stats).map(([k, v]) => (
             <div key={k} className="card p-4">
@@ -214,6 +232,21 @@ export default function PlayerDetail() {
       ) : <p className="text-[13px] text-mute">No highlight video uploaded yet.</p>}
 
       {showCard && <TalentaCard player={p} onClose={() => setShowCard(false)} />}
+    </div>
+  );
+}
+
+// Placeholder shown to public viewers in place of premium data (full stats,
+// value, history, extra photos). Clubs/academies/scouts see the real content.
+function LockedNotice({ title }: { title: string }) {
+  return (
+    <div className="card flex flex-col items-center gap-2 border-dashed border-white/15 p-7 text-center">
+      <span className="grid h-11 w-11 place-items-center rounded-full bg-primary/15 text-primary"><Lock size={18} /></span>
+      <div className="font-semibold">{title} — for clubs &amp; scouts</div>
+      <p className="max-w-sm text-[13px] leading-relaxed text-mute">
+        Full data is unlocked for verified clubs, academies & scouts — complete stats, estimated value, career history and all photos.
+      </p>
+      <Link to="/signup" className="btn-primary mt-1">Unlock as Club / Scout</Link>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, ChevronRight, Youtube, User } from 'lucide-react';
 import { useSession } from '../session';
 import { COUNTRIES, POSITIONS, SKILL_LEVELS } from '../data';
@@ -38,6 +38,7 @@ export default function PlayerOnboard() {
   const [photoFace, setPhotoFace] = useState('');
   const [photoFull, setPhotoFull] = useState('');
   const [photoAction, setPhotoAction] = useState('');
+  const [agreedRules, setAgreedRules] = useState(false);
 
   const int = (v: string) => Math.max(0, Math.round(Number(v) || 0));
   const buildProfileBody = (): ProfileBody => ({
@@ -65,6 +66,7 @@ export default function PlayerOnboard() {
       if (!/^\S+@\S+\.\S+$/.test(email.trim())) { toast('Please enter a valid email'); setStep(0); return false; }
       if (password.length < 8) { toast('Password must be at least 8 characters'); setStep(0); return false; }
     }
+    if (!agreedRules) { toast('Please accept the Talenta Rules to continue'); return false; }
     return true;
   };
 
@@ -245,6 +247,10 @@ export default function PlayerOnboard() {
                 No reel yet? Skip for now and add it later from My Hub.
               </p>
             </div>
+            <label className="flex items-start gap-2.5 rounded-xl border border-white/15 bg-white/[0.03] p-4 text-[13px] text-mute">
+              <input type="checkbox" checked={agreedRules} onChange={(e) => setAgreedRules(e.target.checked)} className="mt-0.5 accent-primary" />
+              <span>I agree to Talenta's <Link to="/rules" target="_blank" className="font-semibold text-primary">Rules &amp; Code of Conduct</Link> — including honest data, the transfer policy and the 3% commission on deals. I confirm my profile information is true.</span>
+            </label>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="card p-5">
                 <div className="text-[11px] font-bold text-mute">FREE</div>

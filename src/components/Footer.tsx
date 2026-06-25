@@ -26,8 +26,8 @@ const cols: { h: string; items: Item[] }[] = [
     { l: 'Academies & Schools', to: '/signup' }, { l: 'Log in', to: '/login' },
   ] },
   { h: 'Legal', items: [
-    { l: 'Terms of Service', to: '/terms' }, { l: 'Privacy Policy', to: '/privacy' },
-    { l: "Players' Safety", to: '/terms' },
+    { l: 'Platform Rules', to: '/rules' }, { l: 'Terms of Service', to: '/terms' },
+    { l: 'Privacy Policy', to: '/privacy' }, { l: "Players' Safety", to: '/rules' },
   ] },
 ];
 
