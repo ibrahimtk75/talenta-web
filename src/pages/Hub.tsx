@@ -155,8 +155,8 @@ export default function Hub() {
       {/* Edit profile modal */}
       {editOpen && (
         <div className="fixed inset-0 z-[200] grid place-items-center bg-black/60 p-4 backdrop-blur-sm" onClick={() => setEditOpen(false)}>
-          <div className="card w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="mb-4 flex items-center justify-between"><h2 className="font-display text-lg font-bold">Edit profile</h2><button onClick={() => setEditOpen(false)} className="text-mute hover:text-white"><X size={18} /></button></div>
+          <div role="dialog" aria-modal="true" aria-label="Edit profile" className="card w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between"><h2 className="font-display text-lg font-bold">Edit profile</h2><button onClick={() => setEditOpen(false)} aria-label="Close" className="text-mute hover:text-white"><X size={18} /></button></div>
             <div className="space-y-4">
               <div><label className="field-label">Full name</label><input value={eName} onChange={(e) => setEName(e.target.value)} className="field-input" placeholder="Your name" /></div>
               <div><label className="field-label">Main position</label><select value={ePos} onChange={(e) => setEPos(e.target.value)} className="field-input">{POSITIONS.slice(1).map((p) => <option key={p}>{p}</option>)}</select></div>
@@ -173,8 +173,8 @@ export default function Hub() {
       {/* Add video modal */}
       {vidOpen && (
         <div className="fixed inset-0 z-[200] grid place-items-center bg-black/60 p-4 backdrop-blur-sm" onClick={() => setVidOpen(false)}>
-          <div className="card w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="mb-4 flex items-center justify-between"><h2 className="font-display text-lg font-bold">Add a video</h2><button onClick={() => setVidOpen(false)} className="text-mute hover:text-white"><X size={18} /></button></div>
+          <div role="dialog" aria-modal="true" aria-label="Add a video" className="card w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-4 flex items-center justify-between"><h2 className="font-display text-lg font-bold">Add a video</h2><button onClick={() => setVidOpen(false)} aria-label="Close" className="text-mute hover:text-white"><X size={18} /></button></div>
             <p className="mb-3 text-[13px] text-mute">Paste a YouTube link to your highlight reel or skill video — it appears on your profile instantly.</p>
             <input value={vidUrl} onChange={(e) => setVidUrl(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addVideo(); }} className="field-input" placeholder="https://youtube.com/watch?v=..." autoFocus />
             <div className="mt-6 flex justify-end gap-2">

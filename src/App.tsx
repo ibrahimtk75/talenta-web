@@ -56,10 +56,11 @@ function Protected({ allow, children }: { allow: Role[]; children: ReactElement 
 export default function App() {
   return (
     <SessionProvider>
+      <a href="#main" className="skip-link">Skip to content</a>
       <div className="stadium-bg" />
       <ScrollTop />
       <Nav />
-      <main className="min-h-[70vh]">
+      <main id="main" className="min-h-[70vh]">
         <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Landing />} />
