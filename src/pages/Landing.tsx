@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Play, Users, ChevronRight, BadgeCheck, Sparkles, ShieldCheck,
-  Youtube, Percent, UserPlus, Eye, Trophy, ChevronDown,
-  Building2, GraduationCap, School, Landmark, Bot, Video, Target, Instagram, type LucideIcon,
+  Play, ChevronRight, BadgeCheck, Sparkles, ShieldCheck,
+  Youtube, Percent, UserPlus, Eye, Trophy, Search,
+  Building2, GraduationCap, School, Landmark, Bot, Video, Target, type LucideIcon,
 } from 'lucide-react';
-import { SPORTS, COUNTRIES, FLAG, type Player } from '../data';
+import { COUNTRIES, FLAG, type Player } from '../data';
+import { PlayerGridCard } from '../components/PlayerCard';
 import Reveal from '../components/Reveal';
 import { usePlayers } from '../usePlayers';
 import { apiEnabled, fetchInstitutions, type Institution } from '../api';
 
+// Honest, founding-phase metrics — punchy numbers, no inflated claims.
 const stats = [
   { icon: Sparkles, n: 'Free', l: 'For players' },
   { icon: Trophy, n: 'Football', l: 'Live now' },
@@ -17,33 +19,26 @@ const stats = [
   { icon: Percent, n: '3%', l: 'Only on deals' },
 ];
 
+// Short benefit lines — 5–6 words, scannable, no paragraphs.
 const benefits = [
-  { icon: Sparkles, h: 'AI talent matching', p: 'Clubs get player suggestions ranked by position, age, stats & activity — not endless scrolling.' },
-  { icon: ShieldCheck, h: 'Verified profiles', p: 'ID, age & club-history verification + two-way ratings build trust on both sides.' },
-  { icon: Youtube, h: 'Zero-cost video', p: '60-second skill reels & full matches hosted free on YouTube — no hosting bills.' },
-  { icon: Percent, h: 'On-platform deals', p: 'Contracts and signings happen on Talenta. We take just 3% on successful deals.' },
+  { icon: Sparkles, h: 'AI talent matching', p: 'Clubs get ranked suggestions — no endless scrolling.' },
+  { icon: ShieldCheck, h: 'Verified profiles', p: 'ID, age & history checks build trust.' },
+  { icon: Youtube, h: 'Free video reels', p: '60-second skill reels, hosted free.' },
+  { icon: Percent, h: 'Direct deals', p: 'No agents. Just 3% on signings.' },
 ];
 
 // "Powered by AI" — what's live today vs the AI roadmap we're building next.
 const aiFeatures: { icon: LucideIcon; h: string; p: string; live: boolean }[] = [
-  { icon: Sparkles, h: 'AI Talent Score', p: 'Every player gets a clear, data-driven score so clubs spot real ability fast — not endless scrolling.', live: true },
-  { icon: Bot, h: 'AI Assistant', p: 'An always-on assistant answers player and club questions instantly, in plain language.', live: true },
-  { icon: Video, h: 'AI Video Analysis', p: 'Upload a reel and AI extracts your real skills — pace, technique and best position — automatically.', live: false },
-  { icon: Target, h: 'Smart Club Matching', p: 'AI matches each player to the clubs and academies whose needs fit them best, like a recommender engine.', live: false },
+  { icon: Sparkles, h: 'AI Talent Score', p: 'A clear, data-driven score per player.', live: true },
+  { icon: Bot, h: 'AI Assistant', p: 'Instant answers, in plain language.', live: true },
+  { icon: Video, h: 'AI Video Analysis', p: 'Auto-extract pace, technique & position.', live: false },
+  { icon: Target, h: 'Smart Club Matching', p: 'Match each player to the right clubs.', live: false },
 ];
 
 const steps = [
-  { icon: UserPlus, h: 'Create your profile', p: 'Players build a verified career profile and upload a 60-second skill reel — free to start.' },
-  { icon: Eye, h: 'Get discovered', p: 'Your profile appears in the AI feed. Clubs, academies & schools search and find you.' },
-  { icon: Trophy, h: 'Get signed', p: 'Clubs contact you on-platform, set up trials, and sign you. Reputation grows with ratings.' },
-];
-
-const faqs = [
-  ['Is it really free for players?', 'Yes. Players join free, build a profile and post one reel at no cost. The optional Pro plan adds unlimited videos, daily practice, a verified badge and boosted visibility.'],
-  ['Who can register?', 'Players, professional clubs, scouts, academies, schools and universities — worldwide. Each gets a tailored profile and tools.'],
-  ['How does Talenta make money?', 'Club & academy subscriptions, an optional player Pro plan, and a 3% commission only on successful deals signed through the platform.'],
-  ['Are young players protected?', 'Yes. Under-18 players require guardian consent, and clubs contact them only through the platform with guardians notified — safeguarding is built in.'],
-  ['Which sports are supported?', 'We launch with Football. Cricket, Basketball, Hockey and Tennis are coming next on the same platform.'],
+  { icon: UserPlus, h: 'Create your profile', p: 'Build a verified profile + a 60-second reel — free.' },
+  { icon: Eye, h: 'Get discovered', p: 'Appear in the AI feed. Clubs & academies find you.' },
+  { icon: Trophy, h: 'Get signed', p: 'Clubs contact you on-platform and sign you.' },
 ];
 
 // Football nations — ISO codes; rendered as real flag images (flagcdn) so they
@@ -52,7 +47,7 @@ const FLAGS = ['br','ar','fr','de','es','pt','gb-eng','it','nl','be','ng','gh','
 
 export default function Landing() {
   const { players, loading: playersLoading } = usePlayers();
-  const videoPlayers = players.filter((p) => p.yt || p.igUrl).slice(0, 6);
+  const gridPlayers = players.slice(0, 8);
   return (
     <div>
       {/* HERO */}
@@ -67,20 +62,17 @@ export default function Landing() {
         <div className="mx-auto max-w-6xl px-5 py-24 text-center md:py-32">
           <div className="mx-auto mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[13px] text-mute">
             <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_#FF2A4D]" />
-            Now in early access · Football · {COUNTRIES.length}+ countries
+            Early access · Football · {COUNTRIES.length}+ countries
           </div>
           <h1 className="font-display text-5xl font-bold leading-[1.05] md:text-7xl">
             Connect your talent<br />to your <span className="grad-text">dream club</span>.
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-mute">
-            <b className="text-slate-200">Get discovered. Get signed.</b> Build a free video profile —
-            and let clubs, academies & scouts find you, worldwide.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          {/* Two clear paths — player vs scout/club. No long paragraph. */}
+          <div className="mt-9 flex flex-wrap justify-center gap-3">
             <Link to="/signup" className="btn-primary text-base"><Play size={18} fill="white" /> Join Free as Player</Link>
-            <Link to="/signup" className="btn-ghost">For Clubs</Link>
-            <Link to="/signup" className="btn-ghost">🎓 Academies & Schools</Link>
+            <Link to="/signup" className="btn-ghost text-base"><Search size={17} /> Find Talent — Scouts &amp; Clubs</Link>
           </div>
+          <p className="mt-4 text-[13px] text-mute">Free for players · No agent fees · Verified profiles</p>
         </div>
       </section>
 
@@ -96,17 +88,16 @@ export default function Landing() {
                 className="h-7 w-auto select-none rounded shadow-sm shadow-black/40 ring-1 ring-white/10 transition-transform duration-200 hover:scale-125" />
             ))}
           </div>
-          {/* edge fades */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink to-transparent" />
         </div>
         <style>{`.flags-track{animation:flagscroll 45s linear infinite}.flags-track:hover{animation-play-state:paused}@keyframes flagscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}`}</style>
       </section>
 
-      <div className="mx-auto max-w-6xl px-5">
+      <div className="mx-auto max-w-7xl px-5">
         {/* STATS */}
         <Reveal>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
             {stats.map((s) => (
               <div key={s.l} className="card p-5 text-center">
                 <s.icon size={20} className="mx-auto mb-2 text-primary" />
@@ -117,41 +108,34 @@ export default function Landing() {
           </div>
         </Reveal>
 
-        {/* PLAYER VIDEO SHOWCASE */}
-        <Heading title="Watch real talent in action" sub="60-second skill reels from footballers on Talenta — tap to watch their full profile" center />
+        {/* PLAYER GRID — photo-forward cards, like a scouting board */}
+        <Heading title="Watch real talent in action" sub="Tap any player to see their reel, stats & full profile" center />
         {playersLoading ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => <div key={i} className="aspect-video animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => <div key={i} className="aspect-[4/5] animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}
           </div>
-        ) : videoPlayers.length ? (
+        ) : gridPlayers.length ? (
           <>
-            {/* horizontal slider — swipe/scroll through player reels */}
-            <div className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 pb-3" style={{ scrollbarWidth: 'thin' }}>
-              {videoPlayers.map((p) => (
-                <div key={p.id} className="w-[80%] flex-shrink-0 snap-start sm:w-[46%] lg:w-[31.5%]">
-                  <PlayerVideoCard player={p} />
-                </div>
-              ))}
+            <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+              {gridPlayers.map((p) => <PlayerGridCard key={p.id} player={p} />)}
             </div>
-            <p className="mt-1.5 text-center text-[12px] text-mute sm:hidden">← swipe to see more →</p>
-            <div className="mt-6 text-center">
+            <div className="mt-7 text-center">
               <Link to="/browse" className="btn-ghost">Browse all players <ChevronRight size={15} /></Link>
             </div>
           </>
         ) : (
           <div className="rounded-xl2 border border-dashed border-white/15 p-10 text-center text-mute">
-            No player videos yet — be the very first to upload a reel and get discovered. ⚽
+            No players yet — be the very first to upload a reel and get discovered. ⚽
           </div>
         )}
 
         {/* INSTITUTIONS DIRECTORY — clubs, academies, schools, universities */}
-        <Heading title="Clubs, academies & institutions" sub="The clubs, academies, schools & universities discovering talent on Talenta" center />
+        <Heading title="Clubs, academies & institutions" sub="Discovering talent on Talenta" center />
         <InstitutionsDirectory />
 
         {/* LEGENDS / CALLIGRAPHY ART BAND */}
         <Reveal>
           <div className="relative mt-20 overflow-hidden rounded-xl2 border border-primary/25 bg-gradient-to-br from-primary/[0.12] via-ink to-ink p-8 md:p-14">
-            {/* decorative football + pitch arcs (original art) */}
             <svg viewBox="0 0 400 400" className="pointer-events-none absolute -right-12 -top-16 h-[150%] w-auto opacity-[0.16]" fill="none" stroke="url(#ball)" strokeWidth="2.5">
               <defs>
                 <linearGradient id="ball" x1="0" y1="0" x2="1" y2="1">
@@ -169,45 +153,48 @@ export default function Landing() {
               <h2 className="mt-2 leading-[1.05] grad-text" style={{ fontFamily: "'Dancing Script', cursive", fontSize: 'clamp(2.6rem, 6vw, 4.5rem)', fontWeight: 700 }}>
                 Every legend started as<br />a kid with a ball.
               </h2>
-              <p className="mt-5 max-w-lg leading-relaxed text-mute">
-                From a dusty village ground to the world's biggest stadiums — greatness can come from anywhere.
-                Talenta makes sure the world finally sees them.
-              </p>
               <Link to="/signup" className="btn-primary mt-7 inline-flex"><Play size={18} fill="white" /> Start your journey</Link>
             </div>
           </div>
         </Reveal>
 
-        {/* WHY TALENTA */}
+        {/* WHY TALENTA — compact horizontal rows (not big boxes) */}
         <Heading title="Why Talenta" sub="Built to get talent seen — and signed" center />
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           {benefits.map((b, i) => (
-            <Reveal key={b.h} delay={i * 80}>
-              <div className="card h-full p-6">
-                <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/15 text-primary"><b.icon size={20} /></div>
-                <h3 className="mt-4 font-bold">{b.h}</h3>
-                <p className="mt-2 text-[13.5px] leading-relaxed text-mute">{b.p}</p>
+            <Reveal key={b.h} delay={i * 70}>
+              <div className="card flex items-center gap-4 p-5">
+                <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl bg-primary/15 text-primary"><b.icon size={22} /></span>
+                <div className="min-w-0">
+                  <h3 className="font-bold">{b.h}</h3>
+                  <p className="text-[13px] text-mute">{b.p}</p>
+                </div>
               </div>
             </Reveal>
           ))}
         </div>
 
-        {/* POWERED BY AI */}
-        <Heading title="Powered by AI" sub="Smart technology so talent rises on merit — live today, with a bold AI roadmap ahead" center />
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {aiFeatures.map((a, i) => (
-            <Reveal key={a.h} delay={i * 80}>
-              <div className="card h-full p-6">
-                <div className="flex items-center justify-between">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/15 text-primary"><a.icon size={20} /></div>
-                  <span className={`rounded-full px-2.5 py-1 text-[10px] font-extrabold ${a.live ? 'bg-accent text-white' : 'border border-white/10 bg-white/[0.06] text-mute'}`}>{a.live ? '● LIVE' : 'COMING'}</span>
+        {/* POWERED BY AI — heat-map visual + compact feature list (no repeated boxes) */}
+        <Heading title="Powered by AI" sub="Smart technology so talent rises on merit — live today, with a bold roadmap ahead" center />
+        <Reveal>
+          <div className="grid items-stretch gap-6 lg:grid-cols-2">
+            <HeatMapViz />
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              {aiFeatures.map((a) => (
+                <div key={a.h} className="card flex items-start gap-3.5 p-5">
+                  <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-xl bg-primary/15 text-primary"><a.icon size={19} /></span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold">{a.h}</h3>
+                      <span className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold ${a.live ? 'bg-accent text-white' : 'border border-white/10 bg-white/[0.06] text-mute'}`}>{a.live ? '● LIVE' : 'SOON'}</span>
+                    </div>
+                    <p className="mt-1 text-[12.5px] leading-relaxed text-mute">{a.p}</p>
+                  </div>
                 </div>
-                <h3 className="mt-4 font-bold">{a.h}</h3>
-                <p className="mt-2 text-[13.5px] leading-relaxed text-mute">{a.p}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
 
         {/* HOW IT WORKS */}
         <Heading title="How it works" sub="From unknown to signed — in three steps" center />
@@ -224,7 +211,7 @@ export default function Landing() {
           ))}
         </div>
 
-        {/* FOUNDING MEMBERS — FREE OFFER */}
+        {/* FOUNDING MEMBERS — FREE OFFER (single closing CTA) */}
         <Reveal>
           <div className="card relative mt-20 overflow-hidden border-primary/40 bg-gradient-to-br from-primary/[0.12] via-ink to-ink p-8 text-center md:p-12">
             <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/[0.12] px-4 py-1.5 text-[12.5px] font-semibold text-accent">
@@ -234,8 +221,8 @@ export default function Landing() {
               Free for our first<br /><span className="grad-text">1,000 players</span> &amp; <span className="grad-text">100 institutions</span>
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-mute">
-              Be a founding member. The first <b className="text-slate-200">1,000 footballers</b> get Talenta Pro free,
-              and the first <b className="text-slate-200">100 clubs, academies, schools &amp; universities</b> join completely free — just for being early.
+              Be a founding member — the first <b className="text-slate-200">1,000 footballers</b> get Talenta Pro free,
+              and the first <b className="text-slate-200">100 clubs, academies & schools</b> join completely free.
             </p>
             <div className="mx-auto mt-7 flex max-w-lg flex-wrap justify-center gap-4">
               <div className="min-w-[150px] flex-1 rounded-xl border border-primary/30 bg-primary/[0.06] p-4">
@@ -247,40 +234,10 @@ export default function Landing() {
                 <div className="mt-1 text-[12px] uppercase tracking-wide text-mute">Clubs · Schools · Universities FREE</div>
               </div>
             </div>
-            <div className="mt-6 flex flex-wrap justify-center gap-2 opacity-90">
-              {FLAGS.slice(0, 20).map((c, i) => <img key={i} src={`https://flagcdn.com/h24/${c}.png`} alt="" loading="lazy" className="h-5 w-auto rounded-sm ring-1 ring-white/10" />)}
-            </div>
             <div className="mt-7 flex flex-wrap justify-center gap-3">
               <Link to="/signup" className="btn-primary text-base"><Play size={18} fill="white" /> Claim your free spot</Link>
-              <Link to="/signup" className="btn-ghost">For Clubs &amp; Academies</Link>
+              <Link to="/faq" className="btn-ghost">How it works</Link>
             </div>
-          </div>
-        </Reveal>
-
-        {/* COMING SOON */}
-        <Heading title="More sports — coming soon" sub="Talenta is built for 5 sports. Football is live now." />
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {SPORTS.map((s) => (
-            <div key={s[0]} className={`card p-5 text-center ${s[2] ? 'border-primary/60 shadow-glow' : ''}`}>
-              <div className="text-3xl">{s[1]}</div>
-              <div className="mt-2.5 font-bold">{s[0]}</div>
-              <span className={`mt-2 inline-block rounded-full px-3 py-1 text-[10.5px] font-extrabold ${s[2] ? 'bg-accent text-white' : 'border border-white/10 bg-white/[0.06] text-mute'}`}>{s[2] ? '● LIVE' : 'COMING SOON'}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* FAQ */}
-        <Heading title="Frequently asked questions" sub="Everything you need to know" center />
-        <div className="mx-auto max-w-3xl space-y-3">
-          {faqs.map(([q, a]) => <Faq key={q} q={q} a={a} />)}
-        </div>
-
-        {/* CTA */}
-        <Reveal>
-          <div className="card mt-16 overflow-hidden p-10 text-center md:p-14">
-            <h2 className="font-display text-3xl font-bold md:text-4xl">Ready to get discovered?</h2>
-            <p className="mx-auto mt-3 max-w-md text-mute">Be among the first footballers on Talenta. Free to start — get discovered worldwide.</p>
-            <Link to="/signup" className="btn-primary mx-auto mt-6 w-fit text-base">Get started <ChevronRight size={18} /></Link>
           </div>
         </Reveal>
       </div>
@@ -297,39 +254,54 @@ function Heading({ title, sub, center }: { title: string; sub: string; center?: 
   );
 }
 
-// A player's video reel as a tappable thumbnail (links to the full profile).
-function PlayerVideoCard({ player }: { player: Player }) {
+// Original football "performance heat-map" visual — illustrates AI/GPS data
+// without a single line of paragraph text. Pure SVG, no copyrighted assets.
+function HeatMapViz() {
+  // activity blobs on a pitch — x%, y%, radius, intensity colour
+  const blobs = [
+    { x: 30, y: 50, r: 95, c: '#FF2A4D', o: 0.55 },
+    { x: 55, y: 38, r: 70, c: '#FF5A2C', o: 0.5 },
+    { x: 70, y: 62, r: 60, c: '#FFB23C', o: 0.45 },
+    { x: 82, y: 48, r: 48, c: '#FFD23C', o: 0.4 },
+    { x: 42, y: 70, r: 50, c: '#FF5A2C', o: 0.38 },
+  ];
   return (
-    <Link to={`/player/${player.id}`} className="card group overflow-hidden">
-      <div className="relative aspect-video overflow-hidden bg-ink">
-        {player.yt ? (
-          <img src={`https://img.youtube.com/vi/${player.yt}/hqdefault.jpg`} alt={`${player.name} skill reel`} loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-        ) : (
-          <div className="grid h-full w-full place-items-center bg-gradient-to-br from-[#f09433] via-[#dc2743] to-[#bc1888]">
-            <Instagram size={34} className="text-white/90" />
+    <div className="card relative overflow-hidden p-5">
+      <div className="mb-3 flex items-center justify-between">
+        <span className="text-[12px] font-semibold uppercase tracking-wider text-mute">AI movement heat-map</span>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-1 text-[10px] font-bold text-accent"><span className="h-1.5 w-1.5 rounded-full bg-accent" /> SAMPLE</span>
+      </div>
+      <svg viewBox="0 0 400 250" className="w-full rounded-xl" style={{ background: 'linear-gradient(160deg,#0c1f12,#0a1a2e)' }}>
+        <defs>
+          {blobs.map((b, i) => (
+            <radialGradient key={i} id={`hm${i}`}>
+              <stop offset="0%" stopColor={b.c} stopOpacity={b.o} />
+              <stop offset="100%" stopColor={b.c} stopOpacity="0" />
+            </radialGradient>
+          ))}
+        </defs>
+        {/* pitch markings */}
+        <g stroke="#ffffff" strokeOpacity="0.25" fill="none" strokeWidth="1.5">
+          <rect x="12" y="12" width="376" height="226" rx="4" />
+          <line x1="200" y1="12" x2="200" y2="238" />
+          <circle cx="200" cy="125" r="34" />
+          <rect x="12" y="70" width="46" height="110" />
+          <rect x="342" y="70" width="46" height="110" />
+        </g>
+        {/* heat blobs */}
+        {blobs.map((b, i) => (
+          <ellipse key={i} cx={b.x / 100 * 400} cy={b.y / 100 * 250} rx={b.r} ry={b.r * 0.7} fill={`url(#hm${i})`} />
+        ))}
+      </svg>
+      <div className="mt-3 grid grid-cols-3 gap-3 text-center">
+        {[['Top speed', '32.4 km/h'], ['Distance', '11.2 km'], ['Sprints', '24']].map(([l, v]) => (
+          <div key={l} className="rounded-lg border border-white/10 bg-white/[0.03] py-2">
+            <div className="font-display text-base font-bold grad-text">{v}</div>
+            <div className="text-[10px] uppercase tracking-wide text-mute">{l}</div>
           </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
-        <div className="absolute inset-0 grid place-items-center">
-          <span className="grid h-14 w-14 place-items-center rounded-full bg-primary/90 text-white shadow-glow transition-transform group-hover:scale-110">
-            <Play size={22} fill="white" />
-          </span>
-        </div>
-        {player.verified && (
-          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-ink/80 px-2 py-1 text-[11px] font-semibold text-sky backdrop-blur">
-            <BadgeCheck size={12} /> Verified
-          </span>
-        )}
+        ))}
       </div>
-      <div className="flex items-center justify-between p-4">
-        <div className="min-w-0">
-          <div className="flex items-center gap-1.5 font-semibold"><span className="truncate">{player.name}</span> <span>{FLAG[player.country] || '🌍'}</span></div>
-          <div className="text-[12.5px] text-mute">{player.pos}{player.age ? ` · ${player.age}` : ''}</div>
-        </div>
-        {!!player.match && <span className="flex-shrink-0 rounded-lg bg-primary/15 px-2 py-1 text-[12px] font-bold text-primary">{player.match}</span>}
-      </div>
-    </Link>
+    </div>
   );
 }
 
@@ -391,23 +363,6 @@ function InstitutionsDirectory() {
           </div>
         );
       })}
-    </div>
-  );
-}
-
-function Faq({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="card overflow-hidden">
-      <button onClick={() => setOpen((o) => !o)} className="flex w-full items-center justify-between gap-4 p-5 text-left font-semibold">
-        {q}
-        <ChevronDown size={18} className={`flex-shrink-0 text-mute transition-transform ${open ? 'rotate-180' : ''}`} />
-      </button>
-      <div className={`grid transition-all duration-300 ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-        <div className="overflow-hidden">
-          <p className="px-5 pb-5 text-[13.5px] leading-relaxed text-mute">{a}</p>
-        </div>
-      </div>
     </div>
   );
 }

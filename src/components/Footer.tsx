@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Youtube, Linkedin, Play, Mail } from 'lucide-react';
 
-const CONTACT_EMAIL = 'sportssportstalenta@gmail.com';
+const CONTACT_EMAIL = 'sportstalenta@gmail.com';
 
 const socials = [
   { Icon: Instagram, href: 'https://instagram.com/talenta', label: 'Instagram' },
@@ -16,6 +16,10 @@ const cols: { h: string; items: Item[] }[] = [
   { h: 'Explore', items: [
     { l: 'Talent Feed', to: '/feed' }, { l: 'Discover', to: '/browse' },
     { l: 'Rankings', to: '/rankings' }, { l: 'Blog', href: '/blog/' }, { l: 'Pricing', to: '/pricing' },
+  ] },
+  { h: 'Company', items: [
+    { l: 'FAQs', to: '/faq' }, { l: 'How it works', to: '/faq' },
+    { l: 'Pricing', to: '/pricing' }, { l: 'Contact', href: 'mailto:sportstalenta@gmail.com' },
   ] },
   { h: 'Join', items: [
     { l: 'As a Player', to: '/signup' }, { l: 'For Clubs & Scouts', to: '/signup' },
@@ -35,7 +39,7 @@ export default function Footer() {
 
       {/* CTA band */}
       <div className="border-b border-white/10 bg-primary/[0.04]">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-5 px-5 py-9 text-center md:flex-row md:justify-between md:text-left">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-5 px-5 py-9 text-center md:flex-row md:justify-between md:text-left">
           <div>
             <h3 className="font-display text-xl font-bold md:text-2xl">Ready to get discovered?</h3>
             <p className="mt-1 text-sm text-mute">Join free as a founding member — be one of the first 1,000 players.</p>
@@ -48,8 +52,8 @@ export default function Footer() {
       </div>
 
       {/* main */}
-      <div className="mx-auto max-w-6xl px-5 py-14">
-        <div className="grid gap-10 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
+      <div className="mx-auto max-w-7xl px-5 py-14">
+        <div className="grid gap-10 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr]">
           <div>
             <Link to="/" className="inline-flex items-center">
               <img src="/logo-clear.png" alt="Talenta" className="h-10 w-auto" />
