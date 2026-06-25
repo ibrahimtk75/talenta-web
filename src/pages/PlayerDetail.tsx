@@ -57,10 +57,16 @@ export default function PlayerDetail() {
       </button>
 
       <div className="card flex flex-wrap items-center gap-5 p-6">
-        <div className="grid h-20 w-20 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary-2 font-display text-3xl font-bold text-white">{initials(p.name)}</div>
+        {p.photo ? (
+          <img src={p.photo} alt={p.name} className="h-20 w-20 flex-shrink-0 rounded-2xl object-cover ring-1 ring-white/15" />
+        ) : (
+          <div className="grid h-20 w-20 flex-shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary-2 font-display text-3xl font-bold text-white">{initials(p.name)}</div>
+        )}
         <div className="min-w-[200px] flex-1">
           <h1 className="flex items-center gap-2 font-display text-2xl font-bold">
-            {p.name} <span className="text-xl">{FLAG[p.country]}</span>
+            {p.name} {p.country && p.country.length === 2
+              ? <img src={`https://flagcdn.com/h24/${p.country.toLowerCase()}.png`} alt={p.country} className="h-4 w-auto rounded-[2px] ring-1 ring-white/10" />
+              : <span className="text-xl">{FLAG[p.country]}</span>}
             {p.pro && <span className="rounded bg-gradient-to-r from-primary to-primary-2 px-2 py-0.5 text-[10px] font-extrabold text-white">PRO</span>}
             {p.verified && <BadgeCheck size={20} className="text-sky" />}
           </h1>
@@ -80,6 +86,26 @@ export default function PlayerDetail() {
           <button onClick={contact} className="btn-primary"><Send size={16} /> Contact Player</button>
         </div>
       </div>
+
+      {/* Photo gallery — face, full-body (kit/ground), action shots */}
+      {(() => {
+        const gallery = (p.photos && p.photos.length ? p.photos : (p.photo ? [p.photo] : [])).slice(0, 3);
+        if (!gallery.length) return null;
+        const labels = ['Face', 'Full body', 'Action'];
+        return (
+          <div className="mt-6">
+            <h2 className="mb-3 font-display text-lg font-bold">Photos</h2>
+            <div className="grid grid-cols-3 gap-3">
+              {gallery.map((src, i) => (
+                <a key={i} href={src} target="_blank" rel="noopener noreferrer" className="group relative block overflow-hidden rounded-xl2 border border-white/10 bg-ink">
+                  <img src={src} alt={`${p.name} ${labels[i] || ''}`} loading="lazy" className="aspect-[3/4] w-full object-cover transition group-hover:scale-105" />
+                  <span className="absolute bottom-2 left-2 rounded-md bg-black/65 px-2 py-0.5 text-[10.5px] font-semibold backdrop-blur">{labels[i] || `Photo ${i + 1}`}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Sponsor / support a player */}
       <div className="card mt-6 overflow-hidden border-accent/30 bg-gradient-to-br from-accent/[0.09] to-transparent p-6">

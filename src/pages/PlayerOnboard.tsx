@@ -34,7 +34,10 @@ export default function PlayerOnboard() {
   const [assists, setAssists] = useState('');
   const [passAcc, setPassAcc] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
-  const [photoUrl, setPhotoUrl] = useState('');
+  // Three photo positions: face headshot, full-body in kit on the ground, and an action/pro shot.
+  const [photoFace, setPhotoFace] = useState('');
+  const [photoFull, setPhotoFull] = useState('');
+  const [photoAction, setPhotoAction] = useState('');
 
   const int = (v: string) => Math.max(0, Math.round(Number(v) || 0));
   const buildProfileBody = (): ProfileBody => ({
@@ -77,7 +80,8 @@ export default function PlayerOnboard() {
       const resp = await apiRegister({
         email: email.trim(), password, fullName: name.trim(),
         country: country.slice(0, 2).toUpperCase(), role: toBackendRole('player'),
-        ...(photoUrl.trim() ? { avatarUrl: photoUrl.trim() } : {}),
+        ...(photoFace.trim() ? { avatarUrl: photoFace.trim() } : {}),
+        photos: [photoFace, photoFull, photoAction].map((u) => u.trim()).filter(Boolean),
       });
       signIn(resp, 'player', prof);
       // Save the football profile so the player shows up in Browse/search.
@@ -209,11 +213,29 @@ export default function PlayerOnboard() {
         {step === 4 && (
           <div className="space-y-4">
             <div className="rounded-xl border border-white/15 bg-white/[0.03] p-4">
-              <label className="field-label flex items-center gap-2"><User size={16} className="text-primary" /> Your photo (link to a clear face/action photo)</label>
-              <input value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} className="field-input" placeholder="https://…/your-photo.jpg" />
-              <p className="mt-2 text-[12px] leading-relaxed text-mute">
-                A sharp photo makes your card stand out in search. Paste an image link (Instagram, Google Drive “share” image link, etc.). Optional — you can add it later from My Hub.
+              <label className="field-label flex items-center gap-2"><User size={16} className="text-primary" /> Your photos — add up to 3 angles</label>
+              <p className="mb-3 mt-1 text-[12px] leading-relaxed text-mute">
+                Good photos make your card stand out to scouts. Paste image links (Instagram, Google Drive “share” image link, etc.). The face photo shows on your card. All optional — add more later from My Hub.
               </p>
+              <div className="space-y-3">
+                {[
+                  { v: photoFace, set: setPhotoFace, n: '1', t: 'Face photo (headshot)', ph: 'https://…/face.jpg', primary: true },
+                  { v: photoFull, set: setPhotoFull, n: '2', t: 'Full body — in kit, on the ground', ph: 'https://…/full-body.jpg' },
+                  { v: photoAction, set: setPhotoAction, n: '3', t: 'Action / professional shot', ph: 'https://…/action.jpg' },
+                ].map((f) => (
+                  <div key={f.n} className="flex items-center gap-3">
+                    {f.v.trim() ? (
+                      <img src={f.v.trim()} alt="" className="h-12 w-12 flex-shrink-0 rounded-xl object-cover ring-1 ring-white/15" />
+                    ) : (
+                      <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl border border-dashed border-white/15 text-[13px] font-bold text-mute">{f.n}</span>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-1 text-[12px] font-semibold text-slate-200">{f.t}{f.primary && <span className="ml-1.5 rounded bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold text-primary">CARD</span>}</div>
+                      <input value={f.v} onChange={(e) => f.set(e.target.value)} className="field-input" placeholder={f.ph} />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="rounded-xl border border-white/15 bg-white/[0.03] p-4">
               <label className="field-label flex items-center gap-2"><Youtube size={16} className="text-primary" /> Your skill reel (YouTube or Instagram link)</label>

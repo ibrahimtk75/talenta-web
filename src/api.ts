@@ -54,7 +54,7 @@ export function toBackendRole(uiRole: 'player' | 'club' | 'academy' | 'coach' | 
 }
 
 export const apiRegister = (b: {
-  email: string; password: string; fullName: string; country: string; role: string; orgType?: string; avatarUrl?: string;
+  email: string; password: string; fullName: string; country: string; role: string; orgType?: string; avatarUrl?: string; photos?: string[];
 }) => call<AuthResp>('/api/auth/register', b);
 
 export const apiLogin = (b: { email: string; password: string }) =>
@@ -83,7 +83,7 @@ export const apiAddVideoLink = (token: string, url: string, title?: string) =>
 // Players (public browse) — GET /api/players returns an array of footballers.
 // ─────────────────────────────────────────────────────────────
 type BackendPlayer = {
-  id: string; name: string; country: string | null; photo?: string | null; position: string | null; skillLevel?: string | null;
+  id: string; name: string; country: string | null; photo?: string | null; photos?: string[] | null; position: string | null; skillLevel?: string | null;
   age: number | null; foot: string | null; career: [string, string][] | null;
   headline: string | null; stats: Record<string, number> | null;
   youtubeVideoId: string | null; instagramUrl?: string | null; views: number; pro: boolean; verified: boolean;
@@ -108,6 +108,7 @@ function mapPlayer(b: BackendPlayer): Player {
     name: b.name || 'Unnamed player',
     country: b.country || 'Other',
     photo: b.photo || undefined,
+    photos: Array.isArray(b.photos) ? b.photos.filter(Boolean) : [],
     pos: b.position || 'Player',
     skillLevel: b.skillLevel || undefined,
     age: b.age ?? 0,
