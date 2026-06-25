@@ -18,12 +18,19 @@ export default function Nav() {
   // Close the mobile menu whenever the route changes.
   useEffect(() => { setOpen(false); setDisc(false); }, [pathname]);
 
-  // Close the mobile menu when the user scrolls the page.
+  // Close the mobile menu when the user actually scrolls the page. We wait a
+  // moment and require a real scroll delta — otherwise the layout shift / mobile
+  // address-bar reflow when the menu opens fires a scroll and closes it instantly
+  // (the "menu blinks shut" bug).
   useEffect(() => {
     if (!open) return;
-    const close = () => setOpen(false);
-    window.addEventListener('scroll', close, { passive: true });
-    return () => window.removeEventListener('scroll', close);
+    const startY = window.scrollY;
+    let onScroll: (() => void) | null = null;
+    const t = setTimeout(() => {
+      onScroll = () => { if (Math.abs(window.scrollY - startY) > 16) setOpen(false); };
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }, 350);
+    return () => { clearTimeout(t); if (onScroll) window.removeEventListener('scroll', onScroll); };
   }, [open]);
 
   const roleLinks: NavItem[] = [];
