@@ -18,21 +18,6 @@ export default function Nav() {
   // Close the mobile menu whenever the route changes.
   useEffect(() => { setOpen(false); setDisc(false); }, [pathname]);
 
-  // Close the mobile menu when the user actually scrolls the page. We wait a
-  // moment and require a real scroll delta — otherwise the layout shift / mobile
-  // address-bar reflow when the menu opens fires a scroll and closes it instantly
-  // (the "menu blinks shut" bug).
-  useEffect(() => {
-    if (!open) return;
-    const startY = window.scrollY;
-    let onScroll: (() => void) | null = null;
-    const t = setTimeout(() => {
-      onScroll = () => { if (Math.abs(window.scrollY - startY) > 16) setOpen(false); };
-      window.addEventListener('scroll', onScroll, { passive: true });
-    }, 350);
-    return () => { clearTimeout(t); if (onScroll) window.removeEventListener('scroll', onScroll); };
-  }, [open]);
-
   const roleLinks: NavItem[] = [];
   if (role === 'player') roleLinks.push({ to: '/hub', label: 'My Hub', icon: LayoutDashboard }, { to: '/messages', label: 'Messages', icon: MessageSquare });
   else if (role === 'club') roleLinks.push({ to: '/club', label: 'Dashboard', icon: LayoutDashboard }, { to: '/messages', label: 'Messages', icon: MessageSquare });
@@ -101,8 +86,9 @@ export default function Nav() {
         </div>
       </div>
 
+      {open && <div className="fixed inset-0 z-40 bg-black/40 md:hidden" onClick={() => setOpen(false)} aria-hidden="true" />}
       {open && (
-        <div className="border-t border-white/10 bg-ink/95 px-4 py-3 backdrop-blur-xl md:hidden">
+        <div className="relative z-50 border-t border-white/10 bg-ink/95 px-4 py-3 backdrop-blur-xl md:hidden">
           <div className="flex flex-col gap-1">
             <Item l={{ to: '/feed', label: 'Watch', icon: Play }} mobile />
             <div className="px-3.5 pb-0.5 pt-2 text-[11px] font-bold uppercase tracking-wide text-mute/70">Explore</div>
