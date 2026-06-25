@@ -9,6 +9,7 @@ import { POSITIONS, COUNTRIES } from '../data';
 import { payLink } from '../payments';
 import { Kpi, Panel, DashHeader } from '../components/dash';
 import ShareMenu from '../components/ShareMenu';
+import { MyJourney } from '../components/LifetimeLog';
 
 export default function Hub() {
   const { pro, setPro, profile, setProfile, toast } = useSession();
@@ -134,6 +135,9 @@ export default function Hub() {
           </button>
         </div>
       </Panel>
+
+      {/* Lifetime journey log */}
+      <div className="mt-6"><MyJourney /></div>
 
       {/* practice + messages + trials */}
       <div className="mt-6 grid gap-6 lg:grid-cols-3">

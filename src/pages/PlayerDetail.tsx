@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp, Heart, Sparkles, Lock } from 'lucide-react';
 import { FLAG, COUNTRY_NAME, initials, valuationOf, fmtMoney } from '../data';
@@ -7,7 +7,8 @@ import ShareMenu from '../components/ShareMenu';
 import TalentaCard from '../components/TalentaCard';
 import { usePlayer } from '../usePlayers';
 import { useSession } from '../session';
-import { apiEnabled, apiSendMessage } from '../api';
+import { apiEnabled, apiSendMessage, apiPlayerLogs, type PlayerLog } from '../api';
+import { JourneyTimeline } from '../components/LifetimeLog';
 
 export default function PlayerDetail() {
   const { id } = useParams();
@@ -16,7 +17,15 @@ export default function PlayerDetail() {
   const [playing, setPlaying] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [offer, setOffer] = useState('');
+  const [logs, setLogs] = useState<PlayerLog[]>([]);
   const { player: p, loading } = usePlayer(id);
+
+  // Clubs & academies can see the player's lifetime journey (non-private entries).
+  const clubView = role === 'club' || role === 'academy';
+  useEffect(() => {
+    if (!apiEnabled || !p || !clubView) { setLogs([]); return; }
+    apiPlayerLogs(p.id, token || undefined).then(setLogs).catch(() => setLogs([]));
+  }, [p?.id, clubView, token]); // eslint-disable-line
 
   // Per-player SEO: unique title, description and Person/VideoObject schema so
   // search engines can index each footballer as a rich result.
@@ -255,6 +264,14 @@ export default function PlayerDetail() {
           ))}
         </div>
       ) : <p className="text-[13px] text-mute">No stats added yet.</p>}
+
+      {/* Lifetime journey — clubs only, when the player has shared entries */}
+      {isClub && logs.length > 0 && (
+        <>
+          <h2 className="mb-4 mt-9 font-display text-lg font-bold">Journey &amp; development</h2>
+          <div className="card p-6"><JourneyTimeline logs={logs} /></div>
+        </>
+      )}
 
       <h2 className="mb-4 mt-9 font-display text-lg font-bold">Highlight reel</h2>
       {p.yt ? (

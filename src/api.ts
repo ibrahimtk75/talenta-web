@@ -187,6 +187,23 @@ export type Institution = {
 export const fetchInstitutions = () => call<Institution[]>('/api/institutions');
 
 // ─────────────────────────────────────────────────────────────
+// Lifetime player log — the journey timeline (training/growth/health…).
+// ─────────────────────────────────────────────────────────────
+export type LogCategory = 'TRAINING' | 'ROUTINE' | 'GROWTH' | 'FITNESS' | 'HEALTH' | 'MILESTONE';
+export type PlayerLog = {
+  id: string; date: string; category: LogCategory; title: string;
+  note: string | null; metrics: Record<string, number | string> | null; isPrivate: boolean;
+};
+export type NewLog = {
+  date?: string; category: LogCategory; title: string; note?: string;
+  metrics?: Record<string, number | string>; isPrivate?: boolean; healthConsent?: boolean;
+};
+export const apiCreateLog = (token: string, b: NewLog) => call<PlayerLog>('/api/player-logs', b, token);
+export const apiMyLogs = (token: string) => call<PlayerLog[]>('/api/player-logs/mine', undefined, token);
+export const apiDeleteLog = (token: string, id: string) => call<{ ok: boolean }>(`/api/player-logs/${id}`, undefined, token, 'DELETE');
+export const apiPlayerLogs = (id: string, token?: string) => call<PlayerLog[]>(`/api/players/${id}/logs`, undefined, token);
+
+// ─────────────────────────────────────────────────────────────
 // Admin panel — gated by a shared secret sent as the x-admin-key header.
 // ─────────────────────────────────────────────────────────────
 export type Sponsor = { name: string; logo: string; url?: string };
