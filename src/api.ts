@@ -239,11 +239,10 @@ export const adminUpdateUser = (key: string, id: string, patch: AdminPatch) =>
 export const adminDeleteUser = (key: string, id: string) =>
   adminCall<{ ok: boolean }>(`/api/admin/users/${id}`, key, { method: 'DELETE' });
 
-/** Common brand sponsors → Simple Icons logo URLs, for quick admin add. */
-export const BRAND_LOGOS: Record<string, string> = {
-  Nike: 'https://cdn.simpleicons.org/nike', adidas: 'https://cdn.simpleicons.org/adidas',
-  PUMA: 'https://cdn.simpleicons.org/puma', 'Red Bull': 'https://cdn.simpleicons.org/redbull',
-  'Under Armour': 'https://cdn.simpleicons.org/underarmour', Reebok: 'https://cdn.simpleicons.org/reebok',
-  'New Balance': 'https://cdn.simpleicons.org/newbalance', Gatorade: 'https://cdn.simpleicons.org/gatorade',
-  'Coca-Cola': 'https://cdn.simpleicons.org/cocacola', Pepsi: 'https://cdn.simpleicons.org/pepsi',
-};
+/**
+ * Quick-pick sponsor presets for the admin. Empty by default — only add a brand
+ * here once Talenta has a REAL partnership/permission to display its logo
+ * (showing third-party trademarks without consent is a legal risk). Admins add
+ * legitimate sponsors via the "Custom" field with the brand's own logo URL.
+ */
+export const BRAND_LOGOS: Record<string, string> = {};

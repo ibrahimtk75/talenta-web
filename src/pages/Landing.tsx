@@ -45,14 +45,6 @@ const steps = [
 // display correctly on every device (Windows/Edge don't render flag emoji).
 const FLAGS = ['br','ar','fr','de','es','pt','gb-eng','it','nl','be','ng','gh','cm','sn','eg','ma','ci','jp','kr','sa','qa','ae','in','au','us','mx','co','uy','cl','hr','dk','se','no','pl','ch','gb-sct','gb-wls','ie','tr'];
 
-// Sports brands that sponsor athletes worldwide — shown as the sponsorship
-// ecosystem (NOT claimed as Talenta's own sponsors). Logos via Simple Icons.
-const BRANDS: { name: string; slug: string }[] = [
-  { name: 'Nike', slug: 'nike' }, { name: 'adidas', slug: 'adidas' }, { name: 'PUMA', slug: 'puma' },
-  { name: 'Red Bull', slug: 'redbull' }, { name: 'Under Armour', slug: 'underarmour' },
-  { name: 'New Balance', slug: 'newbalance' }, { name: 'Reebok', slug: 'reebok' },
-  { name: 'Gatorade', slug: 'gatorade' }, { name: 'Coca-Cola', slug: 'cocacola' }, { name: 'Pepsi', slug: 'pepsi' },
-];
 
 export default function Landing() {
   const { players, loading: playersLoading } = usePlayers();
@@ -238,29 +230,21 @@ export default function Landing() {
           ))}
         </div>
 
-        {/* SPONSORSHIP & PARTNERSHIPS — honest: the sponsorship ecosystem, not "our sponsors" */}
+        {/* SPONSORSHIP & PARTNERSHIPS — logo-free, honest CTA (no third-party trademarks) */}
         <Heading title="Sponsorship & partnerships" sub="Standout players attract brands. Talenta helps rising talent earn sponsorships — and welcomes partners who want to back the next generation." center />
         <Reveal>
-          <div className="card overflow-hidden p-6 md:p-8">
-            <div className="relative overflow-hidden">
-              <div className="brands-track flex w-max items-center gap-4">
-                {[...BRANDS, ...BRANDS].map((b, i) => (
-                  <span key={i} className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white px-4 py-2.5">
-                    <BrandLogo name={b.name} slug={b.slug} />
-                    <span className="whitespace-nowrap text-[13px] font-semibold text-ink">{b.name}</span>
-                  </span>
-                ))}
-              </div>
-              <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#0c1830] to-transparent" />
-              <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#0c1830] to-transparent" />
-            </div>
-            <p className="mt-4 text-center text-[12px] text-mute">Global brands that sponsor athletes worldwide — illustrating the sponsorship opportunities Talenta opens for players.</p>
+          <div className="card overflow-hidden border-primary/25 bg-gradient-to-br from-primary/[0.10] via-ink to-ink p-8 text-center md:p-10">
+            <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-primary/15 text-primary"><Sparkles size={22} /></span>
+            <h3 className="mt-3 font-display text-xl font-bold md:text-2xl">Back the next generation of talent</h3>
+            <p className="mx-auto mt-2 max-w-xl text-[14px] leading-relaxed text-mute">
+              Brands, sponsors and partners can support rising players, academies and tournaments on Talenta —
+              and reach a young, football-obsessed audience worldwide.
+            </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
               <a href="mailto:sportstalenta@gmail.com?subject=Sponsorship%20%26%20Partnership%20with%20Talenta" className="btn-primary"><Sparkles size={16} /> Become a sponsor / partner</a>
               <Link to="/signup" className="btn-ghost">Sponsor a rising star</Link>
             </div>
           </div>
-          <style>{`.brands-track{animation:brandscroll 32s linear infinite}.brands-track:hover{animation-play-state:paused}@keyframes brandscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}`}</style>
         </Reveal>
 
         {/* FOUNDING MEMBERS — FREE OFFER (single closing CTA) */}
@@ -295,13 +279,6 @@ export default function Landing() {
       </div>
     </div>
   );
-}
-
-// Brand logo from Simple Icons; if the slug 404s, render nothing (name still shows).
-function BrandLogo({ name, slug }: { name: string; slug: string }) {
-  const [ok, setOk] = useState(true);
-  if (!ok) return null;
-  return <img src={`https://cdn.simpleicons.org/${slug}`} alt={name} className="h-6 w-6 flex-shrink-0 object-contain" loading="lazy" onError={() => setOk(false)} />;
 }
 
 function Heading({ title, sub, center }: { title: string; sub: string; center?: boolean }) {
