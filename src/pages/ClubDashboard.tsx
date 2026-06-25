@@ -11,7 +11,7 @@ export default function ClubDashboard() {
   const [q, setQ] = useState('');
   const [country, setCountry] = useState('Any');
   const nav = useNavigate();
-  const { role, profile, toast } = useSession();
+  const { role, profile } = useSession();
   const orgName = profile.name || (role === 'academy' ? 'Your Academy' : 'Your Club');
   const orgMeta = [profile.type || (role === 'academy' ? 'Academy' : 'Club'), profile.country].filter(Boolean).join(' · ');
   const codes = Array.from(new Set(PLAYERS.map((p) => p.country))).sort();
@@ -87,7 +87,7 @@ export default function ClubDashboard() {
                   <span className="min-w-0"><span className="block truncate text-[13px] font-semibold">{p.name}</span><span className="block text-[11px] text-mute">{p.pos}</span></span>
                 </button>
               ))}
-              <button onClick={() => toast('Add player to pipeline')} className="w-full rounded-lg border border-dashed border-white/15 py-2 text-[12px] text-mute hover:border-primary hover:text-white">+ Add</button>
+              <button onClick={() => nav('/browse')} className="w-full rounded-lg border border-dashed border-white/15 py-2 text-[12px] text-mute hover:border-primary hover:text-white">+ Find players</button>
             </div>
           </div>
         ))}

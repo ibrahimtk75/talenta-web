@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp, Heart, Sparkles, Lock } from 'lucide-react';
 import { FLAG, initials, valuationOf, fmtMoney } from '../data';
-import { RateStars } from '../components/Stars';
 import ShareMenu from '../components/ShareMenu';
 import TalentaCard from '../components/TalentaCard';
 import { usePlayer } from '../usePlayers';
@@ -16,20 +15,12 @@ export default function PlayerDetail() {
   const [playing, setPlaying] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [offer, setOffer] = useState('');
-  const [ratings, setRatings] = useState<Record<string, number>>({});
-  const [review, setReview] = useState('');
   const { player: p, loading } = usePlayer(id);
 
   if (loading) return <div className="mx-auto max-w-3xl px-5 py-12 text-mute">Loading…</div>;
   if (!p) return <div className="mx-auto max-w-3xl px-5 py-12">Player not found.</div>;
 
   const isClub = role === 'club' || role === 'academy';
-
-  const submitReview = () => {
-    if (!Object.values(ratings).some(Boolean)) { toast('Please rate at least one category'); return; }
-    toast(`Review submitted for ${p.name} ⭐`);
-    setRatings({}); setReview('');
-  };
 
   const contact = async () => {
     if (!isClub) { toast('Contacting players is for clubs & academies.'); return; }
@@ -43,11 +34,19 @@ export default function PlayerDetail() {
       toast('Sign in as a club to contact players.');
     }
   };
-  const sendOffer = () => {
+  // A real offer = a message to the player with the amount (uses live messaging).
+  const sendOffer = async () => {
     const v = Number(offer);
     if (!v || v <= 0) { toast('Enter a valid offer amount'); return; }
-    toast(`Offer of $${v}K sent to ${p.name}`);
-    setOffer('');
+    if (apiEnabled && token) {
+      try {
+        await apiSendMessage(token, p.id, `Offer via Talenta: $${v}K for ${p.name}. We'd love to discuss — are you open to it?`);
+        toast('Offer sent ✅'); setOffer('');
+        nav('/messages', { state: { peerId: p.id, peerName: p.name } });
+      } catch { toast('Could not send offer — try again'); }
+    } else {
+      toast('Sign in as a club to make an offer.');
+    }
   };
 
   return (
@@ -190,17 +189,11 @@ export default function PlayerDetail() {
       {isClub && (
         <div className="card mt-6 p-6">
           <h2 className="font-display text-lg font-bold">Rate this player</h2>
-          <p className="mt-1 text-[13px] text-mute">Your review helps other clubs & builds trust. Visible after a verified interaction.</p>
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            {['Skill', 'Attitude', 'Reliability'].map((cat) => (
-              <div key={cat} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                <div className="mb-2 text-[13px] font-semibold text-slate-200">{cat}</div>
-                <RateStars onRate={(v) => setRatings((r) => ({ ...r, [cat]: v }))} />
-              </div>
-            ))}
+          <p className="mt-1 text-[13px] text-mute">Reviews keep Talenta trustworthy — you'll be able to rate {p.name} after a verified trial or signing with them on the platform.</p>
+          <div className="mt-4 flex items-center gap-2.5 rounded-xl border border-dashed border-white/15 bg-white/[0.03] p-4 text-[13px] text-mute">
+            <Lock size={16} className="flex-shrink-0 text-primary" />
+            Rating unlocks after a verified interaction with this player — this stops fake reviews.
           </div>
-          <textarea value={review} onChange={(e) => setReview(e.target.value)} className="field-input mt-4" rows={2} placeholder={`Write a short review of ${p.name}...`} />
-          <button onClick={submitReview} className="btn-primary mt-3">Submit review</button>
         </div>
       )}
 

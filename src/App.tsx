@@ -3,6 +3,7 @@ import { useEffect, type ReactElement } from 'react';
 import { SessionProvider, useSession, type Role } from './session';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
 import SupportWidget from './components/SupportWidget';
 import Landing from './pages/Landing';
 import Signup from './pages/Signup';
@@ -58,6 +59,7 @@ export default function App() {
       <ScrollTop />
       <Nav />
       <main className="min-h-[70vh]">
+        <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/signup" element={<Signup />} />
@@ -84,6 +86,7 @@ export default function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </ErrorBoundary>
       </main>
       <Footer />
       <Toast />

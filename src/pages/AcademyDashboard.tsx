@@ -5,7 +5,7 @@ import { useSession } from '../session';
 
 export default function AcademyDashboard() {
   const nav = useNavigate();
-  const { profile, toast } = useSession();
+  const { profile } = useSession();
   const orgName = profile.name || 'Your Academy';
   const orgMeta = [profile.type || 'Academy', profile.country].filter(Boolean).join(' · ');
 
@@ -13,7 +13,7 @@ export default function AcademyDashboard() {
     <div className="mx-auto max-w-6xl px-5 py-10">
       <DashHeader title={orgName} subtitle={orgMeta}
         badge={<span className="rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-0.5 text-[11px] font-semibold text-slate-200">Academy</span>}>
-        <button className="btn-primary text-[13px]" onClick={() => toast('Add athlete')}><UserPlus size={15} /> Add athlete</button>
+        <button className="btn-primary text-[13px]" onClick={() => nav('/browse')}><UserPlus size={15} /> Add athlete</button>
         <button className="btn-ghost text-[13px]" onClick={() => nav('/browse')}><Search size={15} /> Discover talent</button>
       </DashHeader>
 
@@ -30,10 +30,9 @@ export default function AcademyDashboard() {
         <div>
           <div className="mb-3.5 flex items-center justify-between">
             <div className="flex items-center gap-2"><Users size={18} className="text-primary" /><b className="font-display">Our athletes</b></div>
-            <button className="text-[12.5px] font-semibold text-primary" onClick={() => toast('Manage roster')}>Manage</button>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <button onClick={() => toast('Add athlete')} className="flex flex-col items-center justify-center gap-1.5 rounded-xl2 border border-dashed border-white/15 bg-white/[0.03] p-6 text-mute transition hover:border-primary hover:text-white">
+            <button onClick={() => nav('/browse')} className="flex flex-col items-center justify-center gap-1.5 rounded-xl2 border border-dashed border-white/15 bg-white/[0.03] p-6 text-mute transition hover:border-primary hover:text-white">
               <Plus size={24} /> <span className="text-[12.5px] font-semibold">Add your first athlete</span>
             </button>
           </div>

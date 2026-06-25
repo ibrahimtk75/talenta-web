@@ -29,6 +29,8 @@ export default function PlayerOnboard() {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [club, setClub] = useState('');
+  const [clubFrom, setClubFrom] = useState('');
+  const [clubTo, setClubTo] = useState('');
   const [appearances, setAppearances] = useState('');
   const [goals, setGoals] = useState('');
   const [assists, setAssists] = useState('');
@@ -49,7 +51,9 @@ export default function PlayerOnboard() {
     dateOfBirth: dob ? new Date(dob).toISOString() : undefined,
     heightCm: int(height) > 0 ? int(height) : undefined,
     weightKg: int(weight) > 0 ? int(weight) : undefined,
-    currentClub: club.trim() || undefined,
+    currentClub: club.trim()
+      ? `${club.trim()}${clubFrom.trim() || clubTo.trim() ? ` (${clubFrom.trim() || '?'}–${clubTo.trim() || 'Present'})` : ''}`
+      : undefined,
     stats: {
       appearances: int(appearances),
       goals: int(goals),
@@ -187,13 +191,12 @@ export default function PlayerOnboard() {
         )}
         {step === 2 && (
           <div className="space-y-4">
-            <p className="text-sm text-mute">Add every club/academy from childhood to now.</p>
+            <p className="text-sm text-mute">Your current club or academy. You can add your full career history later from My Hub.</p>
             <Field label="Current club / academy"><input value={club} onChange={(e) => setClub(e.target.value)} className="field-input" placeholder="e.g. Santos Youth Academy" /></Field>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="From"><input type="number" className="field-input" placeholder="2018" /></Field>
-              <Field label="To"><input className="field-input" placeholder="2021 / Present" /></Field>
+              <Field label="From (year)"><input value={clubFrom} onChange={(e) => setClubFrom(e.target.value)} type="number" className="field-input" placeholder="2018" /></Field>
+              <Field label="To (year)"><input value={clubTo} onChange={(e) => setClubTo(e.target.value)} className="field-input" placeholder="2021 / Present" /></Field>
             </div>
-            <button className="btn-ghost text-[13px]" onClick={() => toast('Career entry added')}>+ Add another club</button>
           </div>
         )}
         {step === 3 && (
