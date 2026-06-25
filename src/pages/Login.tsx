@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, LogIn } from 'lucide-react';
 import { useSession } from '../session';
 import { apiEnabled, apiLogin } from '../api';
+import { track } from '../analytics';
 
 export default function Login() {
   const nav = useNavigate();
@@ -28,6 +29,7 @@ export default function Login() {
         : academyTypes.includes(resp.user.orgType || '') ? 'academy'
         : 'club';
       signIn(resp, uiRole);
+      track('login', { method: uiRole });
       toast('Welcome back 👋');
       const dest = uiRole === 'player' ? '/hub'
         : uiRole === 'academy' ? '/academy'

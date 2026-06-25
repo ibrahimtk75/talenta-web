@@ -5,6 +5,7 @@ import { useSession } from '../session';
 import { COUNTRIES, POSITIONS, SKILL_LEVELS } from '../data';
 import { payLink } from '../payments';
 import { apiEnabled, apiRegister, apiUpsertProfile, apiAddVideoLink, toBackendRole, type ProfileBody } from '../api';
+import { track } from '../analytics';
 
 const STEPS = ['Personal', 'Physical', 'Career', 'Stats', 'Finish'];
 
@@ -115,6 +116,7 @@ export default function PlayerOnboard() {
     const ok = await createAccount();
     setBusy(false);
     if (!ok) return;
+    track('sign_up', { method: 'player', plan: pro ? 'pro' : 'free' });
     setPro(pro);
     toast(pro ? 'Welcome to Pro! 🚀' : 'Profile created — welcome!');
     nav('/hub');
@@ -132,6 +134,7 @@ export default function PlayerOnboard() {
     const ok = await createAccount();
     setBusy(false);
     if (!ok) return;
+    track('sign_up', { method: 'player', plan: 'pro' });
     setPro(true);
     toast('Secure checkout opened in a new tab 💳');
     nav('/hub');

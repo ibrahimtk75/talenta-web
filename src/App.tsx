@@ -29,6 +29,7 @@ import Faq from './pages/Faq';
 import Rules from './pages/Rules';
 import Admin from './pages/Admin';
 import { Terms, Privacy } from './pages/Legal';
+import { trackPage } from './analytics';
 
 function Toast() {
   const { toastMsg } = useSession();
@@ -43,7 +44,11 @@ function Toast() {
 
 function ScrollTop() {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    // Report each SPA route change to GA (HashRouter doesn't auto-track these).
+    trackPage('#' + pathname);
+  }, [pathname]);
   return null;
 }
 

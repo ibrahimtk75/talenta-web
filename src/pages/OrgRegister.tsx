@@ -4,6 +4,7 @@ import { ArrowLeft, Upload, ChevronRight } from 'lucide-react';
 import { useSession } from '../session';
 import { COUNTRIES } from '../data';
 import { apiEnabled, apiRegister, toBackendRole } from '../api';
+import { track } from '../analytics';
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -58,6 +59,7 @@ export default function OrgRegister() {
       setRole(uiRole);
       setProfile(prof);
     }
+    track('sign_up', { method: uiRole });
     toast(`${academy ? 'Institution' : 'Club'} account created — welcome!`);
     nav(academy ? '/academy' : '/club');
   };
