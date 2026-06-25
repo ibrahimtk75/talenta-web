@@ -27,13 +27,15 @@ export const COUNTRY_NAME: Record<string, string> = {
   BR: 'Brazil', AR: 'Argentina', NG: 'Nigeria', DE: 'Germany', PT: 'Portugal', FR: 'France', GB: 'England', ES: 'Spain',
 };
 
+const PIC = (n: number) => `https://randomuser.me/api/portraits/men/${n}.jpg`;
+
 export const PLAYERS: Player[] = [
-  { id: '1', name: 'Leo Martins', country: 'BR', pos: 'Striker', age: 19, foot: 'Right', yt: YT[0], pro: true, verified: true, match: 96, headline: '41 goals · 18 assists', stats: { Appearances: 60, Goals: 41, Assists: 18, 'Pass %': 82 }, career: [['2014–2018', 'Santos Youth Academy'], ['2018–2021', 'Santos U-17'], ['2021–now', 'Santos B Team']] },
-  { id: '2', name: 'Diego Santos', country: 'AR', pos: 'Left Winger', age: 18, foot: 'Left', yt: YT[1], pro: true, verified: true, match: 91, headline: '28 goals · 22 assists', stats: { Appearances: 44, Goals: 28, Assists: 22, 'Pass %': 79 }, career: [['2016–2020', 'River Plate Academy'], ['2020–now', 'River Plate U-19']] },
-  { id: '3', name: 'Samuel Okafor', country: 'NG', pos: 'Central Midfielder', age: 20, foot: 'Right', yt: YT[2], pro: false, verified: false, match: 88, headline: '21 assists · 88% pass', stats: { Appearances: 38, Goals: 9, Assists: 21, 'Pass %': 88 }, career: [['2019–now', 'Enyimba FC Academy']] },
-  { id: '4', name: 'Lucas Müller', country: 'DE', pos: 'Centre-Back', age: 21, foot: 'Right', yt: YT[3], pro: true, verified: true, match: 84, headline: '140 tackles · 91% pass', stats: { Appearances: 52, Tackles: 140, 'Aerial %': 74, 'Pass %': 91 }, career: [['2015–2019', 'Bayern Youth'], ['2019–now', 'TSV 1860 U-21']] },
-  { id: '5', name: 'João Silva', country: 'PT', pos: 'Goalkeeper', age: 19, foot: 'Right', yt: YT[4], pro: false, verified: false, match: 80, headline: '18 clean sheets', stats: { Appearances: 40, 'Clean Sheets': 18, Saves: 96, 'Save %': 78 }, career: [['2018–now', 'Benfica B']] },
-  { id: '6', name: 'Karim Haddad', country: 'FR', pos: 'Centre-Forward', age: 18, foot: 'Left', yt: YT[5], pro: false, verified: false, match: 78, headline: '24 goals', stats: { Appearances: 33, Goals: 24, Assists: 11, 'Pass %': 77 }, career: [['2017–now', 'Lyon Academy']] },
+  { id: '1', name: 'Leo Martins', country: 'BR', pos: 'Striker', age: 19, foot: 'Right', photo: PIC(32), yt: YT[0], pro: true, verified: true, match: 96, headline: '41 goals · 18 assists', stats: { Appearances: 60, Goals: 41, Assists: 18, 'Pass %': 82 }, career: [['2014–2018', 'Santos Youth Academy'], ['2018–2021', 'Santos U-17'], ['2021–now', 'Santos B Team']] },
+  { id: '2', name: 'Diego Santos', country: 'AR', pos: 'Left Winger', age: 18, foot: 'Left', photo: PIC(45), yt: YT[1], pro: true, verified: true, match: 91, headline: '28 goals · 22 assists', stats: { Appearances: 44, Goals: 28, Assists: 22, 'Pass %': 79 }, career: [['2016–2020', 'River Plate Academy'], ['2020–now', 'River Plate U-19']] },
+  { id: '3', name: 'Samuel Okafor', country: 'NG', pos: 'Central Midfielder', age: 20, foot: 'Right', photo: PIC(12), yt: YT[2], pro: false, verified: false, match: 88, headline: '21 assists · 88% pass', stats: { Appearances: 38, Goals: 9, Assists: 21, 'Pass %': 88 }, career: [['2019–now', 'Enyimba FC Academy']] },
+  { id: '4', name: 'Lucas Müller', country: 'DE', pos: 'Centre-Back', age: 21, foot: 'Right', photo: PIC(51), yt: YT[3], pro: true, verified: true, match: 84, headline: '140 tackles · 91% pass', stats: { Appearances: 52, Tackles: 140, 'Aerial %': 74, 'Pass %': 91 }, career: [['2015–2019', 'Bayern Youth'], ['2019–now', 'TSV 1860 U-21']] },
+  { id: '5', name: 'João Silva', country: 'PT', pos: 'Goalkeeper', age: 19, foot: 'Right', photo: PIC(67), yt: YT[4], pro: false, verified: false, match: 80, headline: '18 clean sheets', stats: { Appearances: 40, 'Clean Sheets': 18, Saves: 96, 'Save %': 78 }, career: [['2018–now', 'Benfica B']] },
+  { id: '6', name: 'Karim Haddad', country: 'FR', pos: 'Centre-Forward', age: 18, foot: 'Left', photo: PIC(76), yt: YT[5], pro: false, verified: false, match: 78, headline: '24 goals', stats: { Appearances: 33, Goals: 24, Assists: 11, 'Pass %': 77 }, career: [['2017–now', 'Lyon Academy']] },
 ];
 
 export const POSITIONS = [

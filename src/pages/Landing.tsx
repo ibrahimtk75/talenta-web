@@ -5,7 +5,7 @@ import {
   Youtube, Percent, UserPlus, Eye, Trophy, Search,
   Building2, GraduationCap, School, Landmark, Bot, Video, Target, type LucideIcon,
 } from 'lucide-react';
-import { COUNTRIES, FLAG, type Player } from '../data';
+import { COUNTRIES, type Player } from '../data';
 import { PlayerGridCard } from '../components/PlayerCard';
 import Reveal from '../components/Reveal';
 import { usePlayers } from '../usePlayers';
@@ -350,7 +350,11 @@ function InstitutionsDirectory() {
             <div className="mt-4 flex-1 space-y-2">
               {list.length ? list.slice(0, 5).map((it) => (
                 <div key={it.id} className="flex items-center gap-2 text-[13px]">
-                  <span>{FLAG[it.country] || '🌍'}</span>
+                  {it.logo ? (
+                    <img src={it.logo} alt="" loading="lazy" className="h-5 w-5 flex-shrink-0 rounded-md object-cover ring-1 ring-white/10" />
+                  ) : (
+                    <span className="grid h-5 w-5 flex-shrink-0 place-items-center rounded-md bg-primary/15 text-[9px] font-bold text-primary">{it.name.slice(0, 2).toUpperCase()}</span>
+                  )}
                   <span className="truncate">{it.name}</span>
                   {it.verified && <BadgeCheck size={13} className="flex-shrink-0 text-sky" />}
                 </div>

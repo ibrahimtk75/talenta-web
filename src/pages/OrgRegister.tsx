@@ -26,6 +26,7 @@ export default function OrgRegister() {
   const [country, setCountry] = useState(COUNTRIES[0]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [logoUrl, setLogoUrl] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -44,6 +45,7 @@ export default function OrgRegister() {
         const resp = await apiRegister({
           email: email.trim(), password, fullName: name.trim(),
           country: country.slice(0, 2).toUpperCase(), role: toBackendRole(uiRole), orgType: type,
+          ...(logoUrl.trim() ? { avatarUrl: logoUrl.trim() } : {}),
         });
         signIn(resp, uiRole, prof);
       } catch (e) {
@@ -112,10 +114,17 @@ export default function OrgRegister() {
               <Field label="Looking for (positions)"><input className="field-input" placeholder="e.g. Strikers, Goalkeepers" /></Field>
               <Field label="Age range"><select className="field-input"><option>U-16</option><option>U-18</option><option>U-21</option><option>Senior</option><option>Any</option></select></Field>
             </div>
-            <button onClick={() => toast('Logo + document upload')}
-              className="flex w-full flex-col items-center gap-1 rounded-xl border border-dashed border-white/15 bg-white/[0.03] py-5 text-mute transition hover:border-primary">
-              <Upload size={22} /> <span className="text-[13px]">Upload logo + verification document</span>
-            </button>
+            <Field label={`${academy ? 'Institution' : 'Club'} logo (image link)`}>
+              <div className="flex items-center gap-3">
+                {logoUrl.trim() ? (
+                  <img src={logoUrl.trim()} alt="logo preview" className="h-12 w-12 flex-shrink-0 rounded-xl object-cover ring-1 ring-white/15" />
+                ) : (
+                  <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl border border-dashed border-white/15 bg-white/[0.03] text-mute"><Upload size={18} /></span>
+                )}
+                <input value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} className="field-input" placeholder="https://…/logo.png" />
+              </div>
+              <p className="mt-1.5 text-[12px] text-mute">Paste a link to your crest/logo — it appears next to your name in the directory. Optional.</p>
+            </Field>
           </div>
         </div>
 

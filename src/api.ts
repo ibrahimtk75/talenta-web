@@ -180,6 +180,6 @@ export const apiUpsertRefereeProfile = (token: string, b: RefereeProfileBody) =>
 // ─────────────────────────────────────────────────────────────
 export type Institution = {
   id: string; name: string; country: string;
-  role: 'CLUB' | 'ACADEMY'; orgType: string | null; verified: boolean;
+  role: 'CLUB' | 'ACADEMY'; orgType: string | null; verified: boolean; logo?: string | null;
 };
 export const fetchInstitutions = () => call<Institution[]>('/api/institutions');
