@@ -12,7 +12,9 @@ const inflight: Record<string, Promise<Player[]> | null> = {};
 export function usePlayers() {
   const { token, role } = useSession();
   const full = role === 'club' || role === 'academy';
-  const scope = full ? 'full' : 'pub';
+  // Key the cache by token too, so logging in/out or switching accounts never
+  // serves another scope's (or another club's) cached list.
+  const scope = full ? `full:${token ?? ''}` : 'pub';
 
   const [players, setPlayers] = useState<Player[]>(cache[scope] ?? (apiEnabled ? [] : PLAYERS));
   const [loading, setLoading] = useState(cache[scope] === undefined && apiEnabled);

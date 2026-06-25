@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, MessageSquare, Eye, Bookmark, Handshake, Send } from 'lucide-react';
-import { PLAYERS, POSITIONS, initials, COUNTRY_NAME } from '../data';
+import { POSITIONS, initials, COUNTRY_NAME, type Player } from '../data';
 import { PlayerRow } from '../components/PlayerCard';
 import { Kpi, Panel, DashHeader } from '../components/dash';
 import { useSession } from '../session';
+import { usePlayers } from '../usePlayers';
 
 export default function ClubDashboard() {
   const [filter, setFilter] = useState('All Positions');
@@ -12,17 +13,18 @@ export default function ClubDashboard() {
   const [country, setCountry] = useState('Any');
   const nav = useNavigate();
   const { role, profile } = useSession();
+  const { players: ALL, loading } = usePlayers();
   const orgName = profile.name || (role === 'academy' ? 'Your Academy' : 'Your Club');
   const orgMeta = [profile.type || (role === 'academy' ? 'Academy' : 'Club'), profile.country].filter(Boolean).join(' · ');
-  const codes = Array.from(new Set(PLAYERS.map((p) => p.country))).sort();
+  const codes = Array.from(new Set(ALL.map((p) => p.country))).sort();
   const ql = q.trim().toLowerCase();
-  let list = PLAYERS.slice();
+  let list = ALL.slice();
   if (filter !== 'All Positions') list = list.filter((p) => p.pos === filter);
   if (country !== 'Any') list = list.filter((p) => p.country === country);
   if (ql) list = list.filter((p) => p.name.toLowerCase().includes(ql) || p.pos.toLowerCase().includes(ql));
   list = list.sort((a, b) => b.match - a.match);
 
-  const pipeline: [string, typeof PLAYERS][] = [
+  const pipeline: [string, Player[]][] = [
     ['Contacted', []],
     ['On trial', []],
     ['Signed', []],
@@ -51,7 +53,9 @@ export default function ClubDashboard() {
           <div className="mb-4 flex flex-wrap gap-2">
             {POSITIONS.map((p) => <button key={p} onClick={() => setFilter(p)} className={`chip !py-1.5 !text-[12px] ${filter === p ? 'chip-active' : ''}`}>{p}</button>)}
           </div>
-          {list.length ? (
+          {loading ? (
+            <div className="grid gap-4 sm:grid-cols-2">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-24 animate-pulse rounded-xl2 border border-white/10 bg-white/[0.03]" />)}</div>
+          ) : list.length ? (
             <div className="grid gap-4 sm:grid-cols-2">{list.map((p) => <PlayerRow key={p.id} player={p} />)}</div>
           ) : (
             <div className="rounded-xl2 border border-dashed border-white/15 p-8 text-center text-mute">No players match your search & filters.</div>

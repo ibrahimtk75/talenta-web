@@ -17,10 +17,24 @@ export default function Login() {
     setBusy(true);
     try {
       const resp = await apiLogin({ email: email.trim(), password });
-      const uiRole = resp.user.role === 'PLAYER' ? 'player' : 'club';
+      // Map the backend role (+ orgType) back to the UI sub-role so each account
+      // lands on its own dashboard (academies register as CLUB + an orgType).
+      const r = resp.user.role;
+      const academyTypes = ['Academy', 'School', 'University'];
+      const uiRole =
+        r === 'PLAYER' ? 'player'
+        : r === 'COACH' ? 'coach'
+        : r === 'REFEREE' ? 'referee'
+        : academyTypes.includes(resp.user.orgType || '') ? 'academy'
+        : 'club';
       signIn(resp, uiRole);
       toast('Welcome back 👋');
-      nav(uiRole === 'player' ? '/hub' : '/club');
+      const dest = uiRole === 'player' ? '/hub'
+        : uiRole === 'academy' ? '/academy'
+        : uiRole === 'club' ? '/club'
+        : uiRole === 'coach' ? '/coaches'
+        : uiRole === 'referee' ? '/referees' : '/';
+      nav(dest);
     } catch (e) {
       const msg = (e as Error).message;
       toast(msg === 'INVALID_CREDENTIALS' ? 'Wrong email or password' : msg);

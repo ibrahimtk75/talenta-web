@@ -11,7 +11,7 @@ const BASE = (((import.meta as any).env?.VITE_API_URL as string) || '').replace(
 /** True when a backend URL is configured — gates all real auth/data calls. */
 export const apiEnabled = !!BASE;
 
-export type AuthUser = { id: string; email: string; role: string; fullName: string };
+export type AuthUser = { id: string; email: string; role: string; fullName: string; orgType?: string | null };
 export type AuthResp = { user: AuthUser; accessToken: string; refreshToken: string };
 
 async function call<T>(path: string, body?: unknown, token?: string, method?: string): Promise<T> {
