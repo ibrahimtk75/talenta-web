@@ -49,15 +49,29 @@ const FLAGS = ['br','ar','fr','de','es','pt','gb-eng','it','nl','be','ng','gh','
 export default function Landing() {
   const { players, loading: playersLoading } = usePlayers();
   const gridPlayers = players.slice(0, 8);
+
+  // The hero background video is heavy — only load it on larger screens, and
+  // only after the page has painted, so mobile loads fast (clean gradient bg).
+  const [showHeroVideo, setShowHeroVideo] = useState(false);
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.innerWidth < 768) return;
+    const t = setTimeout(() => setShowHeroVideo(true), 700);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-[1]">
-          <iframe
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[100vh] w-[177.78vh] min-h-[56.25vw] min-w-full -translate-x-1/2 -translate-y-1/2"
-            src="https://www.youtube.com/embed/5nTsWZODuqY?autoplay=1&mute=1&loop=1&playlist=5nTsWZODuqY&controls=0&modestbranding=1&playsinline=1&rel=0&start=3"
-            allow="autoplay; encrypted-media" title="background" />
+          {/* static gradient background — always shown; on mobile this is the whole bg */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#10254e] via-ink to-[#081530]" />
+          {showHeroVideo && (
+            <iframe
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[100vh] w-[177.78vh] min-h-[56.25vw] min-w-full -translate-x-1/2 -translate-y-1/2"
+              src="https://www.youtube.com/embed/5nTsWZODuqY?autoplay=1&mute=1&loop=1&playlist=5nTsWZODuqY&controls=0&modestbranding=1&playsinline=1&rel=0&start=3"
+              allow="autoplay; encrypted-media" title="background" loading="lazy" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/75 to-ink/95" />
         </div>
         <div className="mx-auto max-w-6xl px-5 py-24 text-center md:py-32">

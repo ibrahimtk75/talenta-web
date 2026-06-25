@@ -1,35 +1,39 @@
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { useEffect, type ReactElement } from 'react';
+import { useEffect, lazy, Suspense, type ReactElement } from 'react';
 import { SessionProvider, useSession, type Role } from './session';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import ErrorBoundary from './components/ErrorBoundary';
 import SupportWidget from './components/SupportWidget';
-import Landing from './pages/Landing';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
-import OrgRegister from './pages/OrgRegister';
-import PlayerOnboard from './pages/PlayerOnboard';
-import Pricing from './pages/Pricing';
-import Browse from './pages/Browse';
-import Feed from './pages/Feed';
-import Rankings from './pages/Rankings';
-import Challenges from './pages/Challenges';
-import Coaches from './pages/Coaches';
-import CoachRegister from './pages/CoachRegister';
-import Referees from './pages/Referees';
-import RefereeRegister from './pages/RefereeRegister';
-import PlayerDetail from './pages/PlayerDetail';
-import ClubDashboard from './pages/ClubDashboard';
-import AcademyDashboard from './pages/AcademyDashboard';
-import Hub from './pages/Hub';
-import Messages from './pages/Messages';
-import NotFound from './pages/NotFound';
-import Faq from './pages/Faq';
-import Rules from './pages/Rules';
-import Admin from './pages/Admin';
-import { Terms, Privacy } from './pages/Legal';
+import Landing from './pages/Landing'; // eager — it's the first paint
 import { trackPage } from './analytics';
+
+// Every other page is code-split, so the initial bundle (landing) stays small
+// and loads fast on mobile. Each page's JS downloads only when it's visited.
+const Signup = lazy(() => import('./pages/Signup'));
+const Login = lazy(() => import('./pages/Login'));
+const OrgRegister = lazy(() => import('./pages/OrgRegister'));
+const PlayerOnboard = lazy(() => import('./pages/PlayerOnboard'));
+const Pricing = lazy(() => import('./pages/Pricing'));
+const Browse = lazy(() => import('./pages/Browse'));
+const Feed = lazy(() => import('./pages/Feed'));
+const Rankings = lazy(() => import('./pages/Rankings'));
+const Challenges = lazy(() => import('./pages/Challenges'));
+const Coaches = lazy(() => import('./pages/Coaches'));
+const CoachRegister = lazy(() => import('./pages/CoachRegister'));
+const Referees = lazy(() => import('./pages/Referees'));
+const RefereeRegister = lazy(() => import('./pages/RefereeRegister'));
+const PlayerDetail = lazy(() => import('./pages/PlayerDetail'));
+const ClubDashboard = lazy(() => import('./pages/ClubDashboard'));
+const AcademyDashboard = lazy(() => import('./pages/AcademyDashboard'));
+const Hub = lazy(() => import('./pages/Hub'));
+const Messages = lazy(() => import('./pages/Messages'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const Faq = lazy(() => import('./pages/Faq'));
+const Rules = lazy(() => import('./pages/Rules'));
+const Admin = lazy(() => import('./pages/Admin'));
+const Terms = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Terms })));
+const Privacy = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Privacy })));
 
 function Toast() {
   const { toastMsg } = useSession();
@@ -67,6 +71,7 @@ export default function App() {
       <Nav />
       <main id="main" className="min-h-[70vh]">
         <ErrorBoundary>
+        <Suspense fallback={<div className="grid min-h-[60vh] place-items-center text-mute">Loading…</div>}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/signup" element={<Signup />} />
@@ -94,6 +99,7 @@ export default function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
         </ErrorBoundary>
       </main>
       <Footer />
