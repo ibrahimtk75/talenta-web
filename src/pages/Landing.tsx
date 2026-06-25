@@ -38,12 +38,6 @@ const steps = [
   { icon: Trophy, h: 'Get signed', p: 'Clubs contact you on-platform, set up trials, and sign you. Reputation grows with ratings.' },
 ];
 
-const audiences = [
-  { icon: Trophy, h: 'For Players', p: 'Build a free profile, post 60-second skill reels and set your asking price. Get discovered by clubs & academies worldwide — and signed.', cta: 'Join as Player' },
-  { icon: Building2, h: 'For Clubs & Scouts', p: 'Search players or get AI-matched by position, age & stats. Watch reels, contact, negotiate and sign — all on one dashboard.', cta: 'Join as Club' },
-  { icon: GraduationCap, h: 'For Academies & Schools', p: 'Showcase your players, build your institution profile, and discover talent across the whole network.', cta: 'Join as Academy' },
-];
-
 const faqs = [
   ['Is it really free for players?', 'Yes. Players join free, build a profile and post one reel at no cost. The optional Pro plan adds unlimited videos, daily practice, a verified badge and boosted visibility.'],
   ['Who can register?', 'Players, professional clubs, scouts, academies, schools and universities — worldwide. Each gets a tailored profile and tools.'],
@@ -79,8 +73,8 @@ export default function Landing() {
             Connect your talent<br />to your <span className="grad-text">dream club</span>.
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-mute">
-            <b className="text-slate-200">Get discovered. Get signed.</b> Footballers build a verified video
-            profile for free — clubs, academies & scouts discover talent and connect directly, worldwide.
+            <b className="text-slate-200">Get discovered. Get signed.</b> Build a free video profile —
+            and let clubs, academies & scouts find you, worldwide.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link to="/signup" className="btn-primary text-base"><Play size={18} fill="white" /> Join Free as Player</Link>
@@ -184,21 +178,6 @@ export default function Landing() {
           </div>
         </Reveal>
 
-        {/* WHO'S IT FOR */}
-        <Heading title="Who's it for?" sub="Whatever your role in football — here's how Talenta works for you" center />
-        <div className="grid gap-5 md:grid-cols-3">
-          {audiences.map((a, i) => (
-            <Reveal key={a.h} delay={i * 90}>
-              <div className="card flex h-full flex-col p-7">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary-2 text-white"><a.icon size={22} /></div>
-                <h3 className="mt-4 text-lg font-bold">{a.h}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-mute">{a.p}</p>
-                <Link to="/signup" className="btn-ghost mt-5 w-fit text-[13px]">{a.cta} <ChevronRight size={15} /></Link>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
         {/* WHY TALENTA */}
         <Heading title="Why Talenta" sub="Built to get talent seen — and signed" center />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -240,33 +219,6 @@ export default function Landing() {
                 <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary-2 text-white"><s.icon size={22} /></div>
                 <h3 className="mt-4 text-lg font-bold">{s.h}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-mute">{s.p}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* WHO IT'S FOR */}
-        <Heading title="Built for clubs, academies & schools" sub="Every level, every region — from grassroots academies to professional clubs" />
-        <Reveal>
-          <div className="flex flex-wrap gap-2.5">
-            {['Professional clubs', 'Football academies', 'Schools & colleges', 'Universities', 'Scouts & agents', 'Grassroots clubs'].map((c) => (
-              <div key={c} className="chip !py-2 !text-slate-100">{c}</div>
-            ))}
-          </div>
-        </Reveal>
-
-        {/* SIGNING MODEL */}
-        <Heading title="Fair by design — no agent fees" sub="Contact, trial and sign all in one place. We charge just 3% — and only when a signing actually happens." />
-        <div className="grid gap-4 sm:grid-cols-3">
-          {[
-            ['Free to join', 'Players build a profile and upload highlights for free. Going Pro is optional.'],
-            ['Direct contact', 'Clubs and scouts message players directly — no middlemen, no gatekeepers.'],
-            ['3% on success', 'No upfront cost to clubs for a deal. We only earn when a player actually gets signed.'],
-          ].map(([h, p], i) => (
-            <Reveal key={h} delay={i * 60}>
-              <div className="card h-full p-5">
-                <div className="font-bold">{h}</div>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-mute">{p}</p>
               </div>
             </Reveal>
           ))}
