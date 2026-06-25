@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ChevronRight, Youtube } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Youtube, User } from 'lucide-react';
 import { useSession } from '../session';
 import { COUNTRIES, POSITIONS, SKILL_LEVELS } from '../data';
 import { payLink } from '../payments';
@@ -34,6 +34,7 @@ export default function PlayerOnboard() {
   const [assists, setAssists] = useState('');
   const [passAcc, setPassAcc] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  const [photoUrl, setPhotoUrl] = useState('');
 
   const int = (v: string) => Math.max(0, Math.round(Number(v) || 0));
   const buildProfileBody = (): ProfileBody => ({
@@ -76,6 +77,7 @@ export default function PlayerOnboard() {
       const resp = await apiRegister({
         email: email.trim(), password, fullName: name.trim(),
         country: country.slice(0, 2).toUpperCase(), role: toBackendRole('player'),
+        ...(photoUrl.trim() ? { avatarUrl: photoUrl.trim() } : {}),
       });
       signIn(resp, 'player', prof);
       // Save the football profile so the player shows up in Browse/search.
@@ -206,6 +208,13 @@ export default function PlayerOnboard() {
         )}
         {step === 4 && (
           <div className="space-y-4">
+            <div className="rounded-xl border border-white/15 bg-white/[0.03] p-4">
+              <label className="field-label flex items-center gap-2"><User size={16} className="text-primary" /> Your photo (link to a clear face/action photo)</label>
+              <input value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} className="field-input" placeholder="https://…/your-photo.jpg" />
+              <p className="mt-2 text-[12px] leading-relaxed text-mute">
+                A sharp photo makes your card stand out in search. Paste an image link (Instagram, Google Drive “share” image link, etc.). Optional — you can add it later from My Hub.
+              </p>
+            </div>
             <div className="rounded-xl border border-white/15 bg-white/[0.03] p-4">
               <label className="field-label flex items-center gap-2"><Youtube size={16} className="text-primary" /> Your skill reel (YouTube or Instagram link)</label>
               <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className="field-input" placeholder="youtu.be/…  ·  instagram.com/reel/…" />

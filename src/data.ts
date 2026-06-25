@@ -6,6 +6,7 @@ export interface Player {
   skillLevel?: string;
   age: number;
   foot: string;
+  photo?: string; // profile photo URL (avatar)
   yt: string;
   igUrl?: string; // Instagram reel URL (alternative to yt)
   pro: boolean;

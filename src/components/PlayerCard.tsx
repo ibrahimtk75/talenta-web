@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { BadgeCheck, Play } from 'lucide-react';
-import { Player, FLAG, initials, ratingOf, ratingCountOf } from '../data';
+import { Player, FLAG, COUNTRY_NAME, initials, ratingOf, ratingCountOf } from '../data';
 import { Stars } from './Stars';
 
 export function PlayerRow({ player }: { player: Player }) {
@@ -34,30 +34,40 @@ export function PlayerRow({ player }: { player: Player }) {
 
 export function PlayerGridCard({ player }: { player: Player }) {
   const nav = useNavigate();
+  // Prefer a real profile photo; fall back to a YouTube thumbnail, then to a
+  // clean initials avatar — so cards stay a tidy photo grid either way.
+  const photo = player.photo || (player.yt ? `https://img.youtube.com/vi/${player.yt}/hqdefault.jpg` : '');
+  const hasReel = !!(player.yt || player.igUrl);
   return (
     <button
       onClick={() => nav(`/player/${player.id}`)}
       className="card group overflow-hidden text-left transition-all hover:-translate-y-1.5 hover:border-primary/60"
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-black">
-        <img src={`https://img.youtube.com/vi/${player.yt}/hqdefault.jpg`} alt={player.name}
-          className="h-full w-full object-cover opacity-90 transition group-hover:scale-105" />
+      {/* portrait photo (Google-grid style) */}
+      <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-primary/25 via-ink to-ink">
+        {photo ? (
+          <img src={photo} alt={player.name} loading="lazy"
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+        ) : (
+          <div className="grid h-full w-full place-items-center">
+            <span className="font-display text-5xl font-bold text-white/80">{initials(player.name)}</span>
+          </div>
+        )}
         <span className="absolute left-3 top-3 rounded-lg border border-white/10 bg-black/65 px-2.5 py-1 text-[11px] font-bold backdrop-blur">{player.pos}</span>
-        <span className="absolute inset-0 grid place-items-center">
-          <span className="grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-white/70 bg-black/50 text-white backdrop-blur">
-            <Play size={16} fill="white" className="ml-0.5" />
-          </span>
-        </span>
+        {player.verified && (
+          <span className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-black/65 backdrop-blur"><BadgeCheck size={15} className="text-sky" /></span>
+        )}
+        {hasReel && (
+          <span className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full bg-primary/90 text-white shadow-glow"><Play size={15} fill="white" className="ml-0.5" /></span>
+        )}
       </div>
-      <div className="p-4">
-        <div className="flex items-center gap-1.5 font-bold">
-          {player.name} <span>{FLAG[player.country]}</span>
-          {player.verified && <BadgeCheck size={15} className="text-sky" />}
-        </div>
-        <div className="mt-0.5 text-[12.5px] text-mute">Age {player.age} · {player.foot} foot</div>
-        <div className="mt-2 flex items-center justify-between">
-          <span className="text-[13px] font-bold grad-text">{player.headline}</span>
-          <span className="flex items-center gap-1"><Stars value={ratingOf(player)} size={12} /><span className="text-[11px] text-mute">{ratingOf(player)}</span></span>
+      {/* name · position · country (clean, like a scouting grid) */}
+      <div className="p-3.5">
+        <div className="truncate text-[15px] font-bold leading-tight">{player.name}</div>
+        <div className="mt-1 text-[13px] text-mute">{player.pos}{player.skillLevel ? ` · ${player.skillLevel}` : ''}</div>
+        <div className="mt-1.5 flex items-center gap-1.5 text-[13px]">
+          <span>{FLAG[player.country] || '🌍'}</span>
+          <span className="text-slate-300">{COUNTRY_NAME[player.country] || player.country}</span>
         </div>
       </div>
     </button>
