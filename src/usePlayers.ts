@@ -1,31 +1,39 @@
 import { useEffect, useState } from 'react';
 import { apiEnabled, fetchPlayers } from './api';
 import { PLAYERS, type Player } from './data';
+import { useSession } from './session';
 
-// Module-level cache so the player list is fetched once and shared across
-// Browse, Feed and PlayerDetail (no refetch when navigating between them).
-let cache: Player[] | null = null;
-let inflight: Promise<Player[]> | null = null;
+// Module-level cache, keyed by access scope ('full' for clubs/academies, 'pub'
+// otherwise) so the public preview and the full club view never mix, and each
+// is fetched once and shared across Browse, Feed, Rankings and PlayerDetail.
+const cache: Record<string, Player[]> = {};
+const inflight: Record<string, Promise<Player[]> | null> = {};
 
 export function usePlayers() {
-  const [players, setPlayers] = useState<Player[]>(cache ?? (apiEnabled ? [] : PLAYERS));
-  const [loading, setLoading] = useState(cache === null && apiEnabled);
+  const { token, role } = useSession();
+  const full = role === 'club' || role === 'academy';
+  const scope = full ? 'full' : 'pub';
+
+  const [players, setPlayers] = useState<Player[]>(cache[scope] ?? (apiEnabled ? [] : PLAYERS));
+  const [loading, setLoading] = useState(cache[scope] === undefined && apiEnabled);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     // Demo mode (no backend configured): use the static sample players.
     if (!apiEnabled) { setPlayers(PLAYERS); setLoading(false); return; }
-    if (cache) { setPlayers(cache); setLoading(false); return; }
+    if (cache[scope]) { setPlayers(cache[scope]); setLoading(false); return; }
 
     let alive = true;
-    inflight = inflight ?? fetchPlayers();
-    inflight
-      .then((list) => { cache = list; if (alive) { setPlayers(list); setLoading(false); } })
+    setLoading(true);
+    const req = inflight[scope] ?? fetchPlayers(full ? token ?? undefined : undefined);
+    inflight[scope] = req;
+    req
+      .then((list) => { cache[scope] = list; if (alive) { setPlayers(list); setLoading(false); } })
       .catch(() => { if (alive) { setPlayers(PLAYERS); setError(true); setLoading(false); } }) // resilience only
-      .finally(() => { inflight = null; });
+      .finally(() => { inflight[scope] = null; });
 
     return () => { alive = false; };
-  }, []);
+  }, [scope, token, full]);
 
   return { players, loading, error };
 }

@@ -125,9 +125,9 @@ function mapPlayer(b: BackendPlayer): Player {
   };
 }
 
-/** Fetch real registered footballers from the backend. */
-export async function fetchPlayers(): Promise<Player[]> {
-  const data = await call<BackendPlayer[]>('/api/players?limit=50');
+/** Fetch real registered footballers. Pass a club/academy token for full data. */
+export async function fetchPlayers(token?: string): Promise<Player[]> {
+  const data = await call<BackendPlayer[]>('/api/players?limit=50', undefined, token);
   return Array.isArray(data) ? data.map(mapPlayer) : [];
 }
 
