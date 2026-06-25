@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, BadgeCheck, Send, Play, Gavel, TrendingUp, Heart, Sparkles, Lock } from 'lucide-react';
-import { FLAG, initials, valuationOf, fmtMoney } from '../data';
+import { FLAG, COUNTRY_NAME, initials, valuationOf, fmtMoney } from '../data';
+import { useSEO } from '../useSEO';
 import ShareMenu from '../components/ShareMenu';
 import TalentaCard from '../components/TalentaCard';
 import { usePlayer } from '../usePlayers';
@@ -16,6 +17,39 @@ export default function PlayerDetail() {
   const [showCard, setShowCard] = useState(false);
   const [offer, setOffer] = useState('');
   const { player: p, loading } = usePlayer(id);
+
+  // Per-player SEO: unique title, description and Person/VideoObject schema so
+  // search engines can index each footballer as a rich result.
+  const countryName = p ? (COUNTRY_NAME[p.country] || p.country) : '';
+  useSEO({
+    title: p ? `${p.name} — ${p.pos} | Talenta` : 'Player | Talenta',
+    description: p
+      ? `${p.name}, ${p.pos}${p.age ? `, age ${p.age}` : ''} from ${countryName}. Watch the highlight reel and full football profile on Talenta.`
+      : undefined,
+    jsonLd: p
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: p.name,
+          jobTitle: `Footballer — ${p.pos}`,
+          nationality: countryName,
+          ...(p.photo ? { image: p.photo } : {}),
+          memberOf: { '@type': 'Organization', name: 'Talenta' },
+          ...(p.yt
+            ? {
+                subjectOf: {
+                  '@type': 'VideoObject',
+                  name: `${p.name} — highlight reel`,
+                  description: `Football skill reel of ${p.name} on Talenta`,
+                  thumbnailUrl: `https://img.youtube.com/vi/${p.yt}/hqdefault.jpg`,
+                  contentUrl: `https://www.youtube.com/watch?v=${p.yt}`,
+                  uploadDate: '2024-01-01',
+                },
+              }
+            : {}),
+        }
+      : null,
+  });
 
   if (loading) return <div className="mx-auto max-w-3xl px-5 py-12 text-mute">Loading…</div>;
   if (!p) return <div className="mx-auto max-w-3xl px-5 py-12">Player not found.</div>;

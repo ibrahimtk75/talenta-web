@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Scale, Repeat, Percent, AlertTriangle, Baby, FileCheck, ChevronRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { useSEO } from '../useSEO';
 
 // Platform rules / code of conduct — users accept these at sign-up and login.
 const sections: { icon: LucideIcon; h: string; points: string[] }[] = [
@@ -55,6 +56,10 @@ const sections: { icon: LucideIcon; h: string; points: string[] }[] = [
 ];
 
 export default function Rules() {
+  useSEO({
+    title: 'Platform Rules & Code of Conduct | Talenta',
+    description: "Talenta's rules: fair play, honest data, on-platform transfers, 3% commission, safeguarding for under-18 players, and how violations are enforced.",
+  });
   return (
     <div className="mx-auto max-w-3xl px-5 py-16">
       <div className="text-center">

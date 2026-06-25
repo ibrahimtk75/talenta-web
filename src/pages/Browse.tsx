@@ -4,6 +4,7 @@ import { Search, X } from 'lucide-react';
 import { POSITIONS, COUNTRY_NAME, SKILL_LEVELS } from '../data';
 import { PlayerGridCard } from '../components/PlayerCard';
 import { usePlayers } from '../usePlayers';
+import { useSEO } from '../useSEO';
 
 const CATS: [string, string][] = [
   ['players', 'Players'], ['clubs', 'Clubs'], ['academies', 'Academies'], ['universities', 'Universities'], ['schools', 'Schools'],
@@ -16,6 +17,11 @@ export default function Browse() {
   const [q, setQ] = useState('');
   const [country, setCountry] = useState('All');
   const [skill, setSkill] = useState('All');
+
+  useSEO({
+    title: 'Discover football talent — players, clubs & academies | Talenta',
+    description: 'Browse and search verified footballers, clubs, academies, schools and universities on Talenta. Filter by position, country and skill level.',
+  });
 
   const { players: all, loading } = usePlayers();
   const isPlayers = cat === 'players';

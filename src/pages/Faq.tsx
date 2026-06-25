@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronRight, Play } from 'lucide-react';
+import { useSEO } from '../useSEO';
 
 // Full FAQ — moved off the home page to keep it clean & visual-first.
 const faqs: [string, string][] = [
@@ -14,6 +15,18 @@ const faqs: [string, string][] = [
 ];
 
 export default function Faq() {
+  useSEO({
+    title: 'FAQ — How Talenta works | Talenta',
+    description: 'Answers about Talenta: is it free for players, who can register, how clubs find talent, safeguarding for minors, and the 3% commission on deals.',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(([q, a]) => ({
+        '@type': 'Question', name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    },
+  });
   return (
     <div className="mx-auto max-w-3xl px-5 py-16">
       <div className="text-center">

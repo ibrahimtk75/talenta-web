@@ -5,6 +5,7 @@ import { pricing } from '../data';
 import { payLink, contactSales } from '../payments';
 import { useSession } from '../session';
 import { useCurrency, fmtLocal, type CurrencyInfo } from '../currency';
+import { useSEO } from '../useSEO';
 
 type Tier = { name: string; tag?: string; usd?: number; lit?: string; per?: string; items: string[]; cta: string; feat?: boolean; pkey?: string; free?: boolean };
 
@@ -41,6 +42,10 @@ function TierCard({ t, region, monthly, cur }: { t: Tier; region: 'world' | 'ind
 }
 
 export default function Pricing() {
+  useSEO({
+    title: 'Pricing — free for players, plans for clubs & academies | Talenta',
+    description: 'Talenta is free for players. Clubs, academies, schools and universities get simple plans, plus a 3% commission only on successful deals. India & global pricing.',
+  });
   const cur = useCurrency();
   const [region, setRegion] = useState<'world' | 'india'>('world');
   const [monthly, setMonthly] = useState(true);
