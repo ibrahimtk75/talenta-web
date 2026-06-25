@@ -64,10 +64,16 @@ export default function Pricing() {
     { name: 'Free Player', tag: 'FREE', free: true, items: ['Public career profile', '1 highlight video', 'Appear in search'], cta: 'Start Free' },
     { name: 'Pro Player', tag: 'POPULAR', usd: p.player, per: p.per, feat: true, pkey: 'proplayer', items: ['Everything in Free', 'Unlimited videos', 'Daily practice space', '✔ Verified badge', 'Boosted visibility', 'Profile analytics'], cta: 'Go Pro' },
   ];
+  // India institutions: explicit, rounded ₹ prices (lower for the Indian market).
+  // Shown literally for the India region; world region uses USD→local FX.
+  const inr = region === 'india';
+  const iInst = monthly
+    ? { school: '₹300', academy: '₹600', university: '₹900' }
+    : { school: '₹3,000', academy: '₹6,000', university: '₹9,000' };
   const inst: Tier[] = [
-    { name: 'School', usd: p.school, per: p.per, pkey: 'school', items: ['School sports profile', 'Showcase your students', 'Discover & contact talent', 'Up to 50 athletes'], cta: 'Contact Sales' },
-    { name: 'Academy', tag: 'POPULAR', usd: p.academy, per: p.per, feat: true, pkey: 'academy', items: ['Everything in School', 'AI talent suggestions', 'Advanced search & filters', 'Unlimited athletes'], cta: 'Contact Sales' },
-    { name: 'University', usd: p.university, per: p.per, pkey: 'university', items: ['Everything in Academy', 'Multi-team management', 'Recruitment tools', 'Priority support'], cta: 'Contact Sales' },
+    { name: 'School', ...(inr ? { lit: iInst.school } : { usd: p.school }), per: p.per, pkey: 'school', items: ['School sports profile', 'Showcase your students', 'Discover & contact talent', 'Up to 50 athletes'], cta: 'Contact Sales' },
+    { name: 'Academy', tag: 'POPULAR', ...(inr ? { lit: iInst.academy } : { usd: p.academy }), per: p.per, feat: true, pkey: 'academy', items: ['Everything in School', 'AI talent suggestions', 'Advanced search & filters', 'Unlimited athletes'], cta: 'Contact Sales' },
+    { name: 'University', ...(inr ? { lit: iInst.university } : { usd: p.university }), per: p.per, pkey: 'university', items: ['Everything in Academy', 'Multi-team management', 'Recruitment tools', 'Priority support'], cta: 'Contact Sales' },
   ];
   const club: Tier[] = [
     { name: 'Pro Club', usd: p.club, per: p.per, pkey: 'club', items: ['AI player suggestions', 'Advanced search & filters', 'Contact & sign players', 'Saved shortlists'], cta: 'Contact Sales' },
