@@ -3,6 +3,17 @@ import { BadgeCheck, Play } from 'lucide-react';
 import { Player, FLAG, COUNTRY_NAME, initials, ratingOf, ratingCountOf } from '../data';
 import { Stars } from './Stars';
 
+// Real flag image (flagcdn) — renders on every device, unlike flag emoji which
+// don't show on Windows/Edge. Falls back to the emoji/globe if the code is odd.
+function CountryFlag({ code }: { code: string }) {
+  const iso = (code || '').toLowerCase();
+  if (!iso || iso.length !== 2) return <span className="text-[13px]">{FLAG[code] || '🌍'}</span>;
+  return (
+    <img src={`https://flagcdn.com/h20/${iso}.png`} alt={code} loading="lazy"
+      className="h-3.5 w-auto flex-shrink-0 rounded-[2px] ring-1 ring-white/10" />
+  );
+}
+
 export function PlayerRow({ player }: { player: Player }) {
   const nav = useNavigate();
   return (
@@ -15,7 +26,7 @@ export function PlayerRow({ player }: { player: Player }) {
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 font-bold">
-          <span className="truncate">{player.name}</span> <span>{FLAG[player.country]}</span>
+          <span className="truncate">{player.name}</span> <CountryFlag code={player.country} />
           {player.verified && <BadgeCheck size={16} className="text-sky" />}
         </div>
         <div className="mt-0.5 text-[12.5px] text-mute">{player.pos} · Age {player.age} · {player.foot} foot</div>
@@ -61,13 +72,13 @@ export function PlayerGridCard({ player }: { player: Player }) {
           <span className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full bg-primary/90 text-white shadow-glow"><Play size={15} fill="white" className="ml-0.5" /></span>
         )}
       </div>
-      {/* name · position · country (clean, like a scouting grid) */}
+      {/* name · position · country (clean, like the Google player grid) */}
       <div className="p-3.5">
-        <div className="truncate text-[15px] font-bold leading-tight">{player.name}</div>
+        <div className="truncate text-[15.5px] font-bold leading-tight">{player.name}</div>
         <div className="mt-1 text-[13px] text-mute">{player.pos}{player.skillLevel ? ` · ${player.skillLevel}` : ''}</div>
-        <div className="mt-1.5 flex items-center gap-1.5 text-[13px]">
-          <span>{FLAG[player.country] || '🌍'}</span>
-          <span className="text-slate-300">{COUNTRY_NAME[player.country] || player.country}</span>
+        <div className="mt-2 flex items-center gap-2 text-[13px]">
+          <CountryFlag code={player.country} />
+          <span className="truncate text-slate-300">{COUNTRY_NAME[player.country] || player.country}</span>
         </div>
       </div>
     </button>
