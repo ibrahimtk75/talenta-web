@@ -13,7 +13,10 @@ function TierCard({ t, region, monthly, cur }: { t: Tier; region: 'world' | 'ind
   const { toast } = useSession();
   const nav = useNavigate();
 
-  const priceText = t.lit ?? (t.usd != null ? fmtLocal(t.usd, cur) : '');
+  // World region is shown in USD ($) for everyone; India region in ₹.
+  const priceText = t.lit ?? (t.usd != null
+    ? (region === 'world' ? '$' + t.usd.toLocaleString() : fmtLocal(t.usd, cur))
+    : '');
 
   const onCta = () => {
     if (t.free) { nav('/signup'); return; }
@@ -75,8 +78,9 @@ export default function Pricing() {
     { name: 'Academy', tag: 'POPULAR', ...(inr ? { lit: iInst.academy } : { usd: p.academy }), per: p.per, feat: true, pkey: 'academy', items: ['Everything in School', 'AI talent suggestions', 'Advanced search & filters', 'Unlimited athletes'], cta: 'Contact Sales' },
     { name: 'University', ...(inr ? { lit: iInst.university } : { usd: p.university }), per: p.per, pkey: 'university', items: ['Everything in Academy', 'Multi-team management', 'Recruitment tools', 'Priority support'], cta: 'Contact Sales' },
   ];
+  const iClub = monthly ? '₹1,999' : '₹19,999';
   const club: Tier[] = [
-    { name: 'Pro Club', usd: p.club, per: p.per, pkey: 'club', items: ['AI player suggestions', 'Advanced search & filters', 'Contact & sign players', 'Saved shortlists'], cta: 'Contact Sales' },
+    { name: 'Pro Club', ...(inr ? { lit: iClub } : { usd: p.club }), per: p.per, pkey: 'club', items: ['AI player suggestions', 'Advanced search & filters', 'Contact & sign players', 'Saved shortlists'], cta: 'Contact Sales' },
     { name: 'Deal commission', lit: '3%', per: '/deal', items: ['Only when you sign a player', 'Secure on-platform deal record', 'Contract & verification support'], cta: 'Learn more' },
   ];
 
@@ -93,11 +97,8 @@ export default function Pricing() {
     <div className="mx-auto max-w-6xl px-5 py-12">
       <h1 className="font-display text-2xl font-bold md:text-3xl">Pricing</h1>
       <p className="mt-1 text-sm text-mute">
-        {cur.loading
-          ? 'Loading prices for your region…'
-          : cur.code === 'USD'
-            ? 'Players start free. Schools, academies, universities & clubs pay to discover & sign. We take just 3% on successful deals.'
-            : <>Shown in <b className="text-slate-200">{cur.code}</b> for your region (approx; billed in USD). Players start free — we take just 3% on successful deals.</>}
+        Players start free. Schools, academies, universities & clubs pay to discover & sign — we take just 3% on successful deals.
+        Prices in <b className="text-slate-200">USD&nbsp;($)</b> for USA &amp; Europe, <b className="text-slate-200">₹</b> for India.
       </p>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
