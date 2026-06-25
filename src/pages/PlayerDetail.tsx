@@ -87,6 +87,24 @@ export default function PlayerDetail() {
         </div>
       </div>
 
+      {/* Brand sponsors — shown publicly (a badge of credibility for the player) */}
+      {p.sponsors && p.sponsors.length > 0 && (
+        <div className="card mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 p-5">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-mute">Sponsored by</span>
+          {p.sponsors.map((s, i) => {
+            const chip = (
+              <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white px-3 py-2">
+                <img src={s.logo} alt={s.name} className="h-6 w-6 object-contain" loading="lazy" />
+                <span className="text-[13px] font-semibold text-ink">{s.name}</span>
+              </span>
+            );
+            return s.url
+              ? <a key={i} href={s.url} target="_blank" rel="noopener noreferrer" className="transition hover:-translate-y-0.5">{chip}</a>
+              : <span key={i}>{chip}</span>;
+          })}
+        </div>
+      )}
+
       {/* Access notice — full data is gated to clubs, academies & scouts */}
       {!isClub && (
         <div className="card mt-6 flex flex-wrap items-center justify-between gap-3 border-primary/30 bg-primary/[0.05] p-4">

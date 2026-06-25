@@ -83,7 +83,7 @@ export const apiAddVideoLink = (token: string, url: string, title?: string) =>
 // Players (public browse) — GET /api/players returns an array of footballers.
 // ─────────────────────────────────────────────────────────────
 type BackendPlayer = {
-  id: string; name: string; country: string | null; photo?: string | null; photos?: string[] | null; position: string | null; skillLevel?: string | null;
+  id: string; name: string; country: string | null; photo?: string | null; photos?: string[] | null; sponsors?: { name: string; logo: string; url?: string }[] | null; position: string | null; skillLevel?: string | null;
   age: number | null; foot: string | null; career: [string, string][] | null;
   headline: string | null; stats: Record<string, number> | null;
   youtubeVideoId: string | null; instagramUrl?: string | null; views: number; pro: boolean; verified: boolean;
@@ -109,6 +109,7 @@ function mapPlayer(b: BackendPlayer): Player {
     country: b.country || 'Other',
     photo: b.photo || undefined,
     photos: Array.isArray(b.photos) ? b.photos.filter(Boolean) : [],
+    sponsors: Array.isArray(b.sponsors) ? b.sponsors.filter((s) => s && s.name && s.logo) : [],
     pos: b.position || 'Player',
     skillLevel: b.skillLevel || undefined,
     age: b.age ?? 0,
