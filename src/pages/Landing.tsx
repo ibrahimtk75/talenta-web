@@ -5,7 +5,7 @@ import {
   Youtube, Percent, UserPlus, Eye, Trophy, Search,
   Building2, GraduationCap, School, Landmark, Bot, Video, Target, type LucideIcon,
 } from 'lucide-react';
-import { COUNTRIES, type Player } from '../data';
+import { COUNTRIES, SPORTS, type Player } from '../data';
 import { PlayerGridCard } from '../components/PlayerCard';
 import Reveal from '../components/Reveal';
 import { usePlayers } from '../usePlayers';
@@ -154,6 +154,24 @@ export default function Landing() {
                 Every legend started as<br />a kid with a ball.
               </h2>
               <Link to="/signup" className="btn-primary mt-7 inline-flex"><Play size={18} fill="white" /> Start your journey</Link>
+            </div>
+
+            {/* upcoming sports — small scrolling strip (replaces the old big "coming soon" grid) */}
+            <div className="relative z-10 mt-9 overflow-hidden border-t border-white/10 pt-4">
+              <span className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.2em] text-mute">One platform · every sport</span>
+              <div className="relative overflow-hidden">
+                <div className="sports-marquee flex w-max items-center gap-7 whitespace-nowrap text-[13px]">
+                  {[...SPORTS, ...SPORTS].map((s, i) => (
+                    <span key={i} className="inline-flex items-center gap-2 text-mute">
+                      <span className="text-base">{s[1]}</span>
+                      <b className="text-slate-200">{s[0]}</b>
+                      <span className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold ${s[2] ? 'bg-accent text-white' : 'border border-white/15 text-mute'}`}>{s[2] ? 'LIVE' : 'SOON'}</span>
+                    </span>
+                  ))}
+                </div>
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-ink to-transparent" />
+              </div>
+              <style>{`.sports-marquee{animation:sportscroll 28s linear infinite}.sports-marquee:hover{animation-play-state:paused}@keyframes sportscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}`}</style>
             </div>
           </div>
         </Reveal>
