@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Play, Compass, Tag, Trophy, Flame, LayoutDashboard, MessageSquare, Menu, X, ChevronDown, type LucideIcon } from 'lucide-react';
+import { Play, Compass, Tag, Trophy, Flame, LayoutDashboard, MessageSquare, Menu, X, ChevronDown, Handshake, type LucideIcon } from 'lucide-react';
 import { useSession } from '../session';
 
 type NavItem = { to: string; label: string; icon: LucideIcon };
@@ -66,6 +66,7 @@ export default function Nav() {
           <Item l={{ to: '/rankings', label: 'Top Players', icon: Trophy }} />
           <Item l={{ to: '/challenges', label: 'Compete', icon: Flame }} />
           <Item l={{ to: '/pricing', label: 'Plans', icon: Tag }} />
+          <Item l={{ to: '/sponsors', label: 'Sponsors', icon: Handshake }} />
         </nav>
 
         <div className="ml-auto flex items-center gap-2.5">
@@ -99,6 +100,7 @@ export default function Nav() {
             <Item l={{ to: '/rankings', label: 'Top Players', icon: Trophy }} mobile />
             <Item l={{ to: '/challenges', label: 'Compete', icon: Flame }} mobile />
             <Item l={{ to: '/pricing', label: 'Plans', icon: Tag }} mobile />
+            <Item l={{ to: '/sponsors', label: 'Sponsors', icon: Handshake }} mobile />
           </div>
         </div>
       )}

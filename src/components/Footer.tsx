@@ -18,7 +18,7 @@ const cols: { h: string; items: Item[] }[] = [
     { l: 'Rankings', to: '/rankings' }, { l: 'Blog', href: '/blog/' }, { l: 'Pricing', to: '/pricing' },
   ] },
   { h: 'Company', items: [
-    { l: 'FAQs', to: '/faq' }, { l: 'How it works', to: '/faq' },
+    { l: 'FAQs', to: '/faq' }, { l: 'Sponsors & Partners', to: '/sponsors' },
     { l: 'Pricing', to: '/pricing' }, { l: 'Contact', href: 'mailto:sportstalenta@gmail.com' },
   ] },
   { h: 'Join', items: [

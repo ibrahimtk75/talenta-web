@@ -32,6 +32,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const Faq = lazy(() => import('./pages/Faq'));
 const Rules = lazy(() => import('./pages/Rules'));
 const Admin = lazy(() => import('./pages/Admin'));
+const Sponsors = lazy(() => import('./pages/Sponsors'));
 const Terms = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Terms })));
 const Privacy = lazy(() => import('./pages/Legal').then((m) => ({ default: m.Privacy })));
 
@@ -94,6 +95,7 @@ export default function App() {
           <Route path="/messages" element={<Protected allow={['player', 'club', 'academy']}><Messages /></Protected>} />
           <Route path="/faq" element={<Faq />} />
           <Route path="/rules" element={<Rules />} />
+          <Route path="/sponsors" element={<Sponsors />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
