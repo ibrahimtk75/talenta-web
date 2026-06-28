@@ -62,6 +62,11 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Dancing+Script:wght@600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Dancing+Script:wght@600;700&display=swap" /></noscript>
 
+    <!-- Speed: warm up connections to the image CDNs we load on the landing -->
+    <link rel="preconnect" href="https://flagcdn.com" crossorigin />
+    <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
+    <link rel="dns-prefetch" href="https://randomuser.me" />
+
     <!-- Structured data (SEO / rich results) -->
     <script type="application/ld+json">
     {
@@ -72,7 +77,7 @@
       "url": "https://talentasports.com",
       "logo": "https://talentasports.com/logo.png",
       "description": "Talenta is a football talent marketplace that connects young footballers with clubs, academies, scouts and schools worldwide. Build a free video profile, get discovered and signed.",
-      "email": "sportssportstalenta@gmail.com",
+      "email": "sportstalenta@gmail.com",
       "sameAs": [
         "https://instagram.com/talenta",
         "https://facebook.com/talenta",
@@ -90,7 +95,14 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Instant-paint shell — shows immediately, React replaces it on mount (no blank screen). -->
+      <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0B1A38;font-family:system-ui,Arial,sans-serif">
+        <img src="/logo-clear.png" alt="Talenta" style="height:46px;width:auto" />
+        <div style="width:34px;height:34px;border:3px solid rgba(255,255,255,.18);border-top-color:#FF5A2C;border-radius:50%;animation:tl-spin .8s linear infinite"></div>
+      </div>
+    </div>
+    <style>@keyframes tl-spin{to{transform:rotate(360deg)}}</style>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
