@@ -4,11 +4,11 @@ import { Facebook, Instagram, Twitter, Youtube, Linkedin, Play, Mail } from 'luc
 const CONTACT_EMAIL = 'sportstalenta@gmail.com';
 
 const socials = [
-  { Icon: Instagram, href: 'https://instagram.com/talenta', label: 'Instagram' },
-  { Icon: Facebook, href: 'https://facebook.com/talenta', label: 'Facebook' },
-  { Icon: Twitter, href: 'https://twitter.com/talenta', label: 'X (Twitter)' },
-  { Icon: Youtube, href: 'https://youtube.com/@talenta', label: 'YouTube' },
-  { Icon: Linkedin, href: 'https://linkedin.com/company/talenta', label: 'LinkedIn' },
+  { Icon: Instagram, href: 'https://instagram.com/talentasports', label: 'Instagram' },
+  { Icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61591497300361', label: 'Facebook' },
+  { Icon: Twitter, href: 'https://x.com/talentasports', label: 'X (Twitter)' },
+  { Icon: Youtube, href: 'https://youtube.com/@talentasports', label: 'YouTube' },
+  { Icon: Linkedin, href: 'https://www.linkedin.com/company/talentasports', label: 'LinkedIn' },
 ];
 
 type Item = { l: string; to?: string; href?: string };
