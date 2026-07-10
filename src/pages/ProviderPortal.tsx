@@ -4,9 +4,11 @@ import { useApp } from '../context/AppContext';
 import { PRODUCTS } from '../data/products';
 import { formatRate } from '../lib/format';
 import StatCard from '../components/StatCard';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 export default function ProviderPortal() {
   const { user } = useApp();
+  useDocumentTitle('Provider Portal');
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== 'provider') return <Navigate to="/dashboard" replace />;
 

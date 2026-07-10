@@ -5,6 +5,7 @@ import { PRODUCTS } from '../data/products';
 import { providerById } from '../data/providers';
 import type { CategoryId, FinancialProduct } from '../lib/types';
 import ProductCard from '../components/ProductCard';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 interface Answers {
   goal: CategoryId | '';
@@ -65,6 +66,7 @@ export default function Advisor() {
 
   const finish = () => setResults(rank(answers));
   const reset = () => { setResults(null); setStep(0); };
+  useDocumentTitle('AI Advisor');
 
   return (
     <div className="container-app py-12">

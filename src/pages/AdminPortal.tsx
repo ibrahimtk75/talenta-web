@@ -6,9 +6,11 @@ import { PROVIDERS } from '../data/providers';
 import { providerById } from '../data/providers';
 import StatCard from '../components/StatCard';
 import TrustBadge from '../components/TrustBadge';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 export default function AdminPortal() {
   const { user } = useApp();
+  useDocumentTitle('Admin Portal');
   if (!user) return <Navigate to="/login" replace />;
   if (user.role !== 'admin') return <Navigate to="/dashboard" replace />;
 

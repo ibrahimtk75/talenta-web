@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Check, TrendingUp, Users, BarChart3, Megaphone } from 'lucide-react';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 export default function Providers() {
+  useDocumentTitle('For Providers');
   const benefits = [
     { icon: Users, title: 'Reach qualified demand', text: 'Get in front of intent-rich users actively comparing products in your category.' },
     { icon: BarChart3, title: 'Analytics that convert', text: 'Impression-to-approval funnels, cohort insights and downloadable reports.' },

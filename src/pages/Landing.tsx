@@ -6,11 +6,13 @@ import { CATEGORIES } from '../data/categories';
 import { PRODUCTS } from '../data/products';
 import Icon from '../components/Icon';
 import ProductCard from '../components/ProductCard';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 export default function Landing() {
   const { t } = useApp();
   const navigate = useNavigate();
   const [q, setQ] = useState('');
+  useDocumentTitle();
 
   const featured = PRODUCTS.filter((p) => p.featured).slice(0, 6);
 

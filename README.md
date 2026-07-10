@@ -18,14 +18,17 @@ later replace with zero UI changes.
 | --- | --- |
 | **Landing** | Hero + global search, 10 category tiles, how-it-works, featured products, trust band |
 | **Marketplace** | Search, category filter, sort (rate / rating / trust), verified-only & hide-flagged toggles, **side-by-side compare** (up to 3) |
-| **Product detail** | Full terms, highlights, provider **trust score** card, **AI eligibility estimate** (live, explainable), apply flow, similar products |
+| **Product detail** | Full terms, highlights, provider **trust score** card, **AI eligibility estimate** (live, explainable), **reviews & ratings** with distribution, apply flow, similar products |
 | **AI Advisor** | 3-step questionnaire → ranked recommendations with plain-English "why we matched" reasons |
 | **AI chat widget** | Always-on assistant with intent routing to categories, safety and eligibility |
+| **Education hub** | Plain-English financial guides (APR, credit, scams, saving, investing, funding) at `/learn` |
 | **Auth** | Email + social (Google / Apple / Phone OTP) mock, **role selector** (client / provider / admin) |
-| **Client dashboard** | Application tracking, saved products, notifications, recommendations |
+| **Client dashboard** | Application tracking, saved products, notifications, recommendations, **referral & rewards** |
 | **Provider portal** | Listings, conversion funnel, subscription plan, verification status |
 | **Admin portal** | Fraud review queue, provider verification, platform stats |
-| **Cross-cutting** | Light/Dark theme, multi-currency, multi-language (EN/ES/HI/AR incl. RTL), trust & **scam-flag indicators** |
+| **Cross-cutting** | Light/Dark theme, multi-currency, multi-language (EN/ES/HI/AR incl. RTL), per-page SEO titles, trust & **scam-flag indicators** |
+
+The catalog spans **28 products across all 10 categories** from 9 providers (including one deliberately flagged listing to demonstrate the fraud indicators).
 
 ## 🧱 Tech stack
 
@@ -50,13 +53,15 @@ npm run preview    # preview the production build
 
 ```
 src/
-  components/   Navbar, Footer, Layout, ProductCard, CompareTray,
+  components/   Navbar, Footer, Layout, ProductCard, CompareTray, Reviews,
                 TrustBadge, StarRating, StatCard, AIChatWidget, Icon, Logo
   context/      AppContext (prefs + session + saved products)
-  data/         categories, providers, products (mock catalog)
-  lib/          types, format (currency/rate/trust), eligibility, i18n
+  data/         categories, providers, products, reviews, learn (mock catalog)
+  lib/          types, format (currency/rate/trust), eligibility, i18n,
+                useDocumentTitle
   pages/        Landing, Marketplace, ProductDetail, Advisor, Login,
-                Dashboard, ProviderPortal, AdminPortal, Providers, About, NotFound
+                Dashboard, ProviderPortal, AdminPortal, Providers, About,
+                Learn, LearnArticle, NotFound
 ```
 
 ## 🗺️ Roadmap

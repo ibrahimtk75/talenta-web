@@ -12,6 +12,7 @@ type Dict = Record<string, string>;
 const en: Dict = {
   'nav.marketplace': 'Marketplace',
   'nav.recommend': 'AI Advisor',
+  'nav.learn': 'Learn',
   'nav.providers': 'For Providers',
   'nav.about': 'How it works',
   'nav.signin': 'Sign in',
@@ -27,6 +28,7 @@ const en: Dict = {
 const es: Dict = {
   'nav.marketplace': 'Mercado',
   'nav.recommend': 'Asesor IA',
+  'nav.learn': 'Aprender',
   'nav.providers': 'Para proveedores',
   'nav.about': 'Cómo funciona',
   'nav.signin': 'Iniciar sesión',
@@ -42,6 +44,7 @@ const es: Dict = {
 const hi: Dict = {
   'nav.marketplace': 'मार्केटप्लेस',
   'nav.recommend': 'AI सलाहकार',
+  'nav.learn': 'सीखें',
   'nav.providers': 'प्रदाताओं के लिए',
   'nav.about': 'यह कैसे काम करता है',
   'nav.signin': 'साइन इन',
@@ -57,6 +60,7 @@ const hi: Dict = {
 const ar: Dict = {
   'nav.marketplace': 'السوق',
   'nav.recommend': 'مستشار الذكاء',
+  'nav.learn': 'تعلّم',
   'nav.providers': 'لمزوّدي الخدمة',
   'nav.about': 'كيف يعمل',
   'nav.signin': 'تسجيل الدخول',

@@ -10,7 +10,9 @@ import { useApp } from '../context/AppContext';
 import StarRating from '../components/StarRating';
 import TrustBadge from '../components/TrustBadge';
 import ProductCard from '../components/ProductCard';
+import Reviews from '../components/Reviews';
 import Icon from '../components/Icon';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -20,6 +22,7 @@ export default function ProductDetail() {
 
   const [form, setForm] = useState<EligibilityInput>({ annualIncome: 40000, creditScore: 700, employed: true });
   const [applied, setApplied] = useState(false);
+  useDocumentTitle(product?.name);
 
   if (!product) {
     return (
@@ -127,6 +130,8 @@ export default function ProductDetail() {
               </p>
             </div>
           )}
+
+          <Reviews productId={product.id} overall={product.rating} count={product.reviews} />
 
           {similar.length > 0 && (
             <div className="mt-10">

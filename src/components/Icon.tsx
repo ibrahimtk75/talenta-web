@@ -2,6 +2,7 @@ import {
   Landmark, CreditCard, ShieldCheck, PiggyBank, TrendingUp, Gift, GraduationCap,
   HandCoins, Smartphone, Building2, Circle, Search, Sparkles, FileCheck, FileText,
   Bookmark, Eye, MousePointerClick, Users, Package, AlertTriangle, Star, CheckCircle2,
+  Percent, ShieldAlert, BarChart3,
   type LucideProps,
 } from 'lucide-react';
 
@@ -11,6 +12,7 @@ const REGISTRY: Record<string, React.ComponentType<LucideProps>> = {
   Landmark, CreditCard, ShieldCheck, PiggyBank, TrendingUp, Gift, GraduationCap,
   HandCoins, Smartphone, Building2, Circle, Search, Sparkles, FileCheck, FileText,
   Bookmark, Eye, MousePointerClick, Users, Package, AlertTriangle, Star, CheckCircle2,
+  Percent, ShieldAlert, BarChart3,
 };
 
 interface IconProps extends LucideProps {

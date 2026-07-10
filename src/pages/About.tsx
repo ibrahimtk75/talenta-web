@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Scale, Lock, Sparkles, Globe2, HeartHandshake } from 'lucide-react';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 export default function About() {
+  useDocumentTitle('How it works');
   const pillars = [
     { icon: ShieldCheck, title: 'Verified providers only', text: 'Every provider passes KYB checks and carries a transparent trust score built from verification, regulatory status, review volume and complaint history.' },
     { icon: Scale, title: 'Impartial by design', text: 'We surface all matching products and label sponsored placements clearly. How we earn — affiliate commissions, subscriptions, featured listings — is disclosed.' },

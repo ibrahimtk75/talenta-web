@@ -16,6 +16,7 @@ export default function Navbar() {
   const links = [
     { to: '/marketplace', label: t('nav.marketplace') },
     { to: '/advisor', label: t('nav.recommend') },
+    { to: '/learn', label: t('nav.learn') },
     { to: '/providers', label: t('nav.providers') },
     { to: '/about', label: t('nav.about') },
   ];
@@ -31,15 +32,15 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-ink-100 bg-white/80 backdrop-blur dark:border-ink-800 dark:bg-ink-900/80">
       <div className="container-app flex h-16 items-center justify-between gap-4">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-5">
           <Logo />
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav className="hidden items-center gap-0.5 xl:flex">
             {links.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 className={({ isActive }) =>
-                  `rounded-lg px-3 py-2 text-sm font-medium transition ${
+                  `whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition ${
                     isActive
                       ? 'bg-brand-50 text-brand-700 dark:bg-ink-800 dark:text-brand-400'
                       : 'text-ink-600 hover:bg-ink-50 dark:text-ink-300 dark:hover:bg-ink-800'
@@ -87,7 +88,7 @@ export default function Navbar() {
           </button>
 
           {user ? (
-            <div className="hidden items-center gap-2 lg:flex">
+            <div className="hidden items-center gap-2 xl:flex">
               <Link to="/dashboard" className="btn-ghost !px-2.5" aria-label="Saved">
                 <Bookmark className="h-4 w-4" />
                 {saved.length > 0 && <span className="text-xs">{saved.length}</span>}
@@ -100,7 +101,7 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <div className="hidden items-center gap-2 lg:flex">
+            <div className="hidden items-center gap-2 xl:flex">
               <Link to="/login" className="btn-ghost">
                 <User className="h-4 w-4" /> {t('nav.signin')}
               </Link>
@@ -110,14 +111,14 @@ export default function Navbar() {
             </div>
           )}
 
-          <button className="btn-ghost !px-2.5 lg:hidden" onClick={() => setOpen((o) => !o)} aria-label="Menu">
+          <button className="btn-ghost !px-2.5 xl:hidden" onClick={() => setOpen((o) => !o)} aria-label="Menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
       {open && (
-        <div className="border-t border-ink-100 bg-white px-4 py-3 lg:hidden dark:border-ink-800 dark:bg-ink-900">
+        <div className="border-t border-ink-100 bg-white px-4 py-3 xl:hidden dark:border-ink-800 dark:bg-ink-900">
           <nav className="flex flex-col gap-1">
             {links.map((l) => (
               <Link
@@ -129,6 +130,28 @@ export default function Navbar() {
                 {l.label}
               </Link>
             ))}
+            <div className="mt-2 flex gap-2 sm:hidden">
+              <select
+                aria-label="Currency"
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
+                className="input !py-2"
+              >
+                {Object.keys(CURRENCIES).map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+              <select
+                aria-label="Language"
+                value={lang}
+                onChange={(e) => setLang(e.target.value as Lang)}
+                className="input !py-2"
+              >
+                {LANGS.map((l) => (
+                  <option key={l.code} value={l.code}>{l.label}</option>
+                ))}
+              </select>
+            </div>
             <div className="mt-2 flex gap-2">
               {user ? (
                 <Link to={dashHref} onClick={() => setOpen(false)} className="btn-primary flex-1">

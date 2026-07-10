@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { Bookmark, Bell, FileText } from 'lucide-react';
+import { Bookmark, Bell, FileText, Gift, Copy, Check } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { productById } from '../data/products';
 import { providerById } from '../data/providers';
 import { formatRate } from '../lib/format';
@@ -25,11 +27,20 @@ const STATUS_STYLE: Record<ApplicationStatus, string> = {
 
 export default function Dashboard() {
   const { user, saved } = useApp();
+  const [copied, setCopied] = useState(false);
+  useDocumentTitle('Dashboard');
+
   if (!user) return <Navigate to="/login" replace />;
   if (user.role === 'provider') return <Navigate to="/provider" replace />;
   if (user.role === 'admin') return <Navigate to="/admin" replace />;
 
   const savedProducts = saved.map((id) => productById(id)).filter(Boolean);
+  const referralCode = `GFC-${user.name.toUpperCase().slice(0, 4)}-2026`;
+  const copyCode = () => {
+    navigator.clipboard?.writeText(referralCode).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
 
   return (
     <div className="container-app py-10">
@@ -116,6 +127,33 @@ export default function Dashboard() {
                   </Link>
                 );
               })}
+            </div>
+          </div>
+
+          <div className="card overflow-hidden">
+            <div className="bg-brand-600 p-5 text-white">
+              <Gift className="h-6 w-6" />
+              <h3 className="mt-2 font-display text-lg font-bold">Refer & earn</h3>
+              <p className="mt-1 text-sm text-brand-50">Give friends $25, get $25 when they’re approved for their first product.</p>
+            </div>
+            <div className="p-5">
+              <p className="text-xs text-ink-400">Your referral code</p>
+              <div className="mt-1 flex items-center gap-2">
+                <code className="flex-1 rounded-lg bg-ink-50 px-3 py-2 font-mono text-sm font-semibold text-ink-800 dark:bg-ink-900 dark:text-ink-100">{referralCode}</code>
+                <button onClick={copyCode} className="btn-ghost !px-2.5" aria-label="Copy referral code">
+                  {copied ? <Check className="h-4 w-4 text-brand-600" /> : <Copy className="h-4 w-4" />}
+                </button>
+              </div>
+              <div className="mt-4 flex items-center justify-between rounded-xl bg-ink-50 p-3 dark:bg-ink-900">
+                <div>
+                  <p className="font-display text-xl font-bold text-brand-700 dark:text-brand-400">1,250</p>
+                  <p className="text-xs text-ink-400">reward points</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-display text-xl font-bold text-ink-900 dark:text-white">3</p>
+                  <p className="text-xs text-ink-400">friends joined</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

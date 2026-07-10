@@ -6,6 +6,7 @@ import { CATEGORIES, categoryById } from '../data/categories';
 import { providerById } from '../data/providers';
 import ProductCard from '../components/ProductCard';
 import CompareTray from '../components/CompareTray';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 type SortKey = 'featured' | 'rate-asc' | 'rating-desc' | 'trust-desc';
 
@@ -64,6 +65,7 @@ export default function Marketplace() {
   }, [cat, search, sort, verifiedOnly, hideFlagged]);
 
   const activeCat = categoryById(cat);
+  useDocumentTitle(activeCat ? activeCat.name : 'Marketplace');
 
   return (
     <div className="container-app py-10">

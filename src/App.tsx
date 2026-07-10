@@ -10,6 +10,8 @@ import ProviderPortal from './pages/ProviderPortal';
 import AdminPortal from './pages/AdminPortal';
 import Providers from './pages/Providers';
 import About from './pages/About';
+import Learn from './pages/Learn';
+import LearnArticle from './pages/LearnArticle';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/advisor" element={<Advisor />} />
         <Route path="/providers" element={<Providers />} />
         <Route path="/about" element={<About />} />
+        <Route path="/learn" element={<Learn />} />
+        <Route path="/learn/:slug" element={<LearnArticle />} />
         <Route path="/login" element={<Login mode="login" />} />
         <Route path="/signup" element={<Login mode="signup" />} />
         <Route path="/dashboard" element={<Dashboard />} />

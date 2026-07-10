@@ -4,9 +4,11 @@ import { Mail, Lock, Chrome, Apple, Phone } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import type { UserRole } from '../lib/types';
 import Logo from '../components/Logo';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 export default function Login({ mode = 'login' }: { mode?: 'login' | 'signup' }) {
   const { login } = useApp();
+  useDocumentTitle(mode === 'signup' ? 'Create account' : 'Sign in');
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<UserRole>('client');

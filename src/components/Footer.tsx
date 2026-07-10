@@ -18,6 +18,7 @@ const groups = [
       { to: '/about', label: 'How it works' },
       { to: '/providers', label: 'For providers' },
       { to: '/advisor', label: 'AI Advisor' },
+      { to: '/learn', label: 'Education hub' },
     ],
   },
   {
