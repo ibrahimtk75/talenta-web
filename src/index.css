@@ -1,89 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html { scroll-behavior: smooth; }
-  body {
-    @apply bg-ink text-slate-100 font-sans antialiased;
-  }
-  ::selection { @apply bg-primary/30; }
-
-  /* Keyboard focus ring for accessibility (visible only when tabbing). */
-  :focus-visible {
-    outline: 2px solid #FF7A45;
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
+:root {
+  color-scheme: light dark;
 }
 
-/* Skip-to-content link — appears when a keyboard user tabs into the page. */
-.skip-link {
-  position: fixed; left: 1rem; top: -100px; z-index: 1000;
-  background: #FF5A2C; color: #fff; padding: 0.6rem 1rem; border-radius: 0.6rem;
-  font-weight: 700; transition: top 0.2s;
+html {
+  scroll-behavior: smooth;
 }
-.skip-link:focus { top: 1rem; }
 
-/* Respect users who prefer reduced motion — pause marquees & long animations. */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .flags-track, .sports-marquee, .brands-track { animation: none !important; }
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+body {
+  @apply bg-ink-50 text-ink-900 antialiased dark:bg-ink-900 dark:text-ink-100;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 @layer components {
-  .glass {
-    @apply bg-white/[0.05] border border-white/10 backdrop-blur-md;
+  .container-app {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
-  .grad-text {
-    @apply bg-gradient-to-r from-primary to-primary-2 bg-clip-text text-transparent;
-  }
+
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold
-           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-brand-500/60 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
-    @apply btn bg-gradient-to-r from-primary to-primary-2 text-white shadow-glow hover:-translate-y-0.5;
+    @apply btn bg-brand-600 text-white hover:bg-brand-700 shadow-glow;
   }
   .btn-ghost {
-    @apply btn bg-white/[0.05] border border-white/15 text-slate-100 hover:border-primary hover:bg-white/[0.08];
+    @apply btn border border-ink-200 bg-white text-ink-800 hover:bg-ink-50 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-100 dark:hover:bg-ink-700;
   }
+  .btn-outline {
+    @apply btn border border-brand-500 text-brand-700 hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-ink-800;
+  }
+
   .card {
-    @apply glass rounded-xl2 shadow-card;
+    @apply rounded-2xl border border-ink-100 bg-white shadow-card transition dark:border-ink-800 dark:bg-ink-800;
   }
+
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold
-           border border-white/10 bg-white/[0.05] text-mute transition-colors;
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold;
   }
-  .chip-active {
-    @apply bg-gradient-to-r from-primary to-primary-2 text-white border-transparent;
+
+  .input {
+    @apply w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-ink-700 dark:bg-ink-900 dark:text-ink-100;
   }
-  .field-label { @apply block text-[13px] font-semibold text-mute mb-1.5; }
-  .field-input {
-    @apply w-full rounded-xl bg-white/[0.04] border border-white/15 px-3.5 py-3 text-[15px]
-           text-slate-100 placeholder:text-mute/60 outline-none focus:border-primary transition;
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink-700 dark:text-ink-200;
+  }
+
+  .section-title {
+    @apply font-display text-2xl font-bold tracking-tight text-ink-900 sm:text-3xl dark:text-white;
   }
 }
 
-/* Native <select> dropdown options — without this, Windows renders the open
-   list as near-white text on a white background (unreadable). Force a dark,
-   on-brand list with light text. */
-select.field-input option,
-select option {
-  background-color: #0B1A38;
-  color: #f1f5f9;
+/* Simple custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
-
-/* stadium background */
-.stadium-bg {
-  position: fixed; inset: 0; z-index: -2; overflow: hidden;
-  background:
-    radial-gradient(1100px 720px at 50% -18%, rgba(255,90,44,.16), transparent 60%),
-    radial-gradient(820px 560px at 85% 4%, rgba(90,169,255,.13), transparent 60%),
-    linear-gradient(180deg, #0E2046 0%, #0B1A38 56%, #081530 100%);
-}
-.stadium-bg::after {
-  content: ''; position: absolute; inset: 0;
-  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.014) 0 120px, transparent 120px 240px);
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-ink-300 dark:bg-ink-700;
 }

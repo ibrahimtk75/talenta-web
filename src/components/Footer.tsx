@@ -1,103 +1,70 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, Linkedin, Play, Mail } from 'lucide-react';
+import { ShieldCheck, Lock, Scale } from 'lucide-react';
+import Logo from './Logo';
 
-const CONTACT_EMAIL = 'sportstalenta@gmail.com';
-
-const socials = [
-  { Icon: Instagram, href: 'https://instagram.com/talentasports', label: 'Instagram' },
-  { Icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61591497300361', label: 'Facebook' },
-  { Icon: Twitter, href: 'https://x.com/talentasports', label: 'X (Twitter)' },
-  { Icon: Youtube, href: 'https://youtube.com/@talentasports', label: 'YouTube' },
-  { Icon: Linkedin, href: 'https://www.linkedin.com/company/talentasports', label: 'LinkedIn' },
-];
-
-type Item = { l: string; to?: string; href?: string };
-const cols: { h: string; items: Item[] }[] = [
-  { h: 'Explore', items: [
-    { l: 'Talent Feed', to: '/feed' }, { l: 'Discover', to: '/browse' },
-    { l: 'Rankings', to: '/rankings' }, { l: 'Blog', href: '/blog/' }, { l: 'Pricing', to: '/pricing' },
-  ] },
-  { h: 'Company', items: [
-    { l: 'FAQs', to: '/faq' }, { l: 'Sponsors & Partners', to: '/sponsors' },
-    { l: 'Pricing', to: '/pricing' }, { l: 'Contact', href: 'mailto:sportstalenta@gmail.com' },
-  ] },
-  { h: 'Join', items: [
-    { l: 'As a Player', to: '/signup' }, { l: 'For Clubs & Scouts', to: '/signup' },
-    { l: 'Academies & Schools', to: '/signup' }, { l: 'Log in', to: '/login' },
-  ] },
-  { h: 'Legal', items: [
-    { l: 'Platform Rules', to: '/rules' }, { l: 'Terms of Service', to: '/terms' },
-    { l: 'Privacy Policy', to: '/privacy' }, { l: "Players' Safety", to: '/rules' },
-  ] },
+const groups = [
+  {
+    title: 'Marketplace',
+    links: [
+      { to: '/marketplace?cat=loans', label: 'Loans' },
+      { to: '/marketplace?cat=credit-cards', label: 'Credit Cards' },
+      { to: '/marketplace?cat=insurance', label: 'Insurance' },
+      { to: '/marketplace?cat=investments', label: 'Investments' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { to: '/about', label: 'How it works' },
+      { to: '/providers', label: 'For providers' },
+      { to: '/advisor', label: 'AI Advisor' },
+    ],
+  },
+  {
+    title: 'Trust & Legal',
+    links: [
+      { to: '/about', label: 'Provider verification' },
+      { to: '/about', label: 'GDPR & CCPA' },
+      { to: '/about', label: 'Responsible lending' },
+    ],
+  },
 ];
 
 export default function Footer() {
   return (
-    <footer className="relative mt-24 overflow-hidden border-t border-white/10 bg-ink/70">
-      {/* top glow accent */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
-
-      {/* CTA band */}
-      <div className="border-b border-white/10 bg-primary/[0.04]">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-5 px-5 py-9 text-center md:flex-row md:justify-between md:text-left">
-          <div>
-            <h3 className="font-display text-xl font-bold md:text-2xl">Ready to get discovered?</h3>
-            <p className="mt-1 text-sm text-mute">Join free as a founding member — be one of the first 1,000 players.</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/signup" className="btn-primary"><Play size={17} fill="white" /> Join Free</Link>
-            <Link to="/rankings" className="btn-ghost">View Rankings</Link>
+    <footer className="mt-20 border-t border-ink-100 bg-white dark:border-ink-800 dark:bg-ink-900">
+      <div className="container-app grid gap-10 py-12 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+        <div>
+          <Logo />
+          <p className="mt-3 max-w-xs text-sm text-ink-500 dark:text-ink-400">
+            A global financial marketplace connecting people with verified loans, cards, insurance,
+            savings, investments and funding — transparently.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3 text-xs text-ink-500 dark:text-ink-400">
+            <span className="flex items-center gap-1"><ShieldCheck className="h-4 w-4 text-brand-600" /> Verified providers</span>
+            <span className="flex items-center gap-1"><Lock className="h-4 w-4 text-brand-600" /> Bank-grade security</span>
+            <span className="flex items-center gap-1"><Scale className="h-4 w-4 text-brand-600" /> Impartial comparison</span>
           </div>
         </div>
-      </div>
-
-      {/* main */}
-      <div className="mx-auto max-w-7xl px-5 py-14">
-        <div className="grid gap-10 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr]">
-          <div>
-            <Link to="/" className="inline-flex items-center">
-              <img src="/logo-clear.png" alt="Talenta" className="h-10 w-auto" />
-            </Link>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-mute">
-              Where footballers get discovered & signed — connecting talent with clubs, academies,
-              scouts & schools worldwide. Built from Kerala, for the world.
-            </p>
-            <div className="mt-5 text-sm">
-              <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2.5 text-mute transition-colors hover:text-white">
-                <Mail size={15} className="text-primary" /> {CONTACT_EMAIL}
-              </a>
-            </div>
-            <div className="mt-5 flex gap-2.5 text-mute">
-              {socials.map(({ Icon, href, label }) => (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                  className="grid h-9 w-9 place-items-center rounded-lg border border-white/10 transition-all hover:-translate-y-0.5 hover:border-primary hover:text-white">
-                  <Icon size={16} />
-                </a>
+        {groups.map((g) => (
+          <div key={g.title}>
+            <h4 className="mb-3 text-sm font-semibold text-ink-900 dark:text-white">{g.title}</h4>
+            <ul className="space-y-2">
+              {g.links.map((l) => (
+                <li key={l.label}>
+                  <Link to={l.to} className="text-sm text-ink-500 hover:text-brand-700 dark:text-ink-400 dark:hover:text-brand-400">
+                    {l.label}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
-          {cols.map((c) => (
-            <div key={c.h}>
-              <h4 className="mb-4 text-[13px] font-bold uppercase tracking-wider text-white/80">{c.h}</h4>
-              <ul className="space-y-2.5">
-                {c.items.map((it) => (
-                  <li key={it.l}>
-                    {it.to
-                      ? <Link to={it.to} className="text-sm text-mute transition-colors hover:text-primary">{it.l}</Link>
-                      : <a href={it.href} className="text-sm text-mute transition-colors hover:text-primary">{it.l}</a>}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-mute sm:flex-row">
-          <span>© 2026 Talenta. All rights reserved.</span>
-          <span className="flex items-center gap-1.5">
-            Built with <span className="text-primary">⚽</span> in Kerala,
-            <img src="https://flagcdn.com/h20/in.png" alt="India" className="h-3 w-auto rounded-[2px] ring-1 ring-white/10" /> India
-          </span>
+        ))}
+      </div>
+      <div className="border-t border-ink-100 py-6 dark:border-ink-800">
+        <div className="container-app flex flex-col items-center justify-between gap-3 text-xs text-ink-400 sm:flex-row">
+          <p>© {new Date().getFullYear()} GlobalFundConnect. Demo build — figures are illustrative, not financial advice.</p>
+          <p>Made with a trust-first design system.</p>
         </div>
       </div>
     </footer>

@@ -1,11 +1,11 @@
 {
-  "name": "Talenta — Football Talent Marketplace",
-  "short_name": "Talenta",
-  "description": "Where footballers get discovered & signed. Connect with clubs, academies & scouts worldwide.",
+  "name": "GlobalFundConnect — Global Financial Marketplace",
+  "short_name": "GlobalFundConnect",
+  "description": "Search and compare loans, cards, insurance, savings, investments, grants and more from verified providers.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0B1A38",
-  "theme_color": "#0B1A38",
+  "background_color": "#0b1220",
+  "theme_color": "#059669",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
