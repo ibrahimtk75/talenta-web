@@ -10,7 +10,8 @@ window.SITE = {
 
   // ⚠️ Replace with the real WhatsApp number: country code + number, no "+", spaces or dashes.
   // Example (Saudi): 9665XXXXXXXX
-  whatsapp: "966500000000",
+  // Until it is set, the WhatsApp buttons let the customer choose the chat themselves.
+  whatsapp: "",
 
   currency: "SAR ", // Saudi Riyal
 
@@ -22,6 +23,25 @@ window.SITE = {
     tiktok: "",
     whatsappChannel: ""
   },
+
+  /* ---------- HERO VIDEO SLIDER ----------
+     video: MP4 file in videos/ (H.264, landscape 1280x720, 5–10 sec, under ~2 MB, no sound needed).
+     webm: optional WebM copy of the same clip (extra browser support).
+     poster: a still image shown while the video loads.
+     Wrap a word in *stars* to highlight it in gold.
+     The 3 clips included are animated placeholders — replace with your own footage
+     (date farms, packing, hotel rooms, Masjid Nabawi). */
+  heroSlides: [
+    { video: "videos/hero-sunset.mp4", webm: "videos/hero-sunset.webm", poster: "images/hero-sunset.jpg", eyebrow: "Servants of Madinah",
+      title: "Fresh from *Madinah*, delivered with care.", text: "Premium Madinah dates & pilgrim stays — order directly on WhatsApp.",
+      cta: { label: "Shop Dates", href: "#dates" } },
+    { video: "videos/hero-grove.mp4", webm: "videos/hero-grove.webm", poster: "images/hero-grove.jpg", eyebrow: "Straight from the farms",
+      title: "Ajwa, Sukari & *Safawi* — picked fresh.", text: "Hand-selected from the date farms of Madinah and packed with care.",
+      cta: { label: "See all dates", href: "#dates" } },
+    { video: "videos/hero-night.mp4", webm: "videos/hero-night.webm", poster: "images/hero-night.jpg", eyebrow: "Accommodation",
+      title: "Your home near *Masjid Nabawi*.", text: "Hotels, Umrah stays, airport pickup and Ziyarat tours for families and groups.",
+      cta: { label: "Book a stay", href: "#stays" } }
+  ],
 
   stats: [
     { value: "52K+", label: "Facebook family" },
@@ -66,10 +86,8 @@ window.SITE = {
     { type: "instagram", src: "",                          title: "Customer reviews" }
   ],
 
-  // SAMPLE reviews — replace with real customer reviews before going live.
+  // Real customer reviews. The Reviews section stays hidden while this list is empty. Example:
+  // { name: "Ahmed, Riyadh", text: "Fresh Ajwa, fast delivery. Ordering on WhatsApp was easy." },
   testimonials: [
-    { name: "Ahmed, Riyadh", text: "Ajwa was super fresh and reached in 4 days. Ordering on WhatsApp was very easy." },
-    { name: "Fatima, Jeddah",  text: "They arranged our hotel near Haram and airport pickup for our Umrah family. Very caring service." },
-    { name: "Rashid, Dubai",       text: "Bought gift boxes for the whole family. Premium packing, good price." }
   ]
 };

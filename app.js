@@ -8,12 +8,103 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   };
+  // With no number set, wa.me opens WhatsApp and lets the customer pick a chat,
+  // so orders never go to a wrong number by accident.
+  var waNumber = String(S.whatsapp || "").replace(/\D/g, "");
+  if (!waNumber) console.warn("Thalal Madinah: set your WhatsApp number in data.js");
   var waLink = function (text) {
-    return "https://wa.me/" + S.whatsapp + (text ? "?text=" + encodeURIComponent(text) : "");
+    return "https://wa.me/" + waNumber + (text ? "?text=" + encodeURIComponent(text) : "");
   };
   var openWa = function (text) { window.open(waLink(text), "_blank", "noopener"); };
 
   /* ---------- Static bindings ---------- */
+  /* ---------- Hero video slider ---------- */
+  (function heroSlider() {
+    var slides = S.heroSlides || [], hero = $("#hero");
+    if (!slides.length) return;
+    var DUR = 7000, cur = -1, timer = null, paused = false;
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var saveData = navigator.connection && navigator.connection.saveData;
+    var hi = function (t) { return esc(t).replace(/\*(.+?)\*/g, "<em>$1</em>"); };
+
+    $("#heroSlides").innerHTML = slides.map(function (s) {
+      return '<div class="hero-slide" style="background-image:url(' + esc(s.poster || "") + ')">' +
+        (s.video && !reduce && !saveData ? '<video muted loop playsinline preload="none" poster="' + esc(s.poster || "") + '">' +
+          (s.webm ? '<source data-src="' + esc(s.webm) + '" type="video/webm">' : "") +
+          '<source data-src="' + esc(s.video) + '" type="video/mp4"></video>' : "") + "</div>";
+    }).join("");
+    $("#heroDots").innerHTML = slides.map(function (s, i) {
+      return '<button class="hero-dot" role="tab" aria-label="Slide ' + (i + 1) + '"><i></i></button>';
+    }).join("");
+    hero.style.setProperty("--dur", DUR + "ms");
+    var els = hero.querySelectorAll(".hero-slide"), dots = hero.querySelectorAll(".hero-dot"), inner = hero.querySelector(".hero-inner");
+
+    function load(v) { // sources are attached only when needed, so the page stays light
+      if (v.dataset.loaded) return;
+      v.querySelectorAll("source").forEach(function (s) { s.src = s.dataset.src; });
+      v.dataset.loaded = 1; v.load();
+    }
+    function play(v) {
+      if (!v) return;
+      load(v);
+      var p = v.play(); if (p && p.catch) p.catch(function () {}); // autoplay may be blocked; poster stays visible
+    }
+    function go(n) {
+      n = (n + slides.length) % slides.length;
+      if (n === cur) return;
+      var s = slides[n];
+      els.forEach(function (el, i) {
+        el.classList.toggle("active", i === n);
+        var v = el.querySelector("video");
+        if (v && i !== n) v.pause();
+      });
+      dots.forEach(function (d, i) {
+        d.classList.toggle("done", i < n); d.classList.remove("active"); d.setAttribute("aria-selected", i === n);
+      });
+      void dots[n].offsetWidth; dots[n].classList.add("active");
+      var v = els[n].querySelector("video"); if (v) { if (v.dataset.loaded) v.currentTime = 0; play(v); }
+      // preload the next clip in the background
+      var nv = els[(n + 1) % slides.length].querySelector("video"); if (nv) { nv.preload = "auto"; load(nv); }
+      $("#heroEyebrow").textContent = s.eyebrow || S.tagline;
+      $("#heroTitle").innerHTML = hi(s.title || "");
+      $("#heroText").textContent = s.text || "";
+      var cta = $("#heroCta"); cta.textContent = (s.cta && s.cta.label) || "Shop Dates"; cta.href = (s.cta && s.cta.href) || "#dates";
+      // second button points to whichever section the main button doesn't
+      var toStays = cta.getAttribute("href") === "#stays", cta2 = $("#heroCta2");
+      cta2.textContent = toStays ? "Shop Dates" : "Book a Stay"; cta2.href = toStays ? "#dates" : "#stays";
+      inner.classList.remove("swap"); void inner.offsetWidth; inner.classList.add("swap");
+      cur = n; schedule();
+    }
+    function schedule() {
+      clearTimeout(timer);
+      if (!paused && !reduce && slides.length > 1) timer = setTimeout(function () { go(cur + 1); }, DUR);
+    }
+    function setPaused(p) { paused = p; hero.classList.toggle("paused", p); if (p) clearTimeout(timer); else schedule(); }
+
+    $("#heroNext").addEventListener("click", function () { go(cur + 1); });
+    $("#heroPrev").addEventListener("click", function () { go(cur - 1); });
+    dots.forEach(function (d, i) { d.addEventListener("click", function () { go(i); }); });
+    // swipe on touch screens
+    var x0 = null;
+    hero.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    hero.addEventListener("touchend", function (e) {
+      if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 50) go(cur + (dx < 0 ? 1 : -1));
+    });
+    // pause when hovered, off-screen or tab hidden (saves battery & data)
+    hero.addEventListener("mouseenter", function () { setPaused(true); });
+    hero.addEventListener("mouseleave", function () { setPaused(false); });
+    document.addEventListener("visibilitychange", function () {
+      var v = els[cur] && els[cur].querySelector("video");
+      if (document.hidden) { setPaused(true); if (v) v.pause(); } else { setPaused(false); play(v); }
+    });
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (en) {
+      var v = els[cur] && els[cur].querySelector("video");
+      if (en[0].isIntersecting) play(v); else if (v) v.pause();
+    }).observe(hero);
+    go(0);
+  })();
+
   document.querySelectorAll("[data-bind]").forEach(function (el) { el.textContent = S[el.dataset.bind] || ""; });
   $("#year").textContent = new Date().getFullYear();
   $("#stats").innerHTML = S.stats.map(function (s) {
@@ -202,6 +293,7 @@
   });
 
   /* ---------- Testimonials ---------- */
+  if (S.testimonials.length) { $("#reviews").hidden = false; $("#navReviews").hidden = false; }
   $("#testimonials").innerHTML = S.testimonials.map(function (t) {
     return '<figure class="quote reveal"><div class="stars">★★★★★</div><p>“' + esc(t.text) + '”</p><cite>— ' + esc(t.name) + "</cite></figure>";
   }).join("");
