@@ -2,7 +2,7 @@
   "use strict";
   var S = window.SITE;
   var $ = function (sel) { return document.querySelector(sel); };
-  var money = function (n) { return S.currency + Number(n).toLocaleString("en-IN"); };
+  var money = function (n) { return S.currency.trim() + "\u00a0" + Number(n).toLocaleString("en-US"); };
   var esc = function (s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -126,7 +126,7 @@
       return '<article class="card reveal" data-id="' + p.id + '">' +
         '<div class="card-media" style="--h:' + p.hue + '"><span class="tag">' + esc(p.tag) + '</span><div class="ph">' + DATE_SVG + "</div>" +
         '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + ' dates" loading="lazy" onerror="this.remove()"></div>' +
-        '<div class="card-body"><span class="ml">' + esc(p.ml) + "</span><h3>" + esc(p.name) + "</h3><p>" + esc(p.desc) + "</p>" +
+        '<div class="card-body"><h3>' + esc(p.name) + "</h3><p>" + esc(p.desc) + "</p>" +
         '<div class="sizes">' + p.options.map(function (o, i) {
           return '<button class="size" data-act="size" data-i="' + i + '" aria-pressed="' + (i === st.o) + '">' + esc(o.w) + "</button>";
         }).join("") + "</div>" +
