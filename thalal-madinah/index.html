@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Thalal Madinah — Premium Madinah Dates & Pilgrim Stays</title>
+  <meta name="description" content="Order fresh Ajwa, Sukari, Safawi and premium Madinah dates directly on WhatsApp. Hotels near Masjid Nabawi, Umrah stays, airport pickup and Ziyarat tours. മദീനയിലെ സേവകർ.">
+  <meta name="theme-color" content="#0f2a22">
+  <meta property="og:title" content="Thalal Madinah — മദീനയിലെ സേവകർ">
+  <meta property="og:description" content="Premium Madinah dates & accommodation. Order directly on WhatsApp.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@500;700&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Store","name":"Thalal Madinah","alternateName":"Thalal Akbar Madinah Dates","description":"Premium Madinah dates and pilgrim accommodation services","address":{"@type":"PostalAddress","addressLocality":"Madinah","addressCountry":"SA"}}
+  </script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar" id="top">
+    <a href="#top" class="logo" aria-label="Thalal Madinah home">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M16 3c4 4 6 8 6 12a6 6 0 0 1-12 0c0-4 2-8 6-12Z" fill="currentColor"/><path d="M16 21v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+      <span><b>Thalal</b> Madinah</span>
+    </a>
+    <nav class="nav-desktop" aria-label="Main">
+      <a href="#dates">Dates</a><a href="#stays">Stays</a><a href="#reels">Reels</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a>
+    </nav>
+    <button class="cart-btn" id="cartOpen" aria-label="Open cart">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12L5 3H2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="20" r="1.5" fill="currentColor"/><circle cx="18" cy="20" r="1.5" fill="currentColor"/></svg>
+      <span class="badge" id="cartCount">0</span>
+    </button>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="eyebrow ml" data-bind="tagline"></p>
+        <h1>Fresh from <em>Madinah</em>,<br>delivered with care.</h1>
+        <p class="lead" data-bind="taglineEn"></p>
+        <div class="hero-cta">
+          <a href="#dates" class="btn btn-gold">Shop Dates</a>
+          <a href="#stays" class="btn btn-ghost">Book a Stay</a>
+        </div>
+        <ul class="stats" id="stats"></ul>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="arch"><div class="arch-inner"><div class="dome"></div><div class="minaret m1"></div><div class="minaret m2"></div></div></div>
+        <div class="float-chip c1">🌴 Ajwa — Madinah</div>
+        <div class="float-chip c2">✓ Order on WhatsApp</div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+
+    <!-- Dates -->
+    <section class="section" id="dates">
+      <div class="section-head">
+        <p class="eyebrow">Our Dates · ഈത്തപ്പഴം</p>
+        <h2>Madinah's finest varieties</h2>
+        <p class="muted">Pick a size, tap <b>Order on WhatsApp</b> — your order reaches us instantly.</p>
+      </div>
+      <div class="filters" id="filters" role="tablist"></div>
+      <div class="grid products" id="products"></div>
+    </section>
+
+    <!-- Stays -->
+    <section class="section alt" id="stays">
+      <div class="section-head">
+        <p class="eyebrow">Accommodation & Services</p>
+        <h2>Your home in Madinah</h2>
+        <p class="muted">Malayalam-speaking support for every pilgrim and family.</p>
+      </div>
+      <div class="bento" id="services"></div>
+
+      <form class="enquiry glass" id="stayForm">
+        <h3>Quick stay enquiry</h3>
+        <div class="form-grid">
+          <label>Service<select name="service" id="serviceSelect"></select></label>
+          <label>Guests<input name="guests" type="number" min="1" value="2" inputmode="numeric"></label>
+          <label>Check-in<input name="from" type="date"></label>
+          <label>Check-out<input name="to" type="date"></label>
+          <label class="full">Your name<input name="name" type="text" placeholder="Name" autocomplete="name"></label>
+          <label class="full">Notes<textarea name="notes" rows="2" placeholder="Room type, budget, special needs…"></textarea></label>
+        </div>
+        <button class="btn btn-wa" type="submit"><span class="wa-ico"></span>Send enquiry on WhatsApp</button>
+      </form>
+    </section>
+
+    <!-- Reels -->
+    <section class="section" id="reels">
+      <div class="section-head">
+        <p class="eyebrow">Reels & Videos</p>
+        <h2>Straight from our farms & hotels</h2>
+        <p class="muted">Swipe through our latest videos from Facebook, YouTube and Instagram.</p>
+      </div>
+      <div class="reels" id="reelList"></div>
+      <div class="reel-actions">
+        <a class="btn btn-ghost" id="sendVideo" target="_blank" rel="noopener">📹 Send us your video review</a>
+        <div class="socials" id="socialsTop"></div>
+      </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="section alt" id="reviews">
+      <div class="section-head">
+        <p class="eyebrow">Reviews</p>
+        <h2>Loved by our family</h2>
+      </div>
+      <div class="testimonials" id="testimonials"></div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="contact">
+      <div class="contact glass">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2>Talk to us on WhatsApp</h2>
+          <p class="muted">Orders, bulk/wholesale enquiries, hotel bookings — one message is all it takes.</p>
+        </div>
+        <a class="btn btn-wa big" id="contactWa" target="_blank" rel="noopener"><span class="wa-ico"></span>Chat now</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="socials" id="socialsFooter"></div>
+    <p class="ml" data-bind="tagline"></p>
+    <p class="muted small">© <span id="year"></span> Thalal Madinah. Prices may vary with season & shipping.</p>
+  </footer>
+
+  <!-- Floating WhatsApp -->
+  <a class="fab-wa" id="fabWa" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><span class="wa-ico"></span></a>
+
+  <!-- Mobile bottom nav -->
+  <nav class="bottom-nav" aria-label="Quick">
+    <a href="#dates"><span>🌴</span>Dates</a>
+    <a href="#stays"><span>🏨</span>Stays</a>
+    <a href="#reels"><span>▶️</span>Reels</a>
+    <button type="button" id="cartOpen2"><span>🛒</span>Cart <i id="cartCount2">0</i></button>
+  </nav>
+
+  <!-- Cart drawer -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="drawer" id="drawer" aria-label="Your cart" aria-hidden="true">
+    <div class="drawer-head">
+      <h3>Your order</h3>
+      <button class="icon-btn" id="cartClose" aria-label="Close cart">✕</button>
+    </div>
+    <div class="drawer-body" id="cartItems"></div>
+    <div class="drawer-foot">
+      <label>Name<input id="custName" type="text" placeholder="Your name" autocomplete="name"></label>
+      <label>Delivery address / city<textarea id="custAddr" rows="2" placeholder="Address, city, pincode"></textarea></label>
+      <div class="total"><span>Total</span><b id="cartTotal">0</b></div>
+      <button class="btn btn-wa full" id="checkout"><span class="wa-ico"></span>Order via WhatsApp</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

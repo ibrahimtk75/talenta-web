@@ -1,0 +1,10 @@
+{
+  "name": "Thalal Madinah",
+  "short_name": "Thalal",
+  "description": "Premium Madinah dates & pilgrim stays — order on WhatsApp",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbf7ef",
+  "theme_color": "#0f2a22",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
