@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Hard &amp; Soft monogram">
+  <defs>
+    <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E9D29A"/>
+      <stop offset=".35" stop-color="#B08D57"/>
+      <stop offset=".6" stop-color="#F3E2B3"/>
+      <stop offset="1" stop-color="#8E6C3A"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="#1A1A19"/>
+  <circle cx="256" cy="256" r="196" fill="none" stroke="url(#foil)" stroke-width="2"/>
+  <circle cx="256" cy="256" r="184" fill="none" stroke="url(#foil)" stroke-width=".75" opacity=".7"/>
+  <g fill="url(#foil)" font-family="'Cormorant Garamond', Didot, 'Bodoni 72', Georgia, serif" text-anchor="middle">
+    <text x="196" y="300" font-size="168" font-weight="500">H</text>
+    <text x="316" y="300" font-size="168" font-weight="500" font-style="italic">S</text>
+    <text x="256" y="252" font-size="64" font-style="italic">&amp;</text>
+    <text x="256" y="392" font-size="22" letter-spacing="10" font-family="'Jost', 'Helvetica Neue', Arial, sans-serif">MAISON</text>
+  </g>
+</svg>
