@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Giftnest — Thoughtful gifts from ₹199</title>
+  <meta name="description" content="A curated marketplace of light-weight gifts, welcome kits and personalised corporate & casual gifts from independent makers. Gifts from ₹199." />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23F3E6DF'/%3E%3Crect x='7' y='13' width='18' height='12' rx='2' fill='%23C2907F'/%3E%3Crect x='6' y='10' width='20' height='5' rx='1.5' fill='%23B07C6B'/%3E%3Crect x='14.5' y='10' width='3' height='15' fill='%23F3E6DF'/%3E%3C/svg%3E" />
+
+  <!-- Inter, loaded without blocking first paint (system font shows until it arrives) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /></noscript>
+
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <script>
+    /* ─── Store configuration ───────────────────────────────────────────
+     * storeApi: '' → demo catalogue (assets/data.js)
+     * storeApi: 'https://your-shop.com' → live WooCommerce Store API
+     *           (/wp-json/wc/store/v1/products), vendor data from Dokan/WCFM
+     *           via wordpress/giftnest-vendor-storeapi.php
+     */
+    window.GN_CONFIG = {
+      storeApi: '',
+      currency: 'INR',
+      locale: 'en-IN',
+      freeShippingAt: 999,
+      tiers: { entryMax: 499, midMax: 1999 },
+      pageSize: 8,
+      checkoutUrl: '/checkout/',
+      vendorSignupUrl: '/vendor-registration/',
+      corporateEmail: 'corporate@example.com'
+    };
+  </script>
+  <script src="assets/data.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <!-- SVG sprite: product artwork as vectors (~3 KB) instead of photos. Colours come from --c1/--c2/--c3 on the card. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="m-box" viewBox="0 0 120 120">
+        <rect x="24" y="52" width="72" height="50" rx="6" fill="var(--c1)" />
+        <rect x="20" y="40" width="80" height="16" rx="5" fill="var(--c2)" />
+        <rect x="55" y="40" width="10" height="62" fill="var(--c3)" />
+        <path d="M60 40c-6-14-24-18-26-8-2 9 14 9 26 8zm0 0c6-14 24-18 26-8 2 9-14 9-26 8z" fill="var(--c3)" />
+      </symbol>
+      <symbol id="m-flowers" viewBox="0 0 120 120">
+        <path d="M42 70h36l-8 36H50z" fill="var(--c2)" />
+        <path d="M60 70V44M60 70 46 50M60 70l14-20" stroke="#8FA58A" stroke-width="3" fill="none" stroke-linecap="round" />
+        <circle cx="60" cy="36" r="11" fill="var(--c1)" /><circle cx="60" cy="36" r="4" fill="var(--c3)" />
+        <circle cx="42" cy="46" r="9" fill="var(--c1)" opacity=".85" /><circle cx="42" cy="46" r="3.5" fill="var(--c3)" />
+        <circle cx="78" cy="46" r="9" fill="var(--c1)" opacity=".85" /><circle cx="78" cy="46" r="3.5" fill="var(--c3)" />
+        <path d="M50 76h20" stroke="var(--c3)" stroke-width="4" stroke-linecap="round" />
+      </symbol>
+      <symbol id="m-mug" viewBox="0 0 120 120">
+        <rect x="32" y="42" width="48" height="56" rx="8" fill="var(--c1)" />
+        <path d="M80 54h6a10 10 0 0 1 0 20h-6" stroke="var(--c2)" stroke-width="7" fill="none" />
+        <rect x="42" y="60" width="28" height="18" rx="4" fill="var(--c3)" />
+        <path d="M48 34c0-6 6-6 6-12M60 34c0-6 6-6 6-12" stroke="var(--c2)" stroke-width="3" fill="none" stroke-linecap="round" />
+      </symbol>
+      <symbol id="m-candle" viewBox="0 0 120 120">
+        <rect x="34" y="50" width="52" height="50" rx="10" fill="var(--c1)" />
+        <rect x="34" y="62" width="52" height="16" fill="var(--c3)" />
+        <path d="M60 50v-8" stroke="#2F2D2A" stroke-width="2" />
+        <path d="M60 24c7 8 7 14 0 18-7-4-7-10 0-18z" fill="#E9B872" />
+      </symbol>
+      <symbol id="m-notebook" viewBox="0 0 120 120">
+        <rect x="32" y="24" width="56" height="76" rx="6" fill="var(--c1)" />
+        <rect x="32" y="24" width="10" height="76" rx="3" fill="var(--c2)" />
+        <rect x="50" y="44" width="28" height="16" rx="3" fill="var(--c3)" />
+        <rect x="84" y="30" width="5" height="44" rx="2" fill="#C9A66B" transform="rotate(12 86 52)" />
+      </symbol>
+      <symbol id="m-hamper" viewBox="0 0 120 120">
+        <path d="M34 58a26 26 0 0 1 52 0" stroke="var(--c2)" stroke-width="5" fill="none" />
+        <circle cx="48" cy="56" r="9" fill="var(--c3)" /><rect x="62" y="44" width="12" height="18" rx="3" fill="var(--c1)" opacity=".7" />
+        <path d="M24 58h72l-8 42H32z" fill="var(--c1)" />
+        <path d="M30 72h60M32 86h56" stroke="var(--c3)" stroke-width="3" />
+      </symbol>
+      <symbol id="m-plant" viewBox="0 0 120 120">
+        <path d="M60 64c-16-4-22-18-18-30 12 2 20 14 18 30zm0 0c16-4 22-18 18-30-12 2-20 14-18 30zm0 0c-2-14 0-28 0-36 4 8 4 22 0 36z" fill="#9DB596" />
+        <path d="M38 64h44l-6 36H44z" fill="var(--c1)" />
+        <rect x="35" y="60" width="50" height="9" rx="3" fill="var(--c2)" />
+      </symbol>
+      <symbol id="m-card" viewBox="0 0 120 120">
+        <rect x="22" y="34" width="76" height="56" rx="6" fill="var(--c1)" />
+        <path d="M22 40l38 26 38-26" stroke="var(--c3)" stroke-width="3" fill="none" />
+        <circle cx="60" cy="74" r="10" fill="var(--c2)" /><circle cx="60" cy="74" r="4" fill="var(--c3)" />
+      </symbol>
+      <symbol id="m-bottle" viewBox="0 0 120 120">
+        <rect x="46" y="20" width="28" height="12" rx="3" fill="var(--c2)" />
+        <rect x="40" y="30" width="40" height="72" rx="12" fill="var(--c1)" />
+        <rect x="40" y="56" width="40" height="20" fill="var(--c3)" />
+      </symbol>
+      <symbol id="m-choco" viewBox="0 0 120 120">
+        <rect x="28" y="30" width="64" height="66" rx="6" fill="#8C6A57" />
+        <path d="M28 52h64M28 74h64M49 30v66M71 30v66" stroke="#7A5A48" stroke-width="2" />
+        <path d="M28 60h64v30a6 6 0 0 1-6 6H34a6 6 0 0 1-6-6z" fill="var(--c1)" />
+        <rect x="44" y="70" width="32" height="12" rx="3" fill="var(--c3)" />
+      </symbol>
+      <symbol id="i-star" viewBox="0 0 20 20"><path d="M10 1.8l2.5 5.2 5.7.7-4.2 3.9 1.1 5.6L10 14.4l-5.1 2.8L6 11.6 1.8 7.7l5.7-.7z" fill="currentColor"/></symbol>
+      <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7zM9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9l1.5-5h13L20 9M4 9h16M4 9v11h16V9M9 20v-6h6v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#feed">Skip to gifts</a>
+
+  <header class="hdr" id="top">
+    <div class="wrap hdr__row">
+      <a class="logo" href="#top" aria-label="Giftnest home">
+        <svg width="26" height="26" aria-hidden="true"><use href="#m-box" style="--c1:#D9AE9F;--c2:#C2907F;--c3:#F7E8E3"/></svg>
+        <span>giftnest</span>
+      </a>
+      <form class="search" role="search" id="searchForm">
+        <svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="q" type="search" placeholder="Search flowers, welcome kits, mugs…" aria-label="Search gifts" autocomplete="off" />
+      </form>
+      <button class="cartbtn" id="cartOpen" aria-label="Open bag" aria-controls="cart">
+        <svg class="ico" aria-hidden="true"><use href="#i-bag"/></svg>
+        <span class="cartbtn__n" id="cartCount" hidden>0</span>
+      </button>
+    </div>
+    <nav class="chips wrap" id="chips" aria-label="Gift categories">
+      <button class="chip is-on" data-cat="all" aria-pressed="true">All gifts</button>
+      <button class="chip" data-cat="flowers" aria-pressed="false">Flowers</button>
+      <button class="chip" data-cat="welcome-kits" aria-pressed="false">Welcome kits</button>
+      <button class="chip" data-cat="corporate" aria-pressed="false">Corporate</button>
+      <button class="chip" data-cat="personalised" aria-pressed="false">Personalised</button>
+      <button class="chip" data-cat="self-care" aria-pressed="false">Self-care</button>
+      <button class="chip" data-cat="treats" aria-pressed="false">Treats</button>
+      <button class="chip" data-cat="desk" aria-pressed="false">Desk &amp; plants</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1 · Hero: budget-friendly entry point -->
+    <section class="hero wrap" aria-labelledby="heroTitle">
+      <div class="hero__copy">
+        <p class="eyebrow">From independent makers</p>
+        <h1 id="heroTitle">Little gifts,<br />big smiles.</h1>
+        <p class="hero__sub">Flowers, welcome kits and personalised keepsakes, starting at <strong id="heroFrom">₹199</strong>. Free handwritten note with every order.</p>
+        <div class="hero__cta">
+          <a class="btn btn--dark" href="#impulse"><span>Shop under <span id="heroUnder">₹499</span></span></a>
+          <a class="btn btn--ghost" href="#corporate">Corporate</a>
+        </div>
+        <ul class="trust">
+          <li>Ships in 24 hrs</li>
+          <li>Free note card</li>
+          <li>120+ makers</li>
+        </ul>
+      </div>
+      <div class="hero__art" aria-hidden="true">
+        <div class="hero__disc"></div>
+        <svg class="hero__a1"><use href="#m-flowers" style="--c1:#E7B8AA;--c2:#C9DCC4;--c3:#FFF6F2"/></svg>
+        <svg class="hero__a2"><use href="#m-box" style="--c1:#E9DCCB;--c2:#C9A48F;--c3:#FFFFFF"/></svg>
+        <svg class="hero__a3"><use href="#m-candle" style="--c1:#D7E3D2;--c2:#9DB596;--c3:#FFFFFF"/></svg>
+        <span class="hero__tag">from <b id="heroTag">₹199</b></span>
+      </div>
+    </section>
+
+    <!-- 2 · Dynamic pricing row: low-priced impulse picks -->
+    <section class="rail wrap" id="impulse" aria-labelledby="impulseTitle">
+      <div class="sec-head">
+        <div>
+          <h2 id="impulseTitle">Sweet little somethings</h2>
+          <p class="muted">Curated gifts under <span id="railUnder">₹499</span>, perfect add-ons.</p>
+        </div>
+        <div class="price-pills" role="group" aria-label="Price filter for this row">
+          <button class="pill is-on" data-max="0">All</button>
+          <button class="pill" data-max="299">Under ₹299</button>
+          <button class="pill" data-max="399">Under ₹399</button>
+        </div>
+      </div>
+      <ul class="products rail__track" id="railTrack" aria-live="polite"></ul>
+    </section>
+
+    <!-- 3 · Infinite feed: entry → mid → premium & bundles -->
+    <section class="feed wrap" id="feed" aria-labelledby="feedTitle">
+      <div class="sec-head">
+        <div>
+          <h2 id="feedTitle">Discover more gifts</h2>
+          <p class="muted" id="feedSub">From little treats to premium hampers. Keep scrolling.</p>
+        </div>
+      </div>
+      <div id="feedBody"></div>
+      <div class="sentinel" id="sentinel" aria-hidden="true"></div>
+      <p class="feed__status muted" id="feedStatus" role="status"></p>
+    </section>
+
+    <!-- Corporate band -->
+    <section class="corp wrap" id="corporate" aria-labelledby="corpTitle">
+      <div class="corp__inner">
+        <div>
+          <p class="eyebrow">For teams of 10 to 10,000</p>
+          <h2 id="corpTitle">Welcome kits your new joiners will post about.</h2>
+          <p class="muted">Branded, personalised and shipped to every desk or doorstep. Bulk pricing from 25 units, one invoice for every vendor.</p>
+        </div>
+        <a class="btn btn--dark" id="corpCta" href="#">Get a bulk quote</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ftr wrap">
+    <div class="ftr__cols">
+      <div>
+        <a class="logo" href="#top"><span>giftnest</span></a>
+        <p class="muted">A marketplace for small, meaningful gifts from independent makers.</p>
+      </div>
+      <div>
+        <h3>Shop</h3>
+        <a href="#impulse">Under ₹499</a><a href="#feed">Premium &amp; bundles</a><a href="#corporate">Corporate</a>
+      </div>
+      <div>
+        <h3>Sell with us</h3>
+        <a id="vendorCta" href="#"><svg class="ico ico--sm" aria-hidden="true"><use href="#i-store"/></svg> Become a vendor</a>
+        <a href="#">Vendor dashboard</a>
+      </div>
+    </div>
+    <p class="muted small">© <span id="yr"></span> Giftnest. Products are sold and shipped by independent vendors.</p>
+  </footer>
+
+  <!-- Floating bag (mobile) -->
+  <button class="fab" id="fab" hidden aria-controls="cart">
+    <svg class="ico" aria-hidden="true"><use href="#i-bag"/></svg>
+    <span id="fabLabel">View bag</span>
+  </button>
+
+  <!-- Cart drawer -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="cart" id="cart" aria-label="Your bag" aria-hidden="true" tabindex="-1">
+    <div class="cart__head">
+      <h2>Your bag</h2>
+      <button class="iconbtn" id="cartClose" aria-label="Close bag"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="ship" id="ship">
+      <p id="shipMsg"></p>
+      <div class="ship__bar"><span id="shipBar"></span></div>
+    </div>
+    <ul class="cart__list" id="cartList"></ul>
+    <div class="cart__upsell" id="upsell"></div>
+    <div class="cart__foot">
+      <div class="cart__total"><span>Subtotal</span><strong id="cartTotal">₹0</strong></div>
+      <a class="btn btn--dark btn--block" id="checkout" href="#">Checkout</a>
+      <p class="muted small center">Items ship from each vendor separately. Gift note included.</p>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
